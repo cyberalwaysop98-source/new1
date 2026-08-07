@@ -5,7 +5,6 @@ export default function Reserve() {
     <section id="reserve" className="section reserve">
       <div className="reserve__top eyebrow">
         <span>予約 / RESERVE</span>
-        <span>WALK-INS AFTER 15:00</span>
       </div>
 
       <div className="reserve__body">
@@ -30,10 +29,6 @@ export default function Reserve() {
               <br />
               Closed Mon, Tue
             </p>
-          </div>
-
-          <div className="reserve__seal" aria-hidden="true">
-            <span className="menu-name">黒</span>
           </div>
         </div>
       </div>

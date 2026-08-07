@@ -9,6 +9,11 @@ Read DESIGN.md before any task in this repo.
 Reject these in review, they are the failure modes for this specific design:
 
 - Vermilion used as a glow, fill, or gradient → it becomes a generic dark-mode SaaS site.
+- Vermilion drawn as an **enclosed shape** — a bordered square, badge, pill, or chip. The
+  geometry failure, not the glow one: a closed vermilion outline reads as a UI badge however
+  restrained the colour is, and it will out-compete the reservation CTA for attention. The
+  seal in §6.8 did exactly this and was removed. Vermilion is a rule, a seal-less mark, or one
+  word — never a container.
 - A Western display serif replacing Shippori Mincho → loses the only distinctive type decision.
 - Photographs of coffee cups, latte art, or hands holding mugs → instant stock-photo café.
 - Rounded corners, drop shadows, glassmorphism, or any card with a background colour.

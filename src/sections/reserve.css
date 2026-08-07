@@ -4,6 +4,16 @@
   margin-bottom: 10vh;
 }
 
+/* The tategaki rail (§5) owns the right edge above 820px. Removing the seal
+   moved the hours block outward into the rail's lane — measured 16px of overlap
+   at 1100, 1440 and 2560. Same rule as §6.2: nothing right-aligned may sit under
+   the rail. */
+@media (min-width: 821px){
+  .reserve__body{
+    padding-right: 44px;
+  }
+}
+
 .reserve__body{
   display: flex;
   justify-content: space-between;
@@ -30,6 +40,10 @@
   gap: var(--gut);
 }
 
+/* The seal (a 104px vermilion-bordered square holding 黒) was removed in
+   Phase 6. It was the only enclosed shape on the page, and at that size against
+   flat sumi it read as a badge and pulled focus off the CTA — see §10. */
+
 .reserve__hours{
   display: flex;
   flex-direction: column;
@@ -37,17 +51,6 @@
   text-align: right;
 }
 
-.reserve__seal{
-  width: 104px;
-  height: 104px;
-  flex: 0 0 auto;
-  border: 1px solid var(--shu);
-  border-radius: 2px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--shu-lit);
-}
 
 .reserve__address{
   margin-top: 10vh;

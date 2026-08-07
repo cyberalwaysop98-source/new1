@@ -214,8 +214,15 @@ request leaves the origin. Measured on the production build:
   `max-width` in `ch`.
 - Asymmetry is the rule: manifesto lines alternate flush-right / flush-left. Section heads are
   `space-between` baseline-aligned pairs (heading left, eyebrow right).
-- Vertical rhythm is in `vh`, not px. Section padding: `20vh` minimum, `34vh` for the manifesto.
-  The empty space *is* the design — do not compress it to fit more on screen.
+- Vertical rhythm is in `vh`, not px. **Section padding is a uniform `20vh`.** The empty space
+  *is* the design — do not compress it to fit more on screen.
+
+  > Amended in Phase 6 to match what was built. This previously read "`20vh` minimum, `34vh`
+  > for the manifesto", setting up a contrast between the manifesto and everything else. That
+  > contrast no longer has anywhere to live: the manifesto is a **pinned viewport** (§6.2), not
+  > a padded block, so it has no block padding at all. Measured on the build, every content
+  > section carries exactly `180px` top and bottom at a 900px viewport. Uniform 20vh is the
+  > real rhythm — the spec now says so rather than describing a build that does not exist.
 - Persistent chrome: fixed nav (`mix-blend-mode: difference`), fixed vertical tategaki rail on
   the right with a scroll-progress hairline. Rail hides under 820px.
 - Global overlays: film grain (SVG turbulence, opacity .055, `mix-blend-mode: overlay`) and a
@@ -324,6 +331,23 @@ region for nothing. If the footage is ever regraded brighter, re-measure before 
 
 Lines enter masked `yPercent 105 → 0` and **exit the same way**. `EASE` and `DUR` come from
 `src/lib/motion.js` — no new easing values, no new durations.
+
+> **The pin stays at `+=340%`. Settled in Phase 6 — do not relitigate.**
+>
+> The critique raised that this is 36% of total scroll depth (3960 of 11058px) for three
+> sentences, and that `0.00–0.15` and `0.90–1.00` carry no text at all. That is the intended
+> reading. This is the centrepiece and the only pinned section on the page; the silent head and
+> tail are **pacing**, not dead scroll — the pour arriving before the first line, and the steam
+> settling after the last, are what make the section feel like a room rather than a slideshow.
+> Shortening the pin would buy scroll depth back at the cost of the one moment §1 exists for.
+
+> **Open, pending real footage: §6.2 and §6.3/§6.5 may be doing the same job.** The Phase 6
+> critique found the two ambient breaks (間 and the roast) structurally identical — one
+> `<AmbientBreak>` component used twice, both currently rendering the same placeholder gradient,
+> so the page meets the same beat twice with nothing learned between. **Deferred, not dismissed:**
+> the judgement is about the placeholder, not the design. Re-run it once real ambient video
+> exists, and if they still read as one beat, fold the roast caption into §6.4 where binchōtan is
+> already named.
 
 - **One line moving at a time, enforced by the non-overlapping windows above** — not by trigger
   separation, and not by a queue. Separation cannot guarantee it: a single large scroll delta
@@ -471,6 +495,12 @@ Five menu rows. Hairline between each. No photographs.
   shifts to `--shu-lit`. Rows are `<button>` elements — keyboard focusable, visible focus ring.
 
 ### 6.7 The Room
+
+> **The SVG line elevation is provisional.** It was built as a placeholder that could plausibly
+> become permanent, and Phase 6 found it does not: at 1440 the two plates read as a CAD
+> elevation — thin hairlines with large dead areas — rather than the "heavy crop" stills this
+> section specifies. Treat it as a placeholder awaiting `room-01.webp` / `room-02.webp`, not as
+> the finished treatment.
 Two plates, Alethia's card pair. Full-width stills, heavy crop, caption underneath in 10px
 tracked labels.
 
@@ -481,17 +511,28 @@ tracked labels.
 ### 6.8 Reserve
 ```
 ┌──────────────────────────────────────────────┐
-│ 予約 / RESERVE          WALK-INS AFTER 15:00 │
+│ 予約 / RESERVE                               │
 │                                              │
-│ Sit down.        HOURS          ┌────┐       │
-│ Say nothing.     Wed–Sun        │ 黒 │       │
-│                  08:00–19:00    └────┘       │
-│ BOOK A SEAT →    Closed Mon,Tue              │
+│ Sit down.                       HOURS        │
+│ Say nothing.                    Wed–Sun      │
+│                                 08:00–19:00  │
+│ BOOK A SEAT →                   Closed Mon,Tue│
+│                                              │
+│ 2-14-6 Tomigaya, Shibuya-ku, Tokyo 151-0063. │
 └──────────────────────────────────────────────┘
 ```
 Address: 2-14-6 Tomigaya, Shibuya-ku, Tokyo 151-0063.
-The seal is a 104px vermilion-bordered square containing 黒 — the only enclosed shape on the
-entire page.
+
+**No seal.** A 104px vermilion-bordered square containing 黒 stood here through phases 2–5 and
+was removed in Phase 6. It was the only enclosed shape on the page, so it had no vocabulary to
+belong to, and at that size against flat `--sumi` it read as a **badge** — the eye reached it
+before "Sit down. Say nothing." and before the CTA. It cost the page its most important call to
+action for decoration. See §10. Do not reintroduce it.
+
+**One eyebrow at the top, not two.** `WALK-INS AFTER 15:00` was removed in the same pass: with
+the fixed nav sitting directly above, three tracked-caps items stacked into a band that read as
+UI chrome rather than composition. The information was redundant anyway — the hours are
+immediately below it.
 
 ### 6.9 Footer reveal
 `position: fixed; bottom: 0; height: 74svh; z-index: 0`, with the content wrapper at `z-index: 1`
@@ -622,6 +663,11 @@ extraction, not a target.
 Reject these in review, they are the failure modes for this specific design:
 
 - Vermilion used as a glow, fill, or gradient → it becomes a generic dark-mode SaaS site.
+- Vermilion drawn as an **enclosed shape** — a bordered square, badge, pill, or chip. The
+  geometry failure, not the glow one: a closed vermilion outline reads as a UI badge however
+  restrained the colour is, and it will out-compete the reservation CTA for attention. The
+  seal in §6.8 did exactly this and was removed. Vermilion is a rule, a seal-less mark, or one
+  word — never a container.
 - A Western display serif replacing Shippori Mincho → loses the only distinctive type decision.
 - Photographs of coffee cups, latte art, or hands holding mugs → instant stock-photo café.
 - Rounded corners, drop shadows, glassmorphism, or any card with a background colour.
