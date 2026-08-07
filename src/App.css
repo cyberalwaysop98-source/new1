@@ -1,0 +1,6 @@
+.page-content{
+  position: relative;
+  z-index: 1;
+  background: var(--sumi);
+  margin-bottom: 74svh; /* DESIGN.md §6.10 — reveals the fixed footer beneath */
+}

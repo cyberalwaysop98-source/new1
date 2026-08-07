@@ -1,0 +1,36 @@
+.grain-source{
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.grain-overlay{
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  opacity: .055;
+  mix-blend-mode: overlay;
+  filter: url(#grain-filter);
+  /* #808080 is a permitted exception to DESIGN.md §3's six-value rule — see the
+     "Two permitted colour literals outside this block" note there. It is the
+     blend substrate for mix-blend-mode: overlay (mid-grey is the identity value),
+     not a design colour. Changing it tints the entire page. */
+  background: #808080;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .grain-overlay{
+    /* grain animation off — the filter itself is static (no JS re-seed), so a
+       static grain texture already satisfies "animation off" here. */
+    opacity: .04;
+  }
+}
+
+.vignette-overlay{
+  position: fixed;
+  inset: 0;
+  z-index: 91;
+  pointer-events: none;
+  background: radial-gradient(120% 100% at 50% 50%, transparent 55%, rgba(0,0,0,.55) 100%);
+}

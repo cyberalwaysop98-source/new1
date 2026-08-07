@@ -1,0 +1,24 @@
+.manifesto{
+  display: flex;
+  flex-direction: column;
+  gap: 26vh;
+}
+
+.manifesto__line{
+  max-width: 22ch;
+}
+
+.manifesto__line--right{
+  align-self: flex-end;
+  text-align: right;
+}
+
+.manifesto__line--left{
+  align-self: flex-start;
+  text-align: left;
+}
+
+.manifesto strong{
+  font-weight: 400;
+  color: var(--shu-lit);
+}

@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0B0A09" />
+    <title>NOIR — 喫茶室, Tomigaya</title>
+    <meta
+      name="description"
+      content="NOIR — a seven-seat kissaten in Tomigaya, Tokyo. Dark wood, one low light, hand-drip only."
+    />
+
+    <!--
+      TEMPORARY dev-only webfont loader. DESIGN.md §4.1 specifies self-hosted,
+      subset .woff2 with preload + font-display:swap — the real subset files
+      (public/fonts/*.woff2) don't exist yet (Phase 0 asset production is
+      deferred, see src/styles/fonts.css). Remove this link and add the
+      <link rel="preload"> pair from §4.1 the day those two files land.
+    -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Shippori+Mincho&family=Zen+Kaku+Gothic+New:wght@300;400&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

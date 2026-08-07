@@ -1,0 +1,26 @@
+.ambient-media{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ambient-media--placeholder{
+  background:
+    radial-gradient(60% 50% at 30% 20%, rgba(140,42,30,.16), transparent 60%),
+    radial-gradient(70% 60% at 75% 80%, rgba(232,225,212,.05), transparent 65%),
+    linear-gradient(180deg, var(--sumi-2), var(--sumi));
+}
+
+.ambient-media--placeholder.ambient-media--roast{
+  background:
+    radial-gradient(45% 40% at 50% 55%, rgba(179,58,37,.22), transparent 65%),
+    linear-gradient(180deg, var(--sumi-2), var(--sumi));
+}
+
+.ambient-media--placeholder.ambient-media--close{
+  background:
+    radial-gradient(65% 55% at 50% 15%, rgba(232,225,212,.06), transparent 60%),
+    linear-gradient(180deg, var(--sumi), var(--sumi-2));
+}

@@ -1,0 +1,38 @@
+/* DESIGN.md §5 — shared layout rules. Single column, --gut side padding, no
+   max-width container; vertical rhythm in vh, not px. */
+
+.section{
+  position: relative;
+  padding: 20vh var(--gut);
+}
+
+.section--manifesto{
+  padding-top: 34vh;
+  padding-bottom: 34vh;
+}
+
+.section-head{
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--gut);
+  margin-bottom: 8vh;
+}
+
+.hairline{
+  border: 0;
+  border-top: 1px solid var(--rule);
+  margin: 0;
+}
+
+/* DESIGN.md §7 — "Text enter: masked yPercent 105 → 0". GSAP animates
+   .reveal-mask__inner's yPercent from within .reveal-mask (overflow: hidden). */
+.reveal-mask{
+  display: block;
+  overflow: hidden;
+}
+
+.reveal-mask__inner{
+  display: block;
+  will-change: transform;
+}

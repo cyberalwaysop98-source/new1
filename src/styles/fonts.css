@@ -1,0 +1,39 @@
+/*
+ * DESIGN.md §4.1 — self-hosted, subset, preloaded, metrics-matched fallback.
+ * The subset .woff2 files below (public/fonts/*.woff2) are NOT present yet — font
+ * subsetting is a Phase 0 asset-production step this pass does not run (see
+ * WORKFLOW.md). Until those files exist these @font-face rules simply fail to
+ * match and the browser falls through to the metrics-matched fallback faces,
+ * which is why index.html also carries a temporary Google Fonts <link> for local
+ * dev — remove that link the day these two files land in public/fonts/.
+ */
+
+@font-face{
+  font-family: 'Shippori Mincho';
+  src: url('/fonts/shippori-mincho-subset.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face{
+  font-family: 'Shippori Mincho Fallback';
+  src: local('Georgia');
+  size-adjust: 112%;
+  ascent-override: 92%;
+  descent-override: 28%;
+  line-gap-override: 0%;
+}
+
+@font-face{
+  font-family: 'Zen Kaku Gothic New';
+  src: url('/fonts/zen-kaku-gothic-new-subset.woff2') format('woff2');
+  font-weight: 300;
+  font-display: swap;
+}
+@font-face{
+  font-family: 'Zen Kaku Gothic New Fallback';
+  src: local('-apple-system'), local('Helvetica Neue'), local('Arial');
+  size-adjust: 100%;
+  ascent-override: 90%;
+  descent-override: 22%;
+  line-gap-override: 0%;
+}

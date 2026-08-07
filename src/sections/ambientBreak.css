@@ -1,0 +1,70 @@
+.ambient-break{
+  position: relative;
+  overflow: hidden;
+}
+
+.ambient-break__media{
+  position: absolute;
+  inset: 0;
+}
+
+.ambient-break__rule{
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 2;
+}
+
+.ambient-break__rule--top{
+  top: 0;
+}
+
+.ambient-break__rule--bottom{
+  bottom: 0;
+}
+
+.ambient-break__marquee{
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  transform: translateY(-50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.ambient-break__marquee-track{
+  display: inline-flex;
+  gap: clamp(24px, 6vw, 96px);
+  font-family: var(--display);
+  font-size: clamp(48px, 12vw, 180px);
+  line-height: 1;
+  padding-left: 100%;
+}
+
+.ambient-break__token--outline{
+  color: transparent;
+  -webkit-text-stroke: 1px var(--washi);
+}
+
+.ambient-break__token--solid{
+  color: var(--washi);
+}
+
+.ambient-break__caption{
+  position: absolute;
+  bottom: 5vh;
+  z-index: 2;
+  max-width: 34ch;
+}
+
+.ambient-break__caption--left{
+  left: var(--gut);
+  text-align: left;
+}
+
+.ambient-break__caption--right{
+  right: var(--gut);
+  text-align: right;
+}

@@ -1,0 +1,45 @@
+.selection__group{
+  display: flex;
+  flex-direction: column;
+}
+
+.selection__row{
+  display: grid;
+  grid-template-columns: 1fr 2fr auto;
+  align-items: baseline;
+  gap: var(--gut);
+  width: 100%;
+  padding: 4vh 0;
+  padding-left: 0;
+  transition: padding-left .7s var(--ease);
+}
+
+.selection__row:hover,
+.selection__row:focus-visible{
+  padding-left: 22px;
+}
+
+.selection__row:hover .selection__price,
+.selection__row:focus-visible .selection__price{
+  color: var(--shu-lit);
+  transition: color .7s var(--ease);
+}
+
+.selection__name em{
+  font-style: normal;
+  font-family: var(--body);
+  font-size: 13px;
+  color: var(--washi-dim);
+  margin-left: 8px;
+}
+
+.selection__price{
+  transition: color .7s var(--ease);
+}
+
+@media (max-width: 700px){
+  .selection__row{
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}

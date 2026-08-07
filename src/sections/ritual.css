@@ -1,0 +1,52 @@
+.ritual{
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: var(--gut);
+  align-items: center;
+  min-height: 100svh;
+}
+
+.ritual__intro{
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ritual__jp{
+  writing-mode: horizontal-tb;
+  letter-spacing: .2em;
+  font-size: 14px;
+  color: var(--washi-dim);
+}
+
+.ritual__stage{
+  position: relative;
+}
+
+.ritual__canvas{
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--rule);
+}
+
+.ritual__captions{
+  position: absolute;
+  top: 5%;
+  right: 5%;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  writing-mode: vertical-rl;
+}
+
+.ritual__temp{
+  position: absolute;
+  bottom: 5%;
+  right: 5%;
+}
+
+@media (max-width: 900px){
+  .ritual{
+    grid-template-columns: 1fr;
+  }
+}

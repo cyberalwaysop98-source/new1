@@ -1,0 +1,26 @@
+.nav{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 80;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 28px var(--gut);
+  mix-blend-mode: difference;
+  pointer-events: none;
+}
+
+.nav a{
+  pointer-events: auto;
+  text-decoration: none;
+}
+
+.nav__mark{
+  color: var(--washi);
+}
+
+.nav__cta{
+  color: var(--washi);
+}
