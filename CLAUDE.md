@@ -14,6 +14,10 @@ Reject these in review, they are the failure modes for this specific design:
 - Rounded corners, drop shadows, glassmorphism, or any card with a background colour.
 - Compressing `vh` padding to "fit more content" → the emptiness is the product.
 - Scrubbing a `<video>` element instead of frames.
+- Cropping the subject out of the frame sequence to make it fill the viewport. The fit follows
+  the source: a portrait master is `contain` (its negative space IS the shot), a 16:9 master is
+  `cover` (§6.2). What is never acceptable is a crop that cuts the dripper or strands most of
+  the viewport in dead ground — measure before choosing, do not default either way.
 - Adding a testimonials section, a logo wall, an Instagram grid, or a newsletter modal.
 - More than one animation moving at any given moment.
 

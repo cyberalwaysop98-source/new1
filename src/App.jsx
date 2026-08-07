@@ -6,7 +6,6 @@ import Hero from './sections/Hero';
 import Manifesto from './sections/Manifesto';
 import AmbientBreak from './sections/AmbientBreak';
 import Method from './sections/Method';
-import Ritual from './sections/Ritual';
 import Selection from './sections/Selection';
 import Room from './sections/Room';
 import Reserve from './sections/Reserve';
@@ -47,7 +46,6 @@ function App() {
         />
 
         <Method />
-        <Ritual />
 
         <AmbientBreak
           id="roast"

@@ -13,22 +13,39 @@
 // never hardcoded at a call site — §6.5 indexes with Math.round(p * (FRAMES - 1)).
 export const FRAMES = 120;
 
-// True: the real sequence exists in public/frames/ritual/. The procedural sumi-e
-// renderer (src/lib/ritualProcedural.js) is retained as the fallback for when
-// this is false — do not delete it.
 export const USE_FRAMES = true;
 
 export const ritualFrames = {
   count: FRAMES,
-  // Measured, not the originally specified 1440×1760 — the sequence could not
-  // meet the 60 KB/frame budget at 1440px. See DESIGN.md §8.
-  width: 1200,
-  height: 1800,
+  // Source is 1280×720; the master is cropped to 1238 wide to remove the
+  // generator watermark at x1243-1263 (§6.2). Right edge only - the dark left
+  // half is where the type sits and must stay intact. No scaling: the long edge
+  // is already under the 1440 ceiling, so any scale would be an upscale.
+  width: 1238,
+  height: 720,
   // Number of leading frames fetched eagerly; the rest load when the section
   // reaches 'top bottom' (§6.5).
   eagerCount: 12,
   // Path for frame index i (0-based).
   path: (i) => `/frames/ritual/ritual_${String(i + 1).padStart(4, '0')}.webp`,
+};
+
+// Below this viewport width the section switches to the portrait crop set and
+// the narrow layout (§6.2). Phones cannot use the 16:9 master: contained it
+// strands two thirds of the viewport, and covered it cuts through the dripper.
+export const NARROW_BREAKPOINT = 900;
+
+// Same 120 frames, same source clip and grade, cropped 4:5 around the subject:
+// crop=576:720:532:0. The offset is re-measured against the watermark-cropped
+// master (dripper+server span x686-953, centre 820) - it is NOT reusable across
+// source clips, re-derive it whenever the footage changes (§6.2).
+export const ritualFramesPortrait = {
+  count: FRAMES,
+  width: 576,
+  height: 720,
+  eagerCount: 12,
+  path: (i) =>
+    `/frames/ritual-portrait/ritual_${String(i + 1).padStart(4, '0')}.webp`,
 };
 
 export const ambient = {

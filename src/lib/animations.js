@@ -1,6 +1,6 @@
 // DESIGN.md §6 + §7 — Phase 3 motion pass. Every tween uses the constants from
-// ./motion.js. The Ritual (§6.5) is explicitly out of scope here — it stays a
-// static canvas until Phase 4, which this pass does not run.
+// ./motion.js. The pinned Manifesto scrub (§6.2) lives in its own component and
+// is deliberately not driven from here.
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { EASE, DUR, STAGGER, SCRUB, ENTER } from './motion';
@@ -63,55 +63,11 @@ export function initAnimations() {
     }
   }
 
-  // ---- Manifesto: one masked line at a time ----
-  // §6.2 ("they must never both be moving") and §10 make non-overlap a hard
-  // invariant. Widening trigger separation alone CANNOT provide it: a single
-  // large scroll delta crosses every trigger within a couple of frames however
-  // far apart the starts are — measured at 3 lines mid-tween on the same frame
-  // for one 2600px wheel event. So the starts below are widened for feel, and a
-  // serial queue supplies the actual guarantee: a line whose trigger fires while
-  // another is still animating waits and plays only once that one has settled.
-  // Durations are untouched (still DUR.reveal).
-  const manifestoLines = gsap.utils.toArray('.manifesto [data-reveal="manifesto"]');
-  if (reduced) {
-    gsap.set(manifestoLines, { yPercent: ENTER.textYPercentTo });
-  } else {
-    let queue = Promise.resolve();
-    manifestoLines.forEach((el, i) => {
-      ScrollTrigger.create({
-        // Trigger off the STABLE parent, never `el` itself: `el` carries the
-        // 105% masking offset from CSS, so using it as its own trigger measures
-        // a displaced box and the start position moves as the line animates.
-        trigger: el.closest('.reveal-mask') ?? el,
-        // 88% / 78% / 68% — each line must travel further up the viewport than
-        // the one before it, on top of the 26vh gap already between them.
-        start: `top ${88 - i * 10}%`,
-        once: true,
-        onEnter: () => {
-          queue = queue.then(
-            () =>
-              // fromTo for the same reason as the hero: the 105% start lives in
-              // CSS and would be read back as pixels, making a yPercent tween a
-              // no-op. Created when the queue reaches it, so immediateRender
-              // fires at the moment the line is due to animate.
-              new Promise((resolve) => {
-                gsap.fromTo(
-                  el,
-                  { yPercent: ENTER.textYPercentFrom, y: 0 },
-                  {
-                    yPercent: ENTER.textYPercentTo,
-                    y: 0,
-                    duration: DUR.reveal,
-                    ease: EASE,
-                    onComplete: resolve,
-                  }
-                );
-              })
-          );
-        },
-      });
-    });
-  }
+  // ---- Manifesto ----
+  // Not handled here. The manifesto is now a pinned, scrubbed section sharing
+  // one timeline with the frame sequence (§6.2) — its line reveals are a pure
+  // function of ScrollTrigger.progress inside src/sections/Manifesto.jsx, so a
+  // separate trigger here would fight it.
 
   // ---- 間: marquee xPercent -34 scrubbed, video scale 1.25 → 1.0 scrubbed ----
   const maSection = document.getElementById('ma');

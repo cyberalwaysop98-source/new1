@@ -1,24 +1,80 @@
+/* DESIGN.md §6.2 — the sequence and the manifesto share one pinned timeline.
+   The frame is contained and centred; the type lives in the bleed that creates,
+   never on the image. --img-l / --img-r / --img-b are published by Manifesto.jsx
+   from the measured image box. */
 .manifesto{
+  position: relative;
+  width: 100%;
+  height: 100svh;
+  padding: 0;
+  overflow: hidden;
+}
+
+.manifesto__canvas{
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--sumi);
+}
+
+.manifesto__slot{
+  position: absolute;
+  top: 0;
+  bottom: 0;
   display: flex;
-  flex-direction: column;
-  gap: 26vh;
+  align-items: center;
+  pointer-events: none;
 }
 
-.manifesto__line{
-  max-width: 22ch;
+/* Landscape source, COVER fit: the frame is full-bleed, so there is no bleed to
+   put type in. The composition keeps its subject in the right half and its left
+   half near-black, so the type overlays that dark half. Alternation (§5) is
+   preserved WITHIN that half — flush-right then flush-left then flush-right —
+   rather than across the full width, which would put a line on the dripper. */
+.manifesto__slot--right,
+.manifesto__slot--left{
+  left: var(--gut);
+  right: 50%;
 }
 
-.manifesto__line--right{
-  align-self: flex-end;
+.manifesto__slot--right{
+  justify-content: flex-end;
   text-align: right;
 }
 
-.manifesto__line--left{
-  align-self: flex-start;
+.manifesto__slot--left{
+  justify-content: flex-start;
   text-align: left;
+}
+
+.manifesto-line{
+  max-width: 100%;
 }
 
 .manifesto strong{
   font-weight: 400;
   color: var(--shu-lit);
+}
+
+/* Portrait phones: the contained frame spans the full width, so there are no
+   side margins at all. The frame is top-anchored (see publishImageBox) and the
+   type takes the band underneath. Alternating flush-left/right still holds. */
+.manifesto--narrow .manifesto__slot{
+  top: calc(var(--img-b, 70%) + 16px);
+  bottom: var(--gut);
+  left: var(--gut);
+  right: var(--gut);
+  align-items: flex-start;
+}
+
+.manifesto--narrow .manifesto__slot--right{
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.manifesto--narrow .manifesto__slot--left{
+  justify-content: flex-start;
+  text-align: left;
 }

@@ -28,13 +28,13 @@ zero data. Section 2 maps exactly what carries over.
 
 | Alethia mechanic | NOIR equivalent | Where |
 |---|---|---|
-| Full-bleed looping `.webm` between content sections | Ambient loops: steam, roast drum, empty room | §6.3, §6.6 |
+| Full-bleed looping `.webm` between content sections | Ambient loops: steam, roast drum, empty room | §6.3, §6.5 |
 | Hero with background video + "Scroll to discover" cue | Hero with steam loop + 下へ / Scroll | §6.1 |
 | Numbered 01–05 list revealing on scroll | The Method, 01–05 | §6.4 |
-| Sticky pinned section, background holds, content swaps over it | The Ritual — pinned scrubbed sequence | §6.5 |
+| Sticky pinned section, background holds, content swaps over it | The Ritual — pinned scrubbed sequence | §6.2 |
 | Section label repeated 3× as a scroll marquee ("our vision") | 間 / ma repeated across the ambient break | §6.3 |
-| Two-card solutions grid | The Room — two plates | §6.8 |
-| Footer that reveals from underneath with its own video | Same, with the closing-time loop | §6.10 |
+| Two-card solutions grid | The Room — two plates | §6.7 |
+| Footer that reveals from underneath with its own video | Same, with the closing-time loop | §6.9 |
 | Tiny wide-tracked eyebrow above an enormous heading | Same, everywhere | §4 |
 
 **What we do NOT take:** Alethia's palette, its rounded UI cards, its floating dashboard
@@ -223,17 +223,14 @@ Ten sections, in this order. Each lists the assets it needs and its motion contr
 ### 6.1 Hero
 ```
 ┌──────────────────────────────────────────────┐
-│ TOKYO · 喫茶室  ──  EST. 2019                 │
-│                                              │
-│   NOIR                          ノ           │
-│                                 ワ           │
-│                                 ル           │
-│   We keep the room dark on purpose.          │
-│   Light flatters coffee — shadow tells       │
-│   the truth about it.                        │
-│                                              │
-│ │ 下へ / SCROLL              七席のみ         │
+│                                     ~~~      │
+│   There is no music,             ((dripper)) │
+│   no wifi, and no                   |||      │
+│   second cup.                    \_______/   │
+│                                   \_____/    │
+│  [ type on the dark LEFT half ]  [ subject ] │
 └──────────────────────────────────────────────┘
+   full-bleed COVER, edge to edge, no bleed
 ```
 - **Assets:** `video/hero.webm|mp4` + `img/hero-poster.webp`. Loop plays at 22% opacity behind
   the type, `object-fit: cover`, muted/loop/playsinline.
@@ -242,90 +239,124 @@ Ten sections, in this order. Each lists the assets it needs and its motion contr
 - **LCP constraint:** the title must paint before the video. Video is `preload="none"` and
   fades in at 800ms.
 
-### 6.2 Manifesto
-Three lines, `34vh` padding top and bottom, `26vh` between lines. Alternating alignment.
+### 6.2 The Manifesto, scrubbed ★ signature
 
-1. There is no music, no wifi, and no second cup.
-2. The beans are ground when you sit down, not before.
-3. What arrives will take **four minutes**. Please let it.
-
-- **Motion:** each line masked, `yPercent: 105 → 0`, 1.4s, trigger `top 88%`. One at a time —
-  they must never both be moving.
-
-### 6.3 間 — ambient break I
-Full-bleed 100svh video loop, hairline border top and bottom. Over it, a horizontal marquee
-of six tokens, alternating outline and solid: `間`(outline) `ma`(solid) `間`(outline)
-`ma`(solid) `間`(outline) `ma`(solid) — i.e. every 間 is outlined
-(`-webkit-text-stroke: 1px`) and every `ma` is solid fill, six tokens total, no more, no fewer.
-Caption bottom-left.
-
-> 間 — the interval. Not empty space, but the pause that gives the next thing its weight.
-> We build the room around it.
-
-- **Assets:** `video/ma.webm|mp4` + poster.
-- **Motion:** marquee `xPercent: -34` scrubbed across the section. Video scales `1.25 → 1.0`
-  scrubbed. No text reveal — it's already moving.
-
-### 6.4 The Method — 01 to 05
-Alethia's numbered list, adapted. Left column sticks; right column scrolls the five items past it.
-
-| № | Title | Line |
-|---|---|---|
-| 01 | Single origin, single lot | We buy one lot at a time and stop when it's gone. |
-| 02 | Roasted over binchōtan | Charcoal, not gas. It is slower and it is worse for business. |
-| 03 | Ground at the seat | Nothing is ground in advance. You will hear it. |
-| 04 | Ninety-two degrees | Held thirty seconds off the boil so it does not scorch on contact. |
-| 05 | Four minutes, three pours | Each smaller than the last. The bed sits flat when it's done. |
-
-- **Motion:** left heading holds for the duration via CSS `position: sticky` — **not** a GSAP
-  pin. One pinning mechanism per page: the Ritual (§6.5) owns the page's only ScrollTrigger
-  pin, and a second pinned trigger competing for pin-spacing calculations through the Lenis
-  bridge is where this pattern breaks. Sticky is visually equivalent for a single always-in-flow
-  column and costs nothing. Items stagger in at `top 82%`, 80ms apart, with the number in
-  `--shu-lit` and a hairline rule that draws left-to-right over 1.2s.
-
-### 6.5 The Ritual — pinned scrub sequence ★ signature
-The centrepiece. Pinned for `+=340%` of viewport height. **Full-bleed: the sequence is the
-whole viewport, and the type sits on it.**
+The centrepiece, and now the only pinned section. The frame sequence and the three manifesto
+lines share **one** timeline: the coffee fills the carafe as the text arrives. Pinned for
+`+=340%` of viewport height.
 
 ```
 ┌──────────────────────────────────────────────┐
-│▒▒▒                                           │
-│▒▒ 抽出                                       │
-│▒▒ Four minutes            [ the sequence,    │
-│▒▒ 四分間                    100vw × 100svh,  │
-│▒▒                           edge to edge ]   │
-│▒▒                                            │
-│▒▒ 92°C                                       │
-│▒▒ 一 湯                                      │
-│▒▒▒                                           │
+│              ┌──────────────┐                │
+│              │              │  There is no   │
+│              │   2:3 frame  │  music, no     │
+│   sumi       │  full height │  wifi, and no  │
+│   bleed      │   contain    │  second cup.   │
+│              │   never      │                │
+│  The beans   │   cropped    │                │
+│  are ground  │              │                │
+│              └──────────────┘                │
 └──────────────────────────────────────────────┘
-  ▒ = scrim: linear-gradient(90deg, rgba(11,10,9,.75), transparent)
+   line 1 right · line 2 left · line 3 right
 ```
 
-The sequence fills the viewport behind everything — no framed box, no bordered stage, no
-column grid. **A dripper centred in a box reads as a product photo**, which is exactly the
-stock-café failure §10 exists to prevent; full-bleed is what makes it a room instead of a
-product.
+**The source is 16:9 landscape, so the fit is `cover`** — full-bleed, edge to edge. The
+composition does the work: the subject sits in the right half and the left half is near-black,
+so the type overlays that dark half and never touches the dripper. At 1440×900 cover crops only
+~5% a side, so almost nothing is lost.
 
-- **Type over footage:** `抽出 / Four minutes / 四分間` pinned top-left, the step captions
-  bottom-left, both inside `--gut`. All type sits on a **vertical scrim** — a left-to-right
-  gradient from `rgba(11,10,9,.75)` to transparent, spanning the full height. The scrim is a
-  gradient, never a box, card, or panel; it has no edge, no border and no corner. It exists so
-  the type stays legible over a moving image, nothing more.
-- **All type is on the left.** Nothing sits at the right edge: the tategaki rail (§5) and the
-  scrollbar both live there, and caption text collides with them. `92°C` moves to the left
-  column with the captions.
-- **Assets:** `frames/ritual/ritual_0001.webp` … `ritual_0120.webp`, 1440×2160, WebP q75,
-  99.6 KB average. Produced in Flow — see WORKFLOW.md §Phase 0. Actual figures in §8; the
-  frame count is read from `FRAMES` in `src/assets/manifest.js`, never hardcoded.
+**No scrim.** Tested rather than assumed: the measured luminance of the footage directly under
+the type peaks at **16/255** across a 61-point sweep of the pin. Against `--washi` (#E8E1D4)
+that is roughly 14:1 contrast — past WCAG AAA — so a gradient would darken an already-black
+region for nothing. If the footage is ever regraded brighter, re-measure before adding one.
 
-> **1440px is the native ceiling — do not scale above it.** The cropped source is exactly
-> 1440×2160, so any larger export is pure upscale carrying **no additional real detail**, only
-> weight. A 1920px pass was produced and measured (132.9 KB average, 15.57 MB total) and
-> discarded for exactly that reason: 33% more bytes for zero more picture. If the sequence ever
-> looks soft edge-to-edge at wide viewports, the fix is a higher-resolution source clip, not a
-> bigger export.
+> **The narrow branch requires its own portrait crop set. This is not optional.**
+>
+> Below `NARROW_BREAKPOINT` (900px) the section serves a **second frame set, cropped 4:5 around
+> the subject** from the same source clip with the same grade —
+> `crop=576:720:640:0`, in `public/frames/ritual-portrait/`. Neither alternative works with a
+> 16:9 master:
+>
+> - **Contain the 16:9 frame** and a 360×780 phone gets a 360×203 strip with roughly **two
+>   thirds of the viewport left as empty ground**. That is not §10's productive emptiness, it
+>   reads as a broken layout — measured and rejected.
+> - **Cover at 360** and the frame shows only the **middle ~26% of the width**, which cuts
+>   straight through the dripper. Rejected: the subject is the one thing that may not be
+>   cropped.
+>
+> The 4:5 crop is the only option that keeps the subject whole *and* fills the phone viewport.
+> Layout is unchanged from the treatment already described: full width, top-anchored, type in
+> the band beneath, alternating flush-left/right.
+>
+> **One predicate drives both** the frame set and the layout mode, so they can never disagree.
+> The contained height is also capped at 60% of the viewport, so a landscape phone cannot
+> compute a taller-than-viewport frame and push the type off screen.
+>
+> Any new source clip must be extracted **twice** — the landscape master and this portrait crop.
+> The crop offset is subject-dependent: derive it by measuring the subject's horizontal extent,
+> do not reuse `640` blindly.
+
+- **Copy** (unchanged, verbatim):
+  1. There is no music, no wifi, and no second cup.
+  2. The beans are ground when you sit down, not before.
+  3. What arrives will take **four minutes**. Please let it.
+- **Type:** manifesto sizing from §4 — `clamp(26px, 4.4vw, 62px)` mincho, lh 1.34. **Do not
+  shrink it to fit the margin.** If a line will not fit, the margin is wrong, not the type.
+- **Alternating:** line 1 flush-right, line 2 flush-left, line 3 flush-right (§5's asymmetry
+  rule), each in the bleed on its side.
+
+**Timeline across the pin.** Text and footage are driven by the same `ScrollTrigger.progress`:
+
+| progress | what happens |
+|---|---|
+| 0.00–0.15 | footage only, no text. The pour begins. |
+| 0.15–0.40 | line 1 reveals, holds |
+| 0.40–0.65 | line 1 exits, line 2 reveals, holds |
+| 0.65–0.90 | line 2 exits, line 3 reveals, holds |
+| 0.90–1.00 | text gone, footage finishes on the steam |
+
+Lines enter masked `yPercent 105 → 0` and **exit the same way**. `EASE` and `DUR` come from
+`src/lib/motion.js` — no new easing values, no new durations.
+
+- **One line moving at a time, enforced by the non-overlapping windows above** — not by trigger
+  separation, and not by a queue. Separation cannot guarantee it: a single large scroll delta
+  crosses every boundary within a couple of frames however far apart they are (measured: 3
+  lines mid-tween on one 2600px wheel). A serial queue cannot either — it plays tweens to
+  completion in order and has no meaning when the user scrubs *backwards*. Line position is a
+  pure function of progress, and the windows never overlap, so the invariant holds in both
+  directions. Verified at 1 across a 61-point sweep at both 1440 and 360.
+
+- **Assets:** `frames/ritual/ritual_0001.webp` … `ritual_0120.webp`, **1238×720**, WebP q75,
+  25.1 KB average, plus the portrait set below. Actual figures in §8; the frame count is read from `FRAMES` in
+  `src/assets/manifest.js`, never hardcoded.
+
+> **1440 is a ceiling, not a target.** The current source is 1280×720, so its long edge is
+> already below it and the frames are extracted at native size with **no scale filter at all**.
+> Scaling up to 1440 would add weight and no picture. Never upscale to hit the number.
+
+> **The source carries a generator watermark. The crop exists to remove it — do not restore the
+> full frame.**
+>
+> The clip has a "Veo" mark burned into the bottom-right corner. It cannot be removed at source,
+> and WORKFLOW.md §0.1 requires that nothing in frame is identifiably branded, so the master is
+> extracted as **`crop=1238:720:0:0`** — 42 columns off the **right edge only**.
+>
+> Measured, not guessed: the mark occupies **x 1243–1263, y 695–703**, identical in frames 0, 95
+> and 191 (peak 137 against a local background median of ~15). A 1238-wide crop clears it by
+> 6px.
+>
+> Why the right edge and not the bottom:
+> - **The left half must stay intact** — it is where the manifesto type sits. The crop never
+>   touches it, and the subject is not re-centred.
+> - Right-trim removes less picture than the equivalent bottom-trim (30,240 px vs 38,400 px).
+> - It keeps the aspect nearer the viewport (1.719 vs 1.855), so `cover` crops *less* at display
+>   time. Trimming the bottom would have widened the frame and cut more off the sides.
+> - Nothing important is lost: the **dripper and server end at x 953**, and even the background
+>   object that appears late reaches only x 1216.
+>
+> If the footage is ever replaced, re-measure the mark before assuming this crop still applies —
+> and note the frames must be extracted **twice**, master and portrait set, with the portrait
+> offset re-derived (see §8).
 
 > **The two source clips share their joining frame.** Video 1's last frame and video 2's first
 > frame are the same moment, so video 2's first frame is trimmed before concatenation
@@ -358,25 +389,67 @@ product.
   count exported from the asset manifest (`src/assets/manifest.js`) — never hardcode the frame
   count in the component. Preload frames 1–12 eagerly, the rest lazily when the section enters
   at `top bottom`.
-- **Canvas fit:** `cover`, centre-anchored, with a 12% safe area inset on all four sides of the
-  source frame — the subject (dripper, bloom, drips) must sit inside that inner 76%×76% region
-  so a `cover` crop at any supported viewport (§9: 360px–2560px) never clips it. This framing
-  constraint applies to how the source frames are shot/cropped in Phase 0 (see WORKFLOW.md
-  §0.1), not just to the canvas math.
+- **Canvas fit:** `contain`, centre-anchored, with `--sumi` filling the bleed. The 2:3 frame
+  sits at **full viewport height**, horizontally centred, and the ground either side is the page
+  ground — the canvas is cleared rather than filled, so the bleed is `--sumi` via the element's
+  own background and not a colour literal.
+
+  **Not `cover`.** Cover cropped the 2:3 frame to a 16:9-ish viewport and threw away the
+  negative space the composition is built on: the dripper filled the frame and bled off the top,
+  and at some scroll positions the screen held nothing but condensation texture. The emptiness
+  around the subject is the shot — cropping it is the §10 "compressing the emptiness" failure
+  wearing a different hat.
+
+  On viewports **narrower** than 2:3 (portrait phones) contain necessarily flips to
+  width-limited: the frame spans the full width with `--sumi` above and below, because full
+  height there would overflow horizontally. This is contain behaving correctly, not a special
+  case.
+
+  The 12% safe-area inset from WORKFLOW.md §0.1 no longer protects against clipping — contain
+  clips nothing. Keep it anyway as a *composition* rule: it is what stops the subject crowding
+  the frame edge, which is the thing that made cover look like a product shot.
 - **Do not** scrub a `<video>` element's `currentTime`. It stutters on Safari and iOS and will
   ruin the one moment the whole page is built around.
-- **Captions:** three steps cross-fade across thirds of the progress — 一 湯 / 二 蒸らし /
-  三 抽出. Opacity ramps `clamp(min(local*4, (1-local)*4))`, y offset `(1-o)*22`. They occupy
-  the **same** bottom-left position and fade through one another — they are not a stacked list
-  of three, or nothing is cross-fading.
 
-### 6.6 Ambient break II — the roast
+### 6.3 間 — ambient break I
+Full-bleed 100svh video loop, hairline border top and bottom. Over it, a horizontal marquee
+of six tokens, alternating outline and solid: `間`(outline) `ma`(solid) `間`(outline)
+`ma`(solid) `間`(outline) `ma`(solid) — i.e. every 間 is outlined
+(`-webkit-text-stroke: 1px`) and every `ma` is solid fill, six tokens total, no more, no fewer.
+Caption bottom-left.
+
+> 間 — the interval. Not empty space, but the pause that gives the next thing its weight.
+> We build the room around it.
+
+- **Assets:** `video/ma.webm|mp4` + poster.
+- **Motion:** marquee `xPercent: -34` scrubbed across the section. Video scales `1.25 → 1.0`
+  scrubbed. No text reveal — it's already moving.
+
+### 6.4 The Method — 01 to 05
+Alethia's numbered list, adapted. Left column sticks; right column scrolls the five items past it.
+
+| № | Title | Line |
+|---|---|---|
+| 01 | Single origin, single lot | We buy one lot at a time and stop when it's gone. |
+| 02 | Roasted over binchōtan | Charcoal, not gas. It is slower and it is worse for business. |
+| 03 | Ground at the seat | Nothing is ground in advance. You will hear it. |
+| 04 | Ninety-two degrees | Held thirty seconds off the boil so it does not scorch on contact. |
+| 05 | Four minutes, three pours | Each smaller than the last. The bed sits flat when it's done. |
+
+- **Motion:** left heading holds for the duration via CSS `position: sticky` — **not** a GSAP
+  pin. One pinning mechanism per page: the Ritual (§6.2) owns the page's only ScrollTrigger
+  pin, and a second pinned trigger competing for pin-spacing calculations through the Lenis
+  bridge is where this pattern breaks. Sticky is visually equivalent for a single always-in-flow
+  column and costs nothing. Items stagger in at `top 82%`, 80ms apart, with the number in
+  `--shu-lit` and a hairline rule that draws left-to-right over 1.2s.
+
+### 6.5 Ambient break II — the roast
 Same construction as 6.3, `70svh`, no marquee. Single caption right-aligned:
 > Binchōtan. Twelve minutes. By ear.
 
 - **Assets:** `video/roast.webm|mp4` + poster.
 
-### 6.7 The Selection
+### 6.6 The Selection
 Five menu rows. Hairline between each. No photographs.
 
 | Name | Notes | Price |
@@ -390,7 +463,7 @@ Five menu rows. Hairline between each. No photographs.
 - **Motion:** rows stagger in 80ms apart. Hover: `padding-left: 0 → 22px` over 0.7s, price
   shifts to `--shu-lit`. Rows are `<button>` elements — keyboard focusable, visible focus ring.
 
-### 6.8 The Room
+### 6.7 The Room
 Two plates, Alethia's card pair. Full-width stills, heavy crop, caption underneath in 10px
 tracked labels.
 
@@ -398,7 +471,7 @@ tracked labels.
 - **Motion:** each plate enters at `scale 1.12 → 1.0` with `clip-path` wipe from the bottom,
   1.4s. Parallax `yPercent: -8` scrubbed while in view.
 
-### 6.9 Reserve
+### 6.8 Reserve
 ```
 ┌──────────────────────────────────────────────┐
 │ 予約 / RESERVE          WALK-INS AFTER 15:00 │
@@ -413,7 +486,7 @@ Address: 2-14-6 Tomigaya, Shibuya-ku, Tokyo 151-0063.
 The seal is a 104px vermilion-bordered square containing 黒 — the only enclosed shape on the
 entire page.
 
-### 6.10 Footer reveal
+### 6.9 Footer reveal
 `position: fixed; bottom: 0; height: 74svh; z-index: 0`, with the content wrapper at `z-index: 1`
 and `margin-bottom: 74svh`. Contains `video/close.webm` at low opacity, an outlined NOIR at
 `clamp(58px, 17vw, 240px)`, a hairline, and one row of links.
@@ -457,12 +530,15 @@ gsap.ticker.lagSmoothing(0);
 **Reduced motion:** grain animation off, scroll cue static, all scrubs → `true`, all reveal
 tweens → `duration: 0` with final state applied. The page must remain fully readable.
 
-The Ritual (§6.5) does not simply collapse its scrub to `true` on a `+=340%` pin — that would
-leave a nearly-static 3.4-viewport-tall section with nothing happening in it, which fails
-"fully readable" as badly as a broken animation would. Under reduced motion the Ritual pin
-shortens to `+=100vh` and renders three static keyframes (one per caption: 一 湯, 二 蒸らし,
-三 抽出) with all three captions visible simultaneously, not cross-fading. It is a short,
+The Manifesto (§6.2) does not simply collapse its scrub to `true` on a `+=340%` pin — that
+would leave a nearly-static 3.4-viewport-tall section with nothing happening in it, which fails
+"fully readable" as badly as a broken animation would. Under reduced motion the pin shortens to
+`+=100vh` and renders three static keyframes, with **all three manifesto lines visible
+simultaneously** in their alternating margins rather than revealing in sequence. It is a short,
 legible, non-animated triptych — never a 340%-tall no-op.
+
+> Spell it `'+=100%'` in code. ScrollTrigger's `end` takes pixels or a percentage **of the
+> viewport** and does not parse CSS units, so `'+=100vh'` silently resolves to 100 *pixels*.
 
 ---
 
@@ -475,7 +551,8 @@ legible, non-animated triptych — never a 340%-tall no-op.
 | `public/video/roast.webm` + `.mp4` | 6s loop | 1.0 MB |
 | `public/video/close.webm` + `.mp4` | 6s loop | 800 KB |
 | `public/img/*-poster.webp` | first frame of each loop | 40 KB ea |
-| `public/frames/ritual/ritual_0001–0120.webp` | **1440×2160, q75** (actual) | **99.6 KB avg (82.6–130.8), 11.67 MB total** (actual) |
+| `public/frames/ritual/ritual_0001–0120.webp` | **1238×720, q75** (actual) | **25.1 KB avg (22.4–30.6), 2.94 MB total** (actual) |
+| `public/frames/ritual-portrait/ritual_0001–0120.webp` | **576×720, q75** (actual) | **18.3 KB avg (15.5–23.6), 2.15 MB total** (actual) |
 | `public/img/room-01.webp`, `room-02.webp` | 2000px wide | 220 KB ea |
 
 **Every video:** `muted loop playsinline preload="none"` with a `poster`. Never autoplay with
@@ -484,22 +561,24 @@ sound. Never let a black rectangle sit where a video hasn't loaded — the poste
 **Ritual frames — measured, not estimated.** The row above is the real output of the Phase 0
 extraction, not a target.
 
-- **Two source clips**, each 3840×2160 / 24fps / 192 frames / 8.000s. Video 2's first frame is
-  trimmed as a shared join frame, giving 383 frames across 15.958s, concatenated and extracted
-  in a single pass so frames distribute evenly across the seam.
-- `fps=7.5` over 15.958s lands **exactly 120 frames** — a ~3.2:1 downsample of the source, so
-  every output frame is a genuine source frame and none is duplicated.
-- **1440×2160 at q75: 99.6 KB average (82.6–130.8), 11.67 MB total.** Native resolution, no
-  upscale — see the ceiling note in §6.5.
+- **One source clip**, 1280×720 / 24fps / 192 frames / 8.000s, 16:9 landscape. **No letterbox
+  padding** — verified by cropdetect (both windows returned the full frame) and confirmed on a
+  brightened grid frame plus column/row brightness profiles.
+- **Cropped to 1238×720 to remove a generator watermark** — right edge only, see §6.2.
+- **Extracted twice**: the landscape master above and a 4:5 portrait set for the narrow branch,
+  `crop=576:720:532:0`. **Combined 5.09 MB.**
+- `fps=15` over 8.000s lands **exactly 120 frames** — a 24→15 decimation, so every output frame
+  is a genuine source frame and none is duplicated.
+- **1238×720 at q75: 25.1 KB average, 2.94 MB.** Portrait set 576×720: 18.3 KB average,
+  2.15 MB. No scale filter on either — both are native pixels.
 
 > **The old 60 KB/frame and 7 MB totals no longer apply.** They were written for a boxed stage;
-> the sequence is now full-bleed (§6.5) and carries the entire viewport, so it is the single
+> the sequence is now full-bleed (§6.2) and carries the entire viewport, so it is the single
 > heaviest thing on the page by a wide margin. 11.67 MB is **not** inside any budget previously
-> written here, and it is not covered by §9's JS budget either — the frames are lazy-loaded
-> after the eager first twelve and never block LCP. What it does affect is data cost on mobile
-> and time-to-smooth-scrub on a cold connection. The remaining lever is quality, not size: q75
-> is the current setting and dropping it has not been tried at 1440px. Resolution is already at
-> the source ceiling and must not be traded further.
+> written here. It is no longer a live concern either: at **2.97 MB** the whole sequence is now
+> lighter than a single hero photograph on most sites, down from 11.67 MB, because the new
+> source is 1280×720 rather than 1440×2160. Nothing is being traded — this is simply a smaller
+> master. The frames are still lazy-loaded after the eager first twelve and never block LCP.
 
 ---
 
@@ -541,5 +620,9 @@ Reject these in review, they are the failure modes for this specific design:
 - Rounded corners, drop shadows, glassmorphism, or any card with a background colour.
 - Compressing `vh` padding to "fit more content" → the emptiness is the product.
 - Scrubbing a `<video>` element instead of frames.
+- Cropping the subject out of the frame sequence to make it fill the viewport. The fit follows
+  the source: a portrait master is `contain` (its negative space IS the shot), a 16:9 master is
+  `cover` (§6.2). What is never acceptable is a crop that cuts the dripper or strands most of
+  the viewport in dead ground — measure before choosing, do not default either way.
 - Adding a testimonials section, a logo wall, an Instagram grid, or a newsletter modal.
 - More than one animation moving at any given moment.

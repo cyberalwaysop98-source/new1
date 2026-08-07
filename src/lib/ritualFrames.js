@@ -3,7 +3,9 @@
 // reaches 'top bottom'. Count comes from the manifest, never hardcoded.
 import { FRAMES, ritualFrames } from '../assets/manifest';
 
-export function createFrameLoader() {
+// `set` is a frame-set descriptor from the manifest (landscape master or the
+// portrait crop) — same shape, different paths and dimensions.
+export function createFrameLoader(set = ritualFrames) {
   const images = new Array(FRAMES).fill(null);
   let lazyStarted = false;
 
@@ -11,13 +13,13 @@ export function createFrameLoader() {
     if (images[i]) return images[i];
     const img = new Image();
     img.decoding = 'async';
-    img.src = ritualFrames.path(i);
+    img.src = set.path(i);
     images[i] = img;
     return img;
   }
 
   function loadEager() {
-    const n = Math.min(ritualFrames.eagerCount, FRAMES);
+    const n = Math.min(set.eagerCount, FRAMES);
     return Promise.all(
       Array.from({ length: n }, (_, i) => {
         const img = load(i);
@@ -31,7 +33,7 @@ export function createFrameLoader() {
   function loadRest() {
     if (lazyStarted) return;
     lazyStarted = true;
-    for (let i = Math.min(ritualFrames.eagerCount, FRAMES); i < FRAMES; i++) load(i);
+    for (let i = Math.min(set.eagerCount, FRAMES); i < FRAMES; i++) load(i);
   }
 
   function isReady(img) {
