@@ -18,4 +18,9 @@ export const ENTER = {
   imageScaleTo: 1,
   textYPercentFrom: 105,
   textYPercentTo: 0,
+  // §6.1 gives the hero its own, larger rise. Mirrored as translateY(110%) in
+  // src/styles/layout.css so the masked state exists at first paint — change
+  // both together.
+  heroYPercentFrom: 110,
+  heroOpacityTo: 0.22,
 };

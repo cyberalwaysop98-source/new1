@@ -12,6 +12,13 @@ dist
 dist-ssr
 *.local
 
+# Ritual source footage — the Flow/Veo master clips (~7 MB each).
+# The extracted frames in public/frames/ritual/ ARE committed; these masters are
+# the input that produced them and are reproducible from WORKFLOW.md §Phase 0
+# plus the ffmpeg pipeline recorded in DESIGN.md §6.5/§8.
+public/*.mp4
+public/*.mov
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

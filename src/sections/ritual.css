@@ -1,15 +1,46 @@
+/* DESIGN.md §6.5 — full-bleed. The sequence IS the viewport; type sits on it.
+   No framed stage, no column grid, no bordered box: a dripper centred in a box
+   reads as a product photo (§10). */
 .ritual{
-  display: grid;
-  grid-template-columns: 1fr 1.6fr;
-  gap: var(--gut);
-  align-items: center;
-  min-height: 100svh;
+  position: relative;
+  /* width:100% not 100vw — 100vw includes the scrollbar gutter and would push
+     the page into horizontal overflow (§9: responsive to 360px). */
+  width: 100%;
+  height: 100svh;
+  padding: 0;
+  overflow: hidden;
+}
+
+.ritual__canvas{
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--sumi);
+}
+
+/* Vertical scrim: a gradient, never a box. No edge, no border, no corner — it
+   only has to keep type legible over a moving image. */
+.ritual__scrim{
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(11, 10, 9, .75), transparent 62%);
 }
 
 .ritual__intro{
+  position: absolute;
+  /* Must clear the fixed nav (§5), which sits at 28px + its own line box. At
+     wide viewports --gut is already past it; at 360px --gut is only ~21.6px and
+     抽出 lands on top of the nav mark. max() keeps the wide layout untouched and
+     only floors the narrow one. */
+  top: max(var(--gut), 72px);
+  left: var(--gut);
   display: flex;
   flex-direction: column;
   gap: 12px;
+  max-width: 30ch;
 }
 
 .ritual__jp{
@@ -19,34 +50,46 @@
   color: var(--washi-dim);
 }
 
-.ritual__stage{
-  position: relative;
-}
-
-.ritual__canvas{
-  width: 100%;
-  height: auto;
-  border: 1px solid var(--rule);
-}
-
-.ritual__captions{
+/* All type lives on the LEFT: the tategaki rail (§5) and the scrollbar both
+   occupy the right edge and collide with anything placed there. */
+.ritual__foot{
   position: absolute;
-  top: 5%;
-  right: 5%;
+  left: var(--gut);
+  bottom: var(--gut);
   display: flex;
   flex-direction: column;
-  gap: 18px;
-  writing-mode: vertical-rl;
+  gap: 14px;
+}
+
+/* The three captions cross-fade THROUGH ONE ANOTHER in a single position — a
+   stacked list of three would not be a cross-fade (§6.5). The container holds
+   the line box; the captions are absolutely stacked inside it. */
+.ritual__captions{
+  position: relative;
+  height: 1.4em;
+  min-width: 12ch;
+}
+
+.ritual__caption{
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  white-space: nowrap;
+  color: var(--washi);
 }
 
 .ritual__temp{
-  position: absolute;
-  bottom: 5%;
-  right: 5%;
+  color: var(--washi-dim);
 }
 
 @media (max-width: 900px){
-  .ritual{
-    grid-template-columns: 1fr;
+  .ritual__intro{
+    max-width: 22ch;
+  }
+
+  .ritual__scrim{
+    /* Narrower viewport, less room for the image to breathe past the type —
+       carry the scrim further across so the captions stay readable. */
+    background: linear-gradient(90deg, rgba(11, 10, 9, .8), transparent 88%);
   }
 }

@@ -8,20 +8,27 @@
 // treatment whenever the relevant field is null, and switch to the real asset
 // the moment a path is filled in here. No other file should hardcode a path.
 
-export const FRAMES = 120; // DESIGN.md §6.5 — ritual_0001.webp … ritual_0120.webp
+// Actual count on disk, produced by the Phase 0 extraction (24fps/8.0s source
+// sampled at fps=15 → 120 genuine frames, no duplication). Read from here and
+// never hardcoded at a call site — §6.5 indexes with Math.round(p * (FRAMES - 1)).
+export const FRAMES = 120;
 
-// Set true only once all 120 frames listed below actually exist in public/.
-export const USE_FRAMES = false;
+// True: the real sequence exists in public/frames/ritual/. The procedural sumi-e
+// renderer (src/lib/ritualProcedural.js) is retained as the fallback for when
+// this is false — do not delete it.
+export const USE_FRAMES = true;
 
 export const ritualFrames = {
   count: FRAMES,
-  width: 1440,
-  height: 1760,
-  // Returns the path for frame index i (0-based). Null while USE_FRAMES is false.
-  path: (i) =>
-    USE_FRAMES
-      ? `/frames/ritual/ritual_${String(i + 1).padStart(4, '0')}.webp`
-      : null,
+  // Measured, not the originally specified 1440×1760 — the sequence could not
+  // meet the 60 KB/frame budget at 1440px. See DESIGN.md §8.
+  width: 1200,
+  height: 1800,
+  // Number of leading frames fetched eagerly; the rest load when the section
+  // reaches 'top bottom' (§6.5).
+  eagerCount: 12,
+  // Path for frame index i (0-based).
+  path: (i) => `/frames/ritual/ritual_${String(i + 1).padStart(4, '0')}.webp`,
 };
 
 export const ambient = {

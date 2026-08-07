@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Overlays from './components/Overlays';
 import Nav from './components/Nav';
 import Rail from './components/Rail';
@@ -19,14 +18,12 @@ import './App.css';
 
 function App() {
   useEffect(() => {
+    // Both are singletons and survive StrictMode's mount → cleanup → mount cycle
+    // on their own. Killing ScrollTriggers in a cleanup here actively broke the
+    // reveals: the teardown removed the triggers while the re-run's tweens
+    // re-asserted their start values, so the hero never left its masked offset.
     initSmoothScroll();
     initAnimations();
-
-    return () => {
-      // React 19 StrictMode double-invokes effects in dev; without this,
-      // remounting stacks a second set of ScrollTriggers on top of the first.
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-    };
   }, []);
 
   return (

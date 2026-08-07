@@ -8,47 +8,110 @@ import { prefersReducedMotion } from './reducedMotion';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Singleton, matching initSmoothScroll. React StrictMode double-invokes effects
+// in dev (mount → cleanup → mount); without this guard the second pass built a
+// duplicate set of tweens whose immediateRender re-applied every start value,
+// leaving the hero frozen at its 110% offset instead of animating to rest.
+let initialized = false;
+
 export function initAnimations() {
+  if (initialized) return;
+  initialized = true;
+
   const reduced = prefersReducedMotion();
   const scrub = reduced ? true : SCRUB;
 
   // ---- Hero: masked load reveal, 1.5s power3.out, 90ms stagger ----
+  // The pre-animation state lives in CSS (styles/layout.css), NOT in a .set()
+  // here — setting it after mount painted the title at rest first and then
+  // pushed it back down, a visible flash. fromTo's immediateRender matches the
+  // value CSS already applied, so nothing moves backwards on first paint.
+  // fromTo with an EXPLICIT yPercent start. gsap.to cannot be used here: the
+  // start value comes from CSS, and getComputedStyle resolves translateY(110%)
+  // to a pixel matrix, so GSAP would read y:270.6px / yPercent:0 and animating
+  // yPercent→0 becomes a no-op that leaves the title stranded. immediateRender
+  // writes exactly the value CSS already painted, so there is no visible jump,
+  // and the singleton guard above means it is asserted only once.
   const heroTargets = gsap.utils.toArray('#hero [data-reveal]');
-  gsap.set(heroTargets, { yPercent: reduced ? 0 : ENTER.textYPercentFrom });
-  if (!reduced && heroTargets.length) {
-    gsap.to(heroTargets, {
-      yPercent: ENTER.textYPercentTo,
-      duration: 1.5,
-      ease: EASE,
-      stagger: 0.09,
-    });
+  if (heroTargets.length) {
+    if (reduced) {
+      gsap.set(heroTargets, { yPercent: ENTER.textYPercentTo });
+    } else {
+      // `y: 0` is load-bearing, not decoration. GSAP composes the final
+      // transform as translate(yPercent% + y), and it parses the CSS matrix
+      // into y: 270.6px. Without zeroing y, the tween runs yPercent 110→0
+      // correctly and still lands on translate(0px, 270.6px) — the title
+      // animates to the wrong resting place.
+      gsap.fromTo(
+        heroTargets,
+        { yPercent: ENTER.heroYPercentFrom, y: 0 },
+        { yPercent: ENTER.textYPercentTo, y: 0, duration: 1.5, ease: EASE, stagger: 0.09 }
+      );
+    }
   }
 
   const heroMedia = document.querySelector('#hero .hero__media');
   if (heroMedia) {
     if (reduced) {
-      gsap.set(heroMedia, { opacity: 0.22 });
+      gsap.set(heroMedia, { opacity: ENTER.heroOpacityTo });
     } else {
       gsap.fromTo(
         heroMedia,
         { opacity: 0 },
-        { opacity: 0.22, duration: 0.6, delay: 0.8, ease: EASE }
+        { opacity: ENTER.heroOpacityTo, duration: 0.6, delay: 0.8, ease: EASE }
       );
     }
   }
 
-  // ---- Manifesto: one masked line at a time, trigger 'top 88%' ----
-  gsap.utils.toArray('.manifesto [data-reveal="manifesto"]').forEach((el) => {
-    gsap.set(el, { yPercent: reduced ? 0 : ENTER.textYPercentFrom });
-    if (!reduced) {
-      gsap.to(el, {
-        yPercent: ENTER.textYPercentTo,
-        duration: DUR.reveal,
-        ease: EASE,
-        scrollTrigger: { trigger: el, start: 'top 88%' },
+  // ---- Manifesto: one masked line at a time ----
+  // §6.2 ("they must never both be moving") and §10 make non-overlap a hard
+  // invariant. Widening trigger separation alone CANNOT provide it: a single
+  // large scroll delta crosses every trigger within a couple of frames however
+  // far apart the starts are — measured at 3 lines mid-tween on the same frame
+  // for one 2600px wheel event. So the starts below are widened for feel, and a
+  // serial queue supplies the actual guarantee: a line whose trigger fires while
+  // another is still animating waits and plays only once that one has settled.
+  // Durations are untouched (still DUR.reveal).
+  const manifestoLines = gsap.utils.toArray('.manifesto [data-reveal="manifesto"]');
+  if (reduced) {
+    gsap.set(manifestoLines, { yPercent: ENTER.textYPercentTo });
+  } else {
+    let queue = Promise.resolve();
+    manifestoLines.forEach((el, i) => {
+      ScrollTrigger.create({
+        // Trigger off the STABLE parent, never `el` itself: `el` carries the
+        // 105% masking offset from CSS, so using it as its own trigger measures
+        // a displaced box and the start position moves as the line animates.
+        trigger: el.closest('.reveal-mask') ?? el,
+        // 88% / 78% / 68% — each line must travel further up the viewport than
+        // the one before it, on top of the 26vh gap already between them.
+        start: `top ${88 - i * 10}%`,
+        once: true,
+        onEnter: () => {
+          queue = queue.then(
+            () =>
+              // fromTo for the same reason as the hero: the 105% start lives in
+              // CSS and would be read back as pixels, making a yPercent tween a
+              // no-op. Created when the queue reaches it, so immediateRender
+              // fires at the moment the line is due to animate.
+              new Promise((resolve) => {
+                gsap.fromTo(
+                  el,
+                  { yPercent: ENTER.textYPercentFrom, y: 0 },
+                  {
+                    yPercent: ENTER.textYPercentTo,
+                    y: 0,
+                    duration: DUR.reveal,
+                    ease: EASE,
+                    onComplete: resolve,
+                  }
+                );
+              })
+          );
+        },
       });
-    }
-  });
+    });
+  }
 
   // ---- 間: marquee xPercent -34 scrubbed, video scale 1.25 → 1.0 scrubbed ----
   const maSection = document.getElementById('ma');

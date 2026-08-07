@@ -7,9 +7,39 @@ Skills referenced are the ones already installed in your Claude Code global skil
 
 ---
 
+## Skills discipline — `find-skills` is bounded per phase
+
+`find-skills` is available in every phase below, but only inside that phase's stated remit. It
+exists to find *reasoning* you are missing, never to widen the build.
+
+**Three rules that hold in every phase:**
+
+1. **A skill is advisory. It never becomes a project dependency.** Installing a skill must not
+   add a package, a runtime, a build plugin, or a CSS framework. The stack in DESIGN.md §7 is
+   closed — `vite + react 19 + gsap/ScrollTrigger + lenis`, and nothing else.
+2. **If a skill recommends a dependency, that is a DESIGN.md amendment, not an install.** Stop,
+   propose the change against §7 and the §9 JS budget, and get it agreed before writing code.
+   framer-motion was removed from this project by exactly that route, in reverse.
+3. **Search inside the phase, resolve inside the phase.** `find-skills` may not be used to
+   import work from a later phase, and anything it turns up must be settled before the current
+   phase's exit criteria are checked. Carrying an open skill question across a phase boundary
+   is the same failure as carrying an unbuilt asset across one.
+
+**Default answer is no.** Most phases already name the skills they need. Reach for `find-skills`
+only when a phase's own list demonstrably does not cover the problem in front of you — and say
+which listed skill fell short and why.
+
+---
+
 ## Phase 0 — Asset production (Flow / Veo)
 
 **Nothing else starts until this phase passes its checklist.**
+
+> **Skills:** none.
+>
+> `find-skills` — **bound:** out of scope. This phase is prompting Flow/Veo and running ffmpeg;
+> there is no code to reason about. A skill that offers to generate or source imagery is
+> answering a question this phase does not ask — the assets are authored, not fetched.
 
 ### The one rule for every prompt
 
@@ -124,6 +154,10 @@ happy for any single frame to be the site's OG image.
 ## Phase 1 — Scaffold
 
 > **Skills:** `pick-ui-library`, `ponytail`
+>
+> `find-skills` — **bound:** scaffold and tooling ergonomics only. It may not be used to find a
+> UI library, CSS framework, or component library; this phase's brief already forbids all three
+> and Tailwind is not on this project. If it surfaces one, that is the answer being wrong.
 
 ```
 Read DESIGN.md in full.
@@ -149,6 +183,10 @@ or a component library. Tailwind is not being used on this project.
 ## Phase 2 — Static build, no motion
 
 > **Skills:** `luxury-layouts`, `typography-master`, `color-theory`, `apple-design`
+>
+> `find-skills` — **bound:** layout, type and colour *reasoning* only. Not components. Anything
+> that returns a pre-built card, grid, or menu component is out of scope: the sections are hand
+> built from §6, and §10 rejects cards outright.
 
 ```
 Read DESIGN.md §4, §5, §6.
@@ -178,6 +216,10 @@ already looks like something. If it only works once it's animated, the layout is
 
 > **Skills:** `gsap-scrolltrigger-storytelling`, `ui-motion-master`, `animate`,
 > `animation-vocabulary`
+>
+> `find-skills` — **bound:** motion reasoning and GSAP/Lenis interaction only. It may not be
+> used to add an animation runtime. If the answer to a motion problem is "install a library",
+> the answer is wrong — GSAP already owns everything scroll-driven and CSS owns the rest (§7).
 
 ```
 Read DESIGN.md §6 and §7.
@@ -209,6 +251,11 @@ fires late. Slow scroll and fast scroll both read correctly.
 ## Phase 4 — The Ritual scrub
 
 > **Skills:** `gsap-scrolltrigger-storytelling`, `performance`
+>
+> `find-skills` — **bound:** canvas rendering, image decode, and frame-sequence performance
+> only. It may not be used to find a scroll-sequence or image-sequence library: §6.5 specifies a
+> hand-written `render(p)` on a `<canvas>`, and §10 forbids scrubbing a `<video>` whatever a
+> library makes convenient.
 
 ```
 Read DESIGN.md §6.5.
@@ -235,6 +282,11 @@ entry, and it still works after a window resize mid-section.
 ## Phase 5 — Performance and quality floor
 
 > **Skills:** `performance`, `ponytail-audit`, `ponytail-debt`
+>
+> `find-skills` — **bound:** measurement, profiling and font subsetting only. This is the one
+> phase permitted to reach for a *build-time* tool (a subsetter for §4.1), and only if it leaves
+> no runtime footprint. Anything that changes the shipped bundle is scored against the §9 budget
+> and reported with what it cost, not merged quietly.
 
 ```
 Read DESIGN.md §9.
@@ -258,6 +310,9 @@ Report what you changed and what it cost.
 ## Phase 6 — Critique
 
 > **Skills:** `impeccable`, `review-animations`, `awwwards`
+>
+> `find-skills` — **bound:** read-only. Critique may not install anything. If a skill would
+> change the site, it belongs to an earlier phase and the phase order says you are too late.
 
 ```
 Read DESIGN.md, especially §10.

@@ -285,19 +285,74 @@ Alethia's numbered list, adapted. Left column sticks; right column scrolls the f
   `--shu-lit` and a hairline rule that draws left-to-right over 1.2s.
 
 ### 6.5 The Ritual — pinned scrub sequence ★ signature
-The centrepiece. Pinned for `+=340%` of viewport height.
+The centrepiece. Pinned for `+=340%` of viewport height. **Full-bleed: the sequence is the
+whole viewport, and the type sits on it.**
 
 ```
 ┌──────────────────────────────────────────────┐
-│  抽出                    ▓▓▓            ─    │
-│  Four minutes           ▓▓▓▓▓          一   │
-│  四分間                  ▓▓▓▓▓         湯   │
-│                          ▓▓▓          92°C  │
-│                         [scrubbed]           │
+│▒▒▒                                           │
+│▒▒ 抽出                                       │
+│▒▒ Four minutes            [ the sequence,    │
+│▒▒ 四分間                    100vw × 100svh,  │
+│▒▒                           edge to edge ]   │
+│▒▒                                            │
+│▒▒ 92°C                                       │
+│▒▒ 一 湯                                      │
+│▒▒▒                                           │
 └──────────────────────────────────────────────┘
+  ▒ = scrim: linear-gradient(90deg, rgba(11,10,9,.75), transparent)
 ```
-- **Assets:** `frames/ritual/ritual_0001.webp` … `ritual_0120.webp`, 1440×1760, WebP q75,
-  ≤60 KB each. Produced in Flow — see WORKFLOW.md §Phase 0.
+
+The sequence fills the viewport behind everything — no framed box, no bordered stage, no
+column grid. **A dripper centred in a box reads as a product photo**, which is exactly the
+stock-café failure §10 exists to prevent; full-bleed is what makes it a room instead of a
+product.
+
+- **Type over footage:** `抽出 / Four minutes / 四分間` pinned top-left, the step captions
+  bottom-left, both inside `--gut`. All type sits on a **vertical scrim** — a left-to-right
+  gradient from `rgba(11,10,9,.75)` to transparent, spanning the full height. The scrim is a
+  gradient, never a box, card, or panel; it has no edge, no border and no corner. It exists so
+  the type stays legible over a moving image, nothing more.
+- **All type is on the left.** Nothing sits at the right edge: the tategaki rail (§5) and the
+  scrollbar both live there, and caption text collides with them. `92°C` moves to the left
+  column with the captions.
+- **Assets:** `frames/ritual/ritual_0001.webp` … `ritual_0120.webp`, 1440×2160, WebP q75,
+  99.6 KB average. Produced in Flow — see WORKFLOW.md §Phase 0. Actual figures in §8; the
+  frame count is read from `FRAMES` in `src/assets/manifest.js`, never hardcoded.
+
+> **1440px is the native ceiling — do not scale above it.** The cropped source is exactly
+> 1440×2160, so any larger export is pure upscale carrying **no additional real detail**, only
+> weight. A 1920px pass was produced and measured (132.9 KB average, 15.57 MB total) and
+> discarded for exactly that reason: 33% more bytes for zero more picture. If the sequence ever
+> looks soft edge-to-edge at wide viewports, the fix is a higher-resolution source clip, not a
+> bigger export.
+
+> **The two source clips share their joining frame.** Video 1's last frame and video 2's first
+> frame are the same moment, so video 2's first frame is trimmed before concatenation
+> (`trim=start_frame=1`) and extraction runs in ONE pass across the joined clip so frames
+> distribute evenly. Verified: luminance across the seam is continuous (33.041 → 33.007 YAVG),
+> and consecutive-frame SSIM at the join (0.928) is *higher* than the sequence's typical
+> frame-to-frame similarity (0.90–0.92), i.e. no hitch.
+>
+> Do not judge the seam with a naive per-pixel comparison. Raw SSIM between the two joining
+> frames is only 0.768 against an in-clip adjacent-frame baseline of 0.985 — not because the
+> clips fail to meet, but because they were encoded independently and SSIM punishes differing
+> compression noise severely on near-black frames. The luminance continuity and the best-match
+> peak landing exactly at `v1[last] ↔ v2[first]` are the reliable signals.
+
+> **Do not re-run `cropdetect` on the Ritual source and "fix" the crop.** It does not work on
+> this footage, and the reason is the brief itself. §Phase 0 requires 70% of the frame in
+> shadow, which puts actual image brightness at **20–27** — inside `cropdetect`'s default
+> `limit=24` border threshold, so it eats real picture and reports a different crop depending on
+> how bright that part of the clip happens to be. Two windows of the same clip disagreed by
+> 268px on width. Dropping the limit does not help either: at `limit=1`, `2` and `6` the
+> padding's own compression noise reads as content and it returns the full frame. **No limit
+> value separates image from padding on this material.**
+>
+> The crop in use — `crop=1440:2160:1200:0` — was derived by measuring the column brightness
+> profile and confirmed visually against a brightened, grid-overlaid frame: symmetric 1200px
+> pillarbox bars around a 1440×2160 image, which is exactly the 2:3 aspect of the source stills
+> Veo padded. It is correct. It is not what `cropdetect` reports, and that is expected.
 - **Implementation:** `<canvas>`, single `render(p)` function, `p` from `ScrollTrigger.progress`.
   `drawImage(images[Math.round(p * (FRAMES - 1))], 0, 0, W, H)`, where `FRAMES` is the frame
   count exported from the asset manifest (`src/assets/manifest.js`) — never hardcode the frame
@@ -311,7 +366,9 @@ The centrepiece. Pinned for `+=340%` of viewport height.
 - **Do not** scrub a `<video>` element's `currentTime`. It stutters on Safari and iOS and will
   ruin the one moment the whole page is built around.
 - **Captions:** three steps cross-fade across thirds of the progress — 一 湯 / 二 蒸らし /
-  三 抽出. Opacity ramps `clamp(min(local*4, (1-local)*4))`, y offset `(1-o)*22`.
+  三 抽出. Opacity ramps `clamp(min(local*4, (1-local)*4))`, y offset `(1-o)*22`. They occupy
+  the **same** bottom-left position and fade through one another — they are not a stacked list
+  of three, or nothing is cross-fading.
 
 ### 6.6 Ambient break II — the roast
 Same construction as 6.3, `70svh`, no marquee. Single caption right-aligned:
@@ -418,11 +475,31 @@ legible, non-animated triptych — never a 340%-tall no-op.
 | `public/video/roast.webm` + `.mp4` | 6s loop | 1.0 MB |
 | `public/video/close.webm` + `.mp4` | 6s loop | 800 KB |
 | `public/img/*-poster.webp` | first frame of each loop | 40 KB ea |
-| `public/frames/ritual/ritual_0001–0120.webp` | 1440×1760, q75 | 60 KB ea, 7 MB total |
+| `public/frames/ritual/ritual_0001–0120.webp` | **1440×2160, q75** (actual) | **99.6 KB avg (82.6–130.8), 11.67 MB total** (actual) |
 | `public/img/room-01.webp`, `room-02.webp` | 2000px wide | 220 KB ea |
 
 **Every video:** `muted loop playsinline preload="none"` with a `poster`. Never autoplay with
 sound. Never let a black rectangle sit where a video hasn't loaded — the poster covers it.
+
+**Ritual frames — measured, not estimated.** The row above is the real output of the Phase 0
+extraction, not a target.
+
+- **Two source clips**, each 3840×2160 / 24fps / 192 frames / 8.000s. Video 2's first frame is
+  trimmed as a shared join frame, giving 383 frames across 15.958s, concatenated and extracted
+  in a single pass so frames distribute evenly across the seam.
+- `fps=7.5` over 15.958s lands **exactly 120 frames** — a ~3.2:1 downsample of the source, so
+  every output frame is a genuine source frame and none is duplicated.
+- **1440×2160 at q75: 99.6 KB average (82.6–130.8), 11.67 MB total.** Native resolution, no
+  upscale — see the ceiling note in §6.5.
+
+> **The old 60 KB/frame and 7 MB totals no longer apply.** They were written for a boxed stage;
+> the sequence is now full-bleed (§6.5) and carries the entire viewport, so it is the single
+> heaviest thing on the page by a wide margin. 11.67 MB is **not** inside any budget previously
+> written here, and it is not covered by §9's JS budget either — the frames are lazy-loaded
+> after the eager first twelve and never block LCP. What it does affect is data cost on mobile
+> and time-to-smooth-scrub on a cold connection. The remaining lever is quality, not size: q75
+> is the current setting and dropping it has not been tried at 1440px. Resolution is already at
+> the source ceiling and must not be traded further.
 
 ---
 

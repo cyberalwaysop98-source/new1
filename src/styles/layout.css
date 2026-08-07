@@ -36,3 +36,29 @@
   display: block;
   will-change: transform;
 }
+
+/* Hero pre-animation state, authored in CSS so the FIRST paint is already the
+   masked state. Previously GSAP applied this via .set() after mount, which
+   painted the title at rest and then pushed it back down to replay — a visible
+   flash-of-final-state. Keep the 110% in sync with ENTER.heroYPercentFrom in
+   src/lib/motion.js (DESIGN.md §6.1).
+   Scoped to .js (set by an inline script in index.html) so a JS failure leaves
+   the hero readable, and skipped under reduced motion where no reveal runs. */
+@media (prefers-reduced-motion: no-preference){
+  .js #hero [data-reveal]{
+    transform: translateY(110%);
+  }
+
+  .js .hero__media{
+    opacity: 0;
+  }
+
+  /* Same reasoning for the manifesto lines. They sit at the fold rather than
+     above it, so the flash is only visible on a tall viewport — but the queue in
+     animations.js reveals them well after mount, and without this the first line
+     would paint at rest before its turn. Keep in sync with
+     ENTER.textYPercentFrom. */
+  .js .manifesto [data-reveal="manifesto"]{
+    transform: translateY(105%);
+  }
+}

@@ -27,6 +27,15 @@
   </head>
   <body>
     <div id="root"></div>
+    <!--
+      Marks JS as available BEFORE first paint, so the hero's pre-animation
+      masked state (styles/layout.css) applies only when GSAP will actually be
+      there to animate it out. Without this the state would be authored in CSS
+      unconditionally and a JS failure would leave the hero permanently hidden.
+      Must stay inline and synchronous — a deferred or external script runs too
+      late and reintroduces the flash it exists to prevent.
+    -->
+    <script>document.documentElement.classList.add('js');</script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
