@@ -11,19 +11,12 @@
       content="NOIR — a seven-seat kissaten in Tomigaya, Tokyo. Dark wood, one low light, hand-drip only."
     />
 
-    <!--
-      TEMPORARY dev-only webfont loader. DESIGN.md §4.1 specifies self-hosted,
-      subset .woff2 with preload + font-display:swap — the real subset files
-      (public/fonts/*.woff2) don't exist yet (Phase 0 asset production is
-      deferred, see src/styles/fonts.css). Remove this link and add the
-      <link rel="preload"> pair from §4.1 the day those two files land.
-    -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Shippori+Mincho&family=Zen+Kaku+Gothic+New:wght@300;400&display=swap"
-      rel="stylesheet"
-    />
+    <!-- §4.1: self-hosted subsets. Preload only the two faces used above the
+         fold, since the hero title is the LCP element and must not wait on a
+         font request that starts late. crossorigin is required even same-origin
+         for fonts, or the preload is fetched twice. -->
+    <link rel="preload" href="/fonts/shippori-mincho-subset.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/zen-kaku-gothic-new-300-subset.woff2" as="font" type="font/woff2" crossorigin />
   </head>
   <body>
     <div id="root"></div>

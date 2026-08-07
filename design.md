@@ -143,6 +143,9 @@ production build.
     metrics-matched.
 
 ```css
+/* Shipped values — see src/styles/fonts.css. The overrides below are MEASURED
+   (real face's average advance vs the fallback's, vertical metrics from the real
+   face's hhea divided by that size-adjust), not estimated. */
 @font-face{
   font-family: 'Shippori Mincho';
   src: url('/fonts/shippori-mincho-subset.woff2') format('woff2');
@@ -151,26 +154,27 @@ production build.
 }
 @font-face{
   font-family: 'Shippori Mincho Fallback';
-  src: local('Georgia');
-  size-adjust: 112%;
-  ascent-override: 92%;
-  descent-override: 28%;
+  src: local('Georgia'), local('Times New Roman');
+  size-adjust: 106.11%;
+  ascent-override: 109.33%;
+  descent-override: 27.14%;
   line-gap-override: 0%;
 }
 :root{ --display: 'Shippori Mincho', 'Shippori Mincho Fallback', Georgia, serif; }
 
+/* Two weights: 300 above the fold, 400 for menu names. */
 @font-face{
   font-family: 'Zen Kaku Gothic New';
-  src: url('/fonts/zen-kaku-gothic-new-subset.woff2') format('woff2');
+  src: url('/fonts/zen-kaku-gothic-new-300-subset.woff2') format('woff2');
   font-weight: 300;
   font-display: swap;
 }
 @font-face{
   font-family: 'Zen Kaku Gothic New Fallback';
-  src: local('-apple-system'), local('Helvetica Neue'), local('Arial');
-  size-adjust: 100%;
-  ascent-override: 90%;
-  descent-override: 22%;
+  src: local('Arial'), local('Helvetica Neue');
+  size-adjust: 92.85%;
+  ascent-override: 124.93%;
+  descent-override: 31.02%;
   line-gap-override: 0%;
 }
 :root{ --body: 'Zen Kaku Gothic New', 'Zen Kaku Gothic New Fallback', -apple-system, 'Hiragino Sans', sans-serif; }
@@ -181,23 +185,26 @@ production build.
 <link rel="preload" href="/fonts/zen-kaku-gothic-new-subset.woff2" as="font" type="font/woff2" crossorigin>
 ```
 
-**Known LCP risk — the interim Google Fonts CDN link.** The build currently loads both faces
-from the Google Fonts CDN via a `<link>` in `index.html`, because the subset `.woff2` files
-above do not exist yet. This is not a cosmetic shortcut, it is a direct threat to the ≤ 2.0s
-LCP in §9:
+**Resolved in Phase 5 — the CDN is gone.** Both faces are now self-hosted subsets and no
+request leaves the origin. Measured on the production build:
 
-- The hero title *is* the LCP element (§9), and it is set in Shippori Mincho. Its paint is
-  therefore gated on a webfont that arrives over a third-party origin.
-- The CDN adds a DNS lookup, TLS handshake and an extra round trip on a connection the browser
-  has not already opened, and serves a full unsubset face rather than the §6-scoped subset.
-- `font-display: swap` keeps text visible, but the metrics-matched fallback is tuned for the
-  subset faces — the swap-in from an unsubset CDN face is where layout shift creeps back and
-  threatens CLS = 0.
+| | before (CDN) | after (subset) |
+|---|---|---|
+| LCP element | `SPAN.footer__mark` | **`[data-reveal="title"]` in `#hero`, text "NOIR"** |
+| LCP time | 120 ms | **92–108 ms** |
+| Third-party hosts | fonts.googleapis, fonts.gstatic | **none** |
+| Font bytes | full unsubset faces over a cross-origin round trip | **36.5 KB** total |
 
-**This must be replaced with the self-hosted subsets before Phase 5 exits.** Phase 5 cannot be
-signed off with the CDN link still in `index.html`, regardless of what the measured numbers say
-on a warm local connection — a passing LCP measured against a cached CDN font is not evidence
-the budget holds for a first-time visitor.
+- `shippori-mincho-subset.woff2` — 19.9 KB, `zen-kaku-gothic-new-300-subset.woff2` — 8.2 KB,
+  `zen-kaku-gothic-new-400-subset.woff2` — 8.4 KB. Only the first two are preloaded: they are
+  the weights above the fold.
+- **125 glyphs**: printable ASCII plus 30 non-ASCII — the kana and kanji in §6 copy, `ō` for
+  *Kōridashi* and *binchōtan*, `¥`, `·`, the dashes and `→`. Derived by scanning the source, not
+  hand-listed. **Regenerate whenever §6 copy changes** — a missing glyph falls back mid-word.
+- Fallback overrides are **measured**, not estimated: the real face's average advance over
+  `[A-Za-z0-9 .,]` against the local fallback's gives `size-adjust`, and the vertical overrides
+  come from the real face's own hhea metrics divided by it. Shippori→Georgia 106.11%,
+  Zen Kaku→Arial 92.85%. CLS across the swap measures 0.
 
 ---
 

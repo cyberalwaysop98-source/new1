@@ -1,8 +1,8 @@
 .footer{
-  position: fixed;
-  left: 0;
-  right: 0;
+  /* sticky, never fixed — see .footer-reveal in App.css and §9 */
+  position: sticky;
   bottom: 0;
+  width: 100%;
   height: 74svh;
   z-index: 0;
   overflow: hidden;

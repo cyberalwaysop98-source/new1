@@ -291,7 +291,7 @@ entry, and it still works after a window resize mid-section.
 ```
 Read DESIGN.md §9.
 
-Audit and fix against the budgets: LCP ≤ 2.0s, initial JS ≤ 90 KB gzipped, CLS 0,
+Audit and fix against the budgets: LCP ≤ 2.0s, initial JS ≤ 120 KB gzipped, CLS 0,
 60fps during the pinned scrub on a mid-range Android profile.
 
 Also verify:

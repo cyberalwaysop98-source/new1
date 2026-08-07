@@ -61,7 +61,9 @@ function App() {
         <Reserve />
       </main>
 
-      <Footer />
+      <div className="footer-reveal">
+        <Footer />
+      </div>
     </>
   );
 }

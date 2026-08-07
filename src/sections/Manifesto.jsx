@@ -171,6 +171,12 @@ export default function Manifesto() {
       // '%' not 'vh' — ScrollTrigger does not parse CSS units (§7).
       end: reduced ? '+=100%' : '+=340%',
       pin: true,
+      // Pin by transform, not position:fixed. The default 'fixed' pinType makes
+      // the browser treat the pin engaging as an abrupt layout change and it
+      // scored CLS 0.625 on a single entry (canvas 0x0 -> full size) the moment
+      // the section pinned. Transforms never generate layout-shift entries, and
+      // it is also the correct pinType alongside a smooth-scroll library (§7).
+      pinType: 'transform',
       scrub: reduced ? true : SCRUB,
       onUpdate: (self) => {
         progress = self.progress;

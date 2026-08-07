@@ -2,5 +2,14 @@
   position: relative;
   z-index: 1;
   background: var(--sumi);
-  margin-bottom: 74svh; /* DESIGN.md §6.10 — reveals the fixed footer beneath */
+}
+
+/* §6.9 — the footer reveal. The container gives the sticky footer its scroll
+   room; the footer itself is NOT fixed, so it never occupies the initial
+   viewport. That is a §9 requirement, not a preference: a fixed footer puts its
+   clamp(58px, 17vw, 240px) mark in the first paint and it wins LCP over the hero
+   title (measured at 120ms, size 230408). */
+.footer-reveal{
+  position: relative;
+  height: 74svh;
 }
