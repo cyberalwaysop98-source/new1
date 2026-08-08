@@ -31,7 +31,21 @@
 .reserve__cta{
   align-self: flex-start;
   border-bottom: 1px solid var(--shu-lit);
-  padding-bottom: 4px;
+  text-decoration: none;
+  /* Same language as the nav: opacity only. The page's one job is this control,
+     and it was the only interactive element with no response to the pointer. */
+  opacity: 1;
+  transition: opacity var(--dur-hover) var(--ease);
+  /* 44px hit area, layout unchanged. Note this replaces the old
+     padding-bottom: 4px — padding-block would have overridden it anyway, and
+     the underline now sits 14px below the text rather than 4px. */
+  padding-block: 14px;
+  margin-block: -14px;
+}
+
+.reserve__cta:hover,
+.reserve__cta:focus-visible{
+  opacity: .55;
 }
 
 .reserve__details{

@@ -10,24 +10,19 @@
   gap: var(--gut);
   width: 100%;
   padding: 4vh 0;
-  /* transform, not padding-left: animating a layout property thrashes layout
-     for an identical result. */
-  transition: transform .7s var(--ease);
-}
-
-.selection__row:hover,
-.selection__row:focus-visible{
-  transform: translateX(22px);
+  /* The 22px shift is driven by GSAP (animations.js), not from here: GSAP owns
+     an inline transform on this element from the reveal, and inline beats the
+     stylesheet, so a :hover transform rule here silently does nothing. */
 }
 
 .selection__row:hover .selection__price,
 .selection__row:focus-visible .selection__price{
   color: var(--shu-lit);
-  transition: color .7s var(--ease);
+  transition: color var(--dur-hover) var(--ease);
 }
 
 .selection__price{
-  transition: color .7s var(--ease);
+  transition: color var(--dur-hover) var(--ease);
 }
 
 @media (max-width: 700px){
@@ -53,15 +48,15 @@
   transform: translateY(0);
   opacity: 1;
   transition:
-    transform .32s var(--ease),
-    opacity .32s var(--ease);
-  transition-delay: calc(var(--i) * 25ms);
+    transform var(--dur-hover) var(--ease),
+    opacity var(--dur-hover) var(--ease);
+  transition-delay: calc(var(--i) * var(--cascade));
 }
 
 .selection__row:hover .selection__romaji .chars__ch,
 .selection__row:focus-visible .selection__romaji .chars__ch{
-  animation: romaji-rebuild .42s var(--ease) both;
-  animation-delay: calc(var(--i) * 25ms);
+  animation: romaji-rebuild var(--dur-hover) var(--ease) both;
+  animation-delay: calc(var(--i) * var(--cascade));
 }
 
 @keyframes romaji-rebuild{

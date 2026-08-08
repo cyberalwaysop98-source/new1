@@ -1,14 +1,24 @@
-// DESIGN.md §7 — motion system constants. No inline easing strings or ad-hoc
-// durations anywhere else in the codebase; everything imports from here.
+// DESIGN.md §7 — the motion system has exactly two homes and they must stay in
+// step:
+//   * JS tweens import the constants below. No duration, delay, stagger or ease
+//     is written as a literal at a call site.
+//   * CSS transitions cannot import JS, so they read the mirrored tokens in
+//     src/styles/tokens.css (--ease, --dur-hover, --cascade). Those tokens are
+//     the same values as DUR.hover, CHAR.cascade and EASE.
+// Changing a value means changing it in both places. The previous version of
+// this comment claimed no ad-hoc values existed anywhere, which was false in ten
+// places — a source of truth whose first sentence is wrong is worse than none.
 
 export const EASE = 'power3.out';
-export const EASE_CSS = 'cubic-bezier(.16, 1, .3, 1)';
 
 export const DUR = {
-  reveal: 1.4,   // 1.2–1.5s
-  hover: 0.65,   // 0.6–0.7s
-  wipe: 1.2,     // section-heading clip wipe
-  count: 0.4,    // numeral count-up — mechanical, not decorative
+  reveal: 1.4,      // 1.2–1.5s
+  heroReveal: 1.5,  // §6.1 gives the hero load reveal its own, longer rise
+  hover: 0.65,      // 0.6–0.7s — mirrored as --dur-hover in tokens.css
+  wipe: 1.2,        // section-heading clip wipe
+  rule: 1.2,        // §6.4 hairline rule drawing left to right
+  fade: 0.6,        // opacity-only fades (the hero ambient loop)
+  count: 0.4,       // numeral count-up — mechanical, not decorative
 };
 
 export const STAGGER = 0.08; // 80ms
@@ -18,8 +28,8 @@ export const STAGGER = 0.08; // 80ms
 export const CHAR = {
   heroStagger: 0.09,   // 90ms between hero characters
   kanaDelay: 0.2,      // kana follows the latin by 200ms
-  cascade: 0.025,      // 25ms between romaji characters on hover
-  rotateStagger: 0.06, // rail characters turn in sequence
+  cascade: 0.025,      // 25ms — mirrored as --cascade in tokens.css
+  mediaDelay: 0.8,     // §6.1: the hero loop fades in at 800ms
 };
 
 export const ENTER_CHAR = {

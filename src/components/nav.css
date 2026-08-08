@@ -21,7 +21,11 @@
      ease. Opacity only: a colour change would fight mix-blend-mode: difference,
      which is already inverting whatever sits behind the nav. */
   opacity: 1;
-  transition: opacity .65s var(--ease);
+  transition: opacity var(--dur-hover) var(--ease);
+  /* 44px hit area without moving anything: the padding grows the box, the equal
+     negative margin removes it from layout. Type size is untouched (§4). */
+  padding-block: 15px;
+  margin-block: -15px;
 }
 
 .nav a:hover,

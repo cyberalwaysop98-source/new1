@@ -48,14 +48,14 @@ export function initAnimations() {
     gsap.fromTo(
       heroChars,
       { yPercent: 110, y: 0, rotate: ENTER_CHAR.rotate, filter: `blur(${ENTER_CHAR.blur}px)` },
-      { ...restChar, duration: 1.5, ease: EASE, stagger: CHAR.heroStagger }
+      { ...restChar, duration: DUR.heroReveal, ease: EASE, stagger: CHAR.heroStagger }
     );
     gsap.fromTo(
       heroKana,
       { yPercent: 110, y: 0, rotate: ENTER_CHAR.rotate, filter: `blur(${ENTER_CHAR.blur}px)` },
       {
         ...restChar,
-        duration: 1.5,
+        duration: DUR.heroReveal,
         ease: EASE,
         stagger: CHAR.heroStagger,
         delay: CHAR.kanaDelay,
@@ -64,7 +64,7 @@ export function initAnimations() {
     gsap.fromTo(
       heroLede,
       { yPercent: ENTER.heroYPercentFrom, y: 0 },
-      { yPercent: 0, y: 0, duration: 1.5, ease: EASE, delay: CHAR.kanaDelay }
+      { yPercent: 0, y: 0, duration: DUR.heroReveal, ease: EASE, delay: CHAR.kanaDelay }
     );
   }
 
@@ -76,7 +76,7 @@ export function initAnimations() {
       gsap.fromTo(
         heroMedia,
         { opacity: 0 },
-        { opacity: ENTER.heroOpacityTo, duration: 0.6, delay: 0.8, ease: EASE }
+        { opacity: ENTER.heroOpacityTo, duration: DUR.fade, delay: CHAR.mediaDelay, ease: EASE }
       );
     }
   }
@@ -137,7 +137,7 @@ export function initAnimations() {
       onEnter: (batch) => {
         gsap.to(batch, { opacity: 1, y: 0, duration: DUR.reveal, ease: EASE, stagger: STAGGER });
         const rules = batch.map((el) => el.querySelector('[data-method-rule]')).filter(Boolean);
-        gsap.to(rules, { scaleX: 1, duration: 1.2, ease: EASE, stagger: STAGGER });
+        gsap.to(rules, { scaleX: 1, duration: DUR.rule, ease: EASE, stagger: STAGGER });
       },
     });
   }
@@ -174,6 +174,22 @@ export function initAnimations() {
         gsap.to(batch, { opacity: 1, y: 0, duration: DUR.reveal, ease: EASE, stagger: STAGGER }),
     });
   }
+
+  // §6.6's 22px hover shift, driven by GSAP rather than CSS. It cannot be a
+  // stylesheet :hover rule: the reveal above leaves an INLINE transform on the
+  // row (translate(0px, 0px)), and inline beats the stylesheet, so the shift
+  // silently never applied. quickTo writes the same inline transform GSAP
+  // already owns, so the two compose instead of fighting.
+  selectionRows.forEach((row) => {
+    if (reduced) return;
+    const xTo = gsap.quickTo(row, 'x', { duration: DUR.hover, ease: EASE });
+    const on = () => xTo(22);
+    const off = () => xTo(0);
+    row.addEventListener('pointerenter', on);
+    row.addEventListener('pointerleave', off);
+    row.addEventListener('focus', on);
+    row.addEventListener('blur', off);
+  });
 
   // ---- The Room: clip-path wipe on the static band, scale + parallax on the
   // ground layer inside it. The two are deliberately split: transforming the

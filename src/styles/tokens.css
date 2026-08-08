@@ -15,6 +15,8 @@
   /* space */
   --gut: clamp(20px, 6vw, 96px);
 
-  /* motion */
+  /* motion — mirrors src/lib/motion.js; change both together */
   --ease: cubic-bezier(.16, 1, .3, 1);
+  --dur-hover: .65s;   /* = DUR.hover */
+  --cascade: 25ms;     /* = CHAR.cascade */
 }

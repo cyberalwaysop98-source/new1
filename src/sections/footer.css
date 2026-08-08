@@ -42,4 +42,13 @@
 
 .footer__link{
   text-decoration: none;
+  opacity: 1;
+  transition: opacity var(--dur-hover) var(--ease);
+  padding-block: 15px;
+  margin-block: -15px;
+}
+
+.footer__link:hover,
+.footer__link:focus-visible{
+  opacity: .55;
 }
