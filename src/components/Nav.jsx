@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { getLenis } from '../lib/smoothScroll';
+import { toggleAmbientSound } from '../lib/sound';
 import './nav.css';
 
 const LINKS = [
@@ -12,6 +13,7 @@ const LINKS = [
 export default function Nav() {
   const [hidden, setHidden] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [soundOn, setSoundOn] = useState(false);
   const lastScrollY = useRef(0);
 
   useEffect(() => {
@@ -38,6 +40,11 @@ export default function Nav() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [mobileOpen]);
+
+  function handleSoundToggle() {
+    const active = toggleAmbientSound();
+    setSoundOn(active);
+  }
 
   function go(e, href) {
     const target = document.querySelector(href);
@@ -67,6 +74,14 @@ export default function Nav() {
               <span className="nav__num">{l.num}</span> {l.label}
             </a>
           ))}
+          <button
+            type="button"
+            className="nav__sound-toggle eyebrow"
+            onClick={handleSoundToggle}
+            aria-label={soundOn ? 'Turn off ambient sound' : 'Turn on ambient sound'}
+          >
+            {soundOn ? 'SOUND / ON' : 'SOUND / OFF'}
+          </button>
         </nav>
 
         <button

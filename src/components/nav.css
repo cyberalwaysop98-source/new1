@@ -53,6 +53,14 @@
   margin-right: 4px;
 }
 
+.nav__sound-toggle{
+  margin-left: 12px;
+  color: var(--washi-dim);
+  letter-spacing: .25em;
+  border-left: 1px solid var(--rule);
+  padding-left: 16px;
+}
+
 .nav__mobile-toggle{
   display: none;
 }
