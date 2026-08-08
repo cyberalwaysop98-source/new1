@@ -39,11 +39,12 @@ export function initAnimations() {
   const heroChars = gsap.utils.toArray('#hero .hero__chars [data-char]');
   const heroKana = gsap.utils.toArray('#hero .hero__kana-chars [data-char]');
   const heroLede = gsap.utils.toArray('#hero .hero__lede [data-reveal]');
+  const heroCta = gsap.utils.toArray('#hero .hero__cta[data-reveal]');
   const restChar = { yPercent: 0, y: 0, rotate: 0, filter: 'blur(0px)' };
 
   if (reduced) {
     gsap.set([...heroChars, ...heroKana], restChar);
-    gsap.set(heroLede, { yPercent: 0, y: 0 });
+    gsap.set([...heroLede, ...heroCta], { yPercent: 0, y: 0 });
   } else {
     gsap.fromTo(
       heroChars,
@@ -62,9 +63,9 @@ export function initAnimations() {
       }
     );
     gsap.fromTo(
-      heroLede,
+      [...heroLede, ...heroCta],
       { yPercent: ENTER.heroYPercentFrom, y: 0 },
-      { yPercent: 0, y: 0, duration: DUR.heroReveal, ease: EASE, delay: CHAR.kanaDelay }
+      { yPercent: 0, y: 0, duration: DUR.heroReveal, ease: EASE, delay: CHAR.kanaDelay, stagger: 0.15 }
     );
   }
 
