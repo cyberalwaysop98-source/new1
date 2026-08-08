@@ -213,28 +213,24 @@ export function initAnimations() {
     }
   });
 
-  // ---- Section headings: clip wipe with a vermilion rule running ahead ----
+  // ---- Section headings: clip reveal left to right ----
   gsap.utils.toArray('[data-wipe]').forEach((head) => {
     const text = head.querySelector('.heading-wipe__text');
-    const bar = head.querySelector('.heading-wipe__bar');
-    if (!text || !bar) return;
+    if (!text) return;
     if (reduced) {
       gsap.set(text, { clipPath: 'inset(0 0% 0 0)' });
-      gsap.set(bar, { scaleY: 0 });
       return;
     }
-    const tl = gsap.timeline({ scrollTrigger: { trigger: head, start: 'top 85%' } });
-    // The bar leads: it is already travelling when the text starts to appear,
-    // and it carries on off the right edge rather than stopping on the page.
-    tl.fromTo(bar, { scaleY: 0, x: 0 }, { scaleY: 1, duration: 0.18, ease: EASE }, 0)
-      .to(bar, { x: () => head.offsetWidth + 24, duration: DUR.wipe, ease: EASE }, 0)
-      .to(bar, { scaleY: 0, duration: 0.2, ease: EASE }, DUR.wipe * 0.86)
-      .fromTo(
-        text,
-        { clipPath: 'inset(0 100% 0 0)' },
-        { clipPath: 'inset(0 0% 0 0)', duration: DUR.wipe, ease: EASE },
-        0.06
-      );
+    gsap.fromTo(
+      text,
+      { clipPath: 'inset(0 100% 0 0)' },
+      {
+        clipPath: 'inset(0 0% 0 0)',
+        duration: DUR.wipe,
+        ease: EASE,
+        scrollTrigger: { trigger: head, start: 'top 85%' },
+      }
+    );
   });
 
   // ---- The Method: numerals count up while the title masks in ----
@@ -272,30 +268,6 @@ export function initAnimations() {
       },
     });
   });
-
-  // ---- Rail: characters turn to face the reader as scroll progresses ----
-  const railChars = gsap.utils.toArray('.rail__label [data-char]');
-  if (railChars.length) {
-    if (reduced) {
-      gsap.set(railChars, { rotationY: 0 });
-    } else {
-      gsap.fromTo(
-        railChars,
-        { rotationY: -78 },
-        {
-          rotationY: 0,
-          ease: 'none',
-          stagger: CHAR.rotateStagger,
-          scrollTrigger: {
-            trigger: document.querySelector('.page-content'),
-            start: 'top top',
-            end: 'bottom bottom',
-            scrub: reduced ? true : SCRUB,
-          },
-        }
-      );
-    }
-  }
 
   // ---- Rail scroll-progress hairline (chrome, DESIGN.md §5) ----
   const railProgress = document.querySelector('.rail__progress');

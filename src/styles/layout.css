@@ -68,8 +68,16 @@
   display: inline-flex;
 }
 
+/* NOT flex-direction: column. Inside writing-mode: vertical-rl (.tategaki) the
+   flex column axis runs HORIZONTALLY, which laid ノワール and the rail label out
+   sideways at a few px wide. Plain inline-block lets the writing mode stack the
+   characters top-to-bottom, which is what vertical setting already does. */
 .chars--vertical{
-  flex-direction: column;
+  display: inline-block;
+}
+
+.chars--vertical .chars__mask{
+  display: inline-block;
 }
 
 /* Each character gets its own mask so it can rise independently. */
@@ -101,7 +109,11 @@
   }
 }
 
-/* ---- Section-heading wipe with a travelling vermilion rule ---------------- */
+/* ---- Section-heading clip reveal ----------------------------------------
+   The wipe only. A 2px vermilion bar used to travel ahead of the reveal edge;
+   it was removed as decorative — it carried no information, repeated three
+   times, and was the only moving vermilion on a page whose §10 opens with two
+   clauses about vermilion discipline. */
 .heading-wipe{
   position: relative;
   display: inline-block;
@@ -109,18 +121,4 @@
 
 .heading-wipe__text{
   display: inline-block;
-}
-
-/* A 2px RULE, not a shape: no corners, no fill, no enclosure (§10). It travels
-   ahead of the reveal edge and exits off the right, so it is never at rest. */
-.heading-wipe__bar{
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 2px;
-  background: var(--shu-lit);
-  transform: scaleY(0);
-  transform-origin: bottom;
-  pointer-events: none;
 }

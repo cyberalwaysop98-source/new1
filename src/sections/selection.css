@@ -10,13 +10,14 @@
   gap: var(--gut);
   width: 100%;
   padding: 4vh 0;
-  padding-left: 0;
-  transition: padding-left .7s var(--ease);
+  /* transform, not padding-left: animating a layout property thrashes layout
+     for an identical result. */
+  transition: transform .7s var(--ease);
 }
 
 .selection__row:hover,
 .selection__row:focus-visible{
-  padding-left: 22px;
+  transform: translateX(22px);
 }
 
 .selection__row:hover .selection__price,

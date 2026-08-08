@@ -761,3 +761,11 @@ Reject these in review, they are the failure modes for this specific design:
   the viewport in dead ground — measure before choosing, do not default either way.
 - Adding a testimonials section, a logo wall, an Instagram grid, or a newsletter modal.
 - More than one animation moving at any given moment.
+- **Verifying that an animation RUNS is not verifying that it RENDERS.** Third occurrence of
+  this shape in this project, so it is now a rule. A property changing over time proves the
+  tween is wired, nothing more. The rail characters rotated exactly as instrumented while laid
+  out horizontally at 3px wide — the effect ran perfectly on a broken element. Earlier:
+  "0/61 determinism mismatches" scored a frozen canvas as perfect scrub determinism, and
+  "CLS 0" scored a page on which nothing moved. **Assert the rendered result — box, position,
+  size, orientation — not only the animated value.** If a measurement looks flawless, confirm
+  the thing being measured is intact before believing it.

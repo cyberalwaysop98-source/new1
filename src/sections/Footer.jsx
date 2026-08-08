@@ -4,6 +4,8 @@ import './footer.css';
 
 const LINKS = [
   { label: 'Reserve', href: '#reserve' },
+  { label: 'reserve@noir.jp', href: 'mailto:reserve@noir.jp?subject=Reservation%20request%20%E2%80%94%20NOIR' },
+  { label: '+81 3 6407 0000', href: 'tel:+81364070000' },
   { label: 'Directions', href: 'https://maps.google.com/?q=2-14-6+Tomigaya,+Shibuya-ku,+Tokyo' },
   { label: 'Instagram', href: 'https://instagram.com' },
 ];

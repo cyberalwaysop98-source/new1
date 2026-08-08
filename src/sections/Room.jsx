@@ -20,7 +20,7 @@ export default function Room() {
   return (
     <section id="room" className="section room">
       <div className="section-head">
-        <h2 className="h-section heading-wipe" data-wipe><span className="heading-wipe__text">The Room</span><span className="heading-wipe__bar" aria-hidden="true" /></h2>
+        <h2 className="h-section heading-wipe" data-wipe><span className="heading-wipe__text">The Room</span></h2>
         <span className="eyebrow">Seven seats</span>
       </div>
 

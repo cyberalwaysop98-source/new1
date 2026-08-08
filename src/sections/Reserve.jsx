@@ -15,11 +15,11 @@ export default function Reserve() {
               <br />
               Say nothing.
             </span>
-            <span className="heading-wipe__bar" aria-hidden="true" />
+            
           </p>
-          <button type="button" className="eyebrow reserve__cta">
+          <a className="eyebrow reserve__cta" href="mailto:reserve@noir.jp?subject=Reservation%20request%20%E2%80%94%20NOIR">
             BOOK A SEAT →
-          </button>
+          </a>
         </div>
 
         <div className="reserve__details">
