@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { renderRitual } from '../lib/ritualProcedural';
@@ -16,30 +16,27 @@ import './manifesto.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// ONE predicate drives both the frame set and the layout, so they can never
-// disagree: below NARROW_BREAKPOINT the section serves the 4:5 portrait crop and
-// the narrow layout; above it, the 16:9 master and full-bleed cover.
 const isNarrow = (w) => w < NARROW_BREAKPOINT;
 const setFor = (w) => (isNarrow(w) ? ritualFramesPortrait : ritualFrames);
 const aspectOf = (set) => set.width / set.height;
 
-// Narrow branch: the frame is contained to the full width but capped so a type
-// band always survives beneath it. Without the cap a landscape phone (say
-// 880×500) would compute a taller-than-viewport image and push the text off
-// screen entirely.
 const NARROW_MAX_H = 0.6;
+
+// Signature Coffee Experience: 5 ritual stages
+const STAGES = [
+  { p: 0.00, kanji: '一 · 挽き', name: 'GRIND', desc: 'Granular bed · Ground at the seat' },
+  { p: 0.18, kanji: '二 · 蒸らし', name: 'BLOOM', desc: 'Carbon dioxide rises · 30s expansion' },
+  { p: 0.40, kanji: '三 · 注ぎ', name: 'POUR', desc: 'Thin thread of water · 92 degrees' },
+  { p: 0.65, kanji: '四 · 滴り', name: 'DRIP', desc: '4 minutes · 3 pours · Dark draw' },
+  { p: 0.88, kanji: '五 · 提供', name: 'SERVE', desc: 'Flat bed · Poured for the seat' },
+];
 
 const LINES = [
   { side: 'right', text: 'There is no music, no wifi, and no second cup.' },
   { side: 'left', text: 'The beans are ground when you sit down, not before.' },
-  { side: 'right', text: null }, // line 3 carries emphasis markup, see JSX
+  { side: 'right', text: null },
 ];
 
-// §6.2 timeline. Segments never overlap, which is what guarantees "one line
-// moving at a time" under a SCRUB. A serial promise-queue cannot do that job
-// here: a queue plays tweens to completion in order and has no meaning when the
-// user scrubs backwards, so the ordering is expressed in the timeline itself.
-// in/out are the reveal and exit windows; between them the line simply holds.
 const STEPS = [
   { in: [0.15, 0.24], out: [0.4, 0.47] },
   { in: [0.47, 0.56], out: [0.65, 0.72] },
@@ -50,6 +47,7 @@ export default function Manifesto() {
   const sectionRef = useRef(null);
   const canvasRef = useRef(null);
   const lineRefs = useRef([]);
+  const [activeStage, setActiveStage] = useState(STAGES[0]);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -78,12 +76,8 @@ export default function Manifesto() {
       publishImageBox(w, h);
     }
 
-    // The type lives in the bleed, so the layout has to know exactly where the
-    // contained image sits. Publish it as custom properties and let CSS place
-    // the lines against it — no magic numbers, correct at every viewport.
     function boxFor(w, h, ir) {
       if (!isNarrow(w)) {
-        // cover
         return { dw: Math.max(w, h * ir), dh: Math.max(h, w / ir), top: null };
       }
       let dw = w;
@@ -104,10 +98,6 @@ export default function Manifesto() {
       return { dw, dh };
     }
 
-    // Landscape viewports COVER the 16:9 master, full-bleed edge to edge.
-    // Narrow viewports contain the 4:5 crop, top-anchored, with the type in the
-    // band beneath. clearRect leaves any uncovered ground as the element's own
-    // background, var(--sumi).
     function drawFrame(img) {
       const { w, h, dpr } = view;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -138,8 +128,14 @@ export default function Manifesto() {
     let trigger;
     let progress = 0;
 
-    // Masked enter/exit, yPercent 105 -> 0 -> 105. Position is a pure function
-    // of progress, so scrubbing backwards reverses exactly.
+    function updateStage(p) {
+      let st = STAGES[0];
+      for (let i = 0; i < STAGES.length; i++) {
+        if (p >= STAGES[i].p) st = STAGES[i];
+      }
+      setActiveStage((prev) => (prev.name !== st.name ? st : prev));
+    }
+
     function renderLines(p) {
       if (reduced) return;
       const els = lineRefs.current;
@@ -163,19 +159,14 @@ export default function Manifesto() {
     function paint() {
       render(progress);
       renderLines(progress);
+      updateStage(progress);
     }
 
     trigger = ScrollTrigger.create({
       trigger: section,
       start: 'top top',
-      // '%' not 'vh' — ScrollTrigger does not parse CSS units (§7).
       end: reduced ? '+=100%' : '+=340%',
       pin: true,
-      // Pin by transform, not position:fixed. The default 'fixed' pinType makes
-      // the browser treat the pin engaging as an abrupt layout change and it
-      // scored CLS 0.625 on a single entry (canvas 0x0 -> full size) the moment
-      // the section pinned. Transforms never generate layout-shift entries, and
-      // it is also the correct pinType alongside a smooth-scroll library (§7).
       pinType: 'transform',
       scrub: reduced ? true : SCRUB,
       onUpdate: (self) => {
@@ -196,7 +187,6 @@ export default function Manifesto() {
     });
 
     if (reduced) {
-      // §7: three static keyframes, all three lines visible at once.
       lineRefs.current.forEach((el) => {
         if (!el) return;
         el.style.transform = 'translateY(0%)';
@@ -217,8 +207,6 @@ export default function Manifesto() {
     function onResize() {
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
-        // Crossing the breakpoint swaps the frame set, so the loader is rebuilt
-        // against the new paths rather than drawing the wrong aspect.
         const next = setFor(window.innerWidth);
         if (USE_FRAMES && next !== activeSet) {
           activeSet = next;
@@ -250,6 +238,14 @@ export default function Manifesto() {
     <section id="manifesto" className="manifesto" ref={sectionRef}>
       <canvas ref={canvasRef} className="manifesto__canvas" />
 
+      {/* Signature Coffee Experience Stage Bar */}
+      <div className="manifesto__stage-bar eyebrow" aria-live="polite">
+        <span className="manifesto__stage-kanji">{activeStage.kanji}</span>
+        <span className="manifesto__stage-sep">/</span>
+        <span className="manifesto__stage-name">{activeStage.name}</span>
+        <span className="manifesto__stage-desc">{activeStage.desc}</span>
+      </div>
+
       {LINES.map((l, i) => (
         <div key={i} className={`manifesto__slot manifesto__slot--${l.side}`}>
           <p className="manifesto-line reveal-mask">
@@ -274,3 +270,4 @@ export default function Manifesto() {
     </section>
   );
 }
+
