@@ -159,7 +159,7 @@ export function initAnimations() {
 
   // ---- The Room: scale 1.12→1.0 + clip-path wipe from bottom, parallax scrub ----
   gsap.utils.toArray('.room__plate').forEach((plate) => {
-    const el = plate.querySelector('.room-elevation');
+    const el = plate.querySelector('.room__face');
     if (!el) return;
     gsap.set(el, {
       scale: reduced ? 1 : ENTER.imageScaleFrom,

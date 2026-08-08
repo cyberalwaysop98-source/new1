@@ -68,7 +68,9 @@
 
 .price{
   font-family: var(--body);
-  font-weight: 300;
+  /* 400, matching body copy. At 300 it sat lighter than the notes beside it in
+     the same menu row, which read as an accident rather than a hierarchy. */
+  font-weight: 400;
   font-size: 14px;
   letter-spacing: 0;
   font-variant-numeric: tabular-nums;

@@ -6,7 +6,8 @@
   z-index: 80;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: baseline;
+  gap: var(--gut);
   padding: 28px var(--gut);
   mix-blend-mode: difference;
   pointer-events: none;
@@ -15,12 +16,38 @@
 .nav a{
   pointer-events: auto;
   text-decoration: none;
+  color: var(--washi);
+  /* §7 — micro-interactions are CSS, using the hover duration and the shared
+     ease. Opacity only: a colour change would fight mix-blend-mode: difference,
+     which is already inverting whatever sits behind the nav. */
+  opacity: 1;
+  transition: opacity .65s var(--ease);
 }
 
-.nav__mark{
-  color: var(--washi);
+.nav a:hover,
+.nav a:focus-visible{
+  opacity: .55;
 }
 
-.nav__cta{
-  color: var(--washi);
+.nav__links{
+  display: flex;
+  gap: clamp(18px, 2.6vw, 44px);
+  align-items: baseline;
+}
+
+@media (max-width: 640px){
+  .nav{
+    gap: 12px;
+  }
+
+  .nav__links{
+    gap: 14px;
+  }
+
+  /* At 360 the four items do not fit on one line at 10px/0.34em tracking.
+     Selection and The Room are reachable by scrolling; the reservation link is
+     the one that must survive, so it is the one kept. */
+  .nav__link:not(:last-child){
+    display: none;
+  }
 }

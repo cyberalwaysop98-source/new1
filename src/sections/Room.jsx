@@ -1,5 +1,20 @@
-import RoomElevation from '../components/RoomElevation';
 import './room.css';
+
+// §6.7 — two full-width plates carrying type only. No photography, no line
+// drawing: the SVG elevation that stood here read as a CAD drawing rather than a
+// room. The material list and the room's facts do the work the stills would.
+const PLATES = [
+  {
+    jp: '素材',
+    label: 'Materials',
+    lines: ['Cedar, one plank.', 'Lime plaster.', 'Blackened steel.'],
+  },
+  {
+    jp: '室',
+    label: 'The room',
+    lines: ['Seven seats.', 'Three pendants.', 'No overhead light.'],
+  },
+];
 
 export default function Room() {
   return (
@@ -9,21 +24,23 @@ export default function Room() {
         <span className="eyebrow">Seven seats</span>
       </div>
 
-      <div className="room__grid">
-        <figure className="room__plate">
-          <div className="room__frame">
-            <RoomElevation variant="counter" />
+      {PLATES.map((plate) => (
+        <figure key={plate.label} className="room__plate">
+          <div className="room__face">
+            <span className="tategaki room__jp" aria-hidden="true">
+              {plate.jp}
+            </span>
+            <ul className="room__lines">
+              {plate.lines.map((line) => (
+                <li key={line} className="manifesto-line room__line">
+                  {line}
+                </li>
+              ))}
+            </ul>
           </div>
-          <figcaption className="eyebrow room__caption">The counter</figcaption>
+          <figcaption className="eyebrow room__caption">{plate.label}</figcaption>
         </figure>
-
-        <figure className="room__plate">
-          <div className="room__frame">
-            <RoomElevation variant="lamps" />
-          </div>
-          <figcaption className="eyebrow room__caption">The lamps</figcaption>
-        </figure>
-      </div>
+      ))}
     </section>
   );
 }

@@ -116,7 +116,7 @@ generic dark serif site. Do not substitute a Western display serif.
 | Eyebrow / label | body 300 | 10px | 0.34em | UPPER |
 | Body / caption | body **400** | **14px** / lh 2 | 0.02em | Sentence |
 | Menu name | display 400 | `clamp(19px, 2vw, 27px)` | 0 | as-is |
-| Price | body 300, `tnum` | 14px | 0 | — |
+| Price | body **400**, `tnum` | 14px | 0 | — |
 | Vertical rail (tategaki) | display 400 | 11px | 0.55em | JP only |
 
 The tension in this design is **giant mincho against 10px tracked-out labels**. Nothing sits
@@ -239,6 +239,13 @@ request leaves the origin. Measured on the production build:
   > real rhythm — the spec now says so rather than describing a build that does not exist.
 - Persistent chrome: fixed nav (`mix-blend-mode: difference`), fixed vertical tategaki rail on
   the right with a scroll-progress hairline. Rail hides under 820px.
+- **Nav contents:** `NOIR` at the left; `Selection`, `The Room`, `予約 / Reserve` at the right,
+  all at eyebrow scale (10px, 0.34em, upper). Hover is an opacity transition only — a colour
+  change would fight the difference blend, which is already inverting whatever sits behind it.
+  **Links scroll through Lenis**, never a native anchor jump: a native jump bypasses the smooth
+  scroll and lands without emitting the scroll events ScrollTrigger listens on, so pins and
+  scrubs arrive in the wrong state. Below 640px only the reservation link survives — four items
+  do not fit at that tracking, and the reservation is the one §1 says the page exists for.
 - Global overlays: film grain (SVG turbulence, opacity .055, `mix-blend-mode: overlay`) and a
   radial vignette. Both `position: fixed`, `pointer-events: none`.
 
@@ -510,18 +517,45 @@ Five menu rows. Hairline between each. No photographs.
   shifts to `--shu-lit`. Rows are `<button>` elements — keyboard focusable, visible focus ring.
 
 ### 6.7 The Room
+```
+┌──────────────────────────────────────────────┐
+│ The Room                        SEVEN SEATS  │
+│ ┌──────────────────────────────────────────┐ │
+│ │ 素  Cedar, one plank.                    │ │
+│ │ 材  Lime plaster.                        │ │
+│ │     Blackened steel.                     │ │
+│ └──────────────────────────────────────────┘ │
+│   MATERIALS                                  │
+│ ┌──────────────────────────────────────────┐ │
+│ │ 室  Seven seats.                         │ │
+│ │     Three pendants.                      │ │
+│ │     No overhead light.                   │ │
+│ └──────────────────────────────────────────┘ │
+│   THE ROOM                                   │
+└──────────────────────────────────────────────┘
+```
 
-> **The SVG line elevation is provisional.** It was built as a placeholder that could plausibly
-> become permanent, and Phase 6 found it does not: at 1440 the two plates read as a CAD
-> elevation — thin hairlines with large dead areas — rather than the "heavy crop" stills this
-> section specifies. Treat it as a placeholder awaiting `room-01.webp` / `room-02.webp`, not as
-> the finished treatment.
-Two plates, Alethia's card pair. Full-width stills, heavy crop, caption underneath in 10px
-tracked labels.
+Two full-width plates carrying **type only** — the material list, then the room's facts. Lines
+are set at manifesto scale; each plate takes a vertical `素材` / `室` label and a 10px tracked
+caption beneath.
 
-- **Assets:** `img/room-01.webp` (the counter), `img/room-02.webp` (the lamps).
-- **Motion:** each plate enters at `scale 1.12 → 1.0` with `clip-path` wipe from the bottom,
-  1.4s. Parallax `yPercent: -8` scrubbed while in view.
+**No photography and no line drawing.** An SVG architectural elevation stood here through
+phases 2–6 and was removed: at 1440 it read as a CAD drawing — thin hairlines with large dead
+areas — not as a room. The stills this section originally specified were never produced. Type
+alone carries it, and does so in the voice §1 asks for: declarative, short, slightly severe.
+
+**These are bands, not cards.** §10 forbids "any card with a background colour", and the
+distinction is the edge: a card has four and reads as UI. A band runs the full width of the
+section with no left or right edge, no corner, no radius — the same construction as the ambient
+breaks in §6.3 and §6.5, which are also full-bleed with hairlines top and bottom. `--sumi-2` is
+the token already designated for a raised surface.
+
+- **Motion:** unchanged from the plates it replaces — each face enters at `scale 1.12 → 1.0`
+  with a `clip-path` wipe from the bottom, 1.4s, then parallaxes `yPercent: -8` scrubbed while
+  in view.
+- **If real stills are ever produced**, they can replace the band's background without touching
+  the motion or the layout. The type would then need re-siting, since it currently occupies the
+  space a photograph would.
 
 ### 6.8 Reserve
 ```
