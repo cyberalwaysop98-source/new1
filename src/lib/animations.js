@@ -3,7 +3,7 @@
 // is deliberately not driven from here.
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { EASE, DUR, STAGGER, SCRUB, ENTER } from './motion';
+import { EASE, DUR, STAGGER, SCRUB, ENTER, CHAR, ENTER_CHAR } from './motion';
 import { prefersReducedMotion } from './reducedMotion';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -32,22 +32,40 @@ export function initAnimations() {
   // yPercent→0 becomes a no-op that leaves the title stranded. immediateRender
   // writes exactly the value CSS already painted, so there is no visible jump,
   // and the singleton guard above means it is asserted only once.
-  const heroTargets = gsap.utils.toArray('#hero [data-reveal]');
-  if (heroTargets.length) {
-    if (reduced) {
-      gsap.set(heroTargets, { yPercent: ENTER.textYPercentTo });
-    } else {
-      // `y: 0` is load-bearing, not decoration. GSAP composes the final
-      // transform as translate(yPercent% + y), and it parses the CSS matrix
-      // into y: 270.6px. Without zeroing y, the tween runs yPercent 110→0
-      // correctly and still lands on translate(0px, 270.6px) — the title
-      // animates to the wrong resting place.
-      gsap.fromTo(
-        heroTargets,
-        { yPercent: ENTER.heroYPercentFrom, y: 0 },
-        { yPercent: ENTER.textYPercentTo, y: 0, duration: 1.5, ease: EASE, stagger: 0.09 }
-      );
-    }
+  // Latin rises character by character; each glyph carries a 2deg rotation and a
+  // 4px blur that resolve as it settles. The kana follows 200ms later, top to
+  // bottom. y:0 is load-bearing here for the same reason as before — GSAP
+  // composes translate(yPercent% + y) and parses the CSS matrix into y.
+  const heroChars = gsap.utils.toArray('#hero .hero__chars [data-char]');
+  const heroKana = gsap.utils.toArray('#hero .hero__kana-chars [data-char]');
+  const heroLede = gsap.utils.toArray('#hero .hero__lede [data-reveal]');
+  const restChar = { yPercent: 0, y: 0, rotate: 0, filter: 'blur(0px)' };
+
+  if (reduced) {
+    gsap.set([...heroChars, ...heroKana], restChar);
+    gsap.set(heroLede, { yPercent: 0, y: 0 });
+  } else {
+    gsap.fromTo(
+      heroChars,
+      { yPercent: 110, y: 0, rotate: ENTER_CHAR.rotate, filter: `blur(${ENTER_CHAR.blur}px)` },
+      { ...restChar, duration: 1.5, ease: EASE, stagger: CHAR.heroStagger }
+    );
+    gsap.fromTo(
+      heroKana,
+      { yPercent: 110, y: 0, rotate: ENTER_CHAR.rotate, filter: `blur(${ENTER_CHAR.blur}px)` },
+      {
+        ...restChar,
+        duration: 1.5,
+        ease: EASE,
+        stagger: CHAR.heroStagger,
+        delay: CHAR.kanaDelay,
+      }
+    );
+    gsap.fromTo(
+      heroLede,
+      { yPercent: ENTER.heroYPercentFrom, y: 0 },
+      { yPercent: 0, y: 0, duration: 1.5, ease: EASE, delay: CHAR.kanaDelay }
+    );
   }
 
   const heroMedia = document.querySelector('#hero .hero__media');
@@ -194,6 +212,90 @@ export function initAnimations() {
       });
     }
   });
+
+  // ---- Section headings: clip wipe with a vermilion rule running ahead ----
+  gsap.utils.toArray('[data-wipe]').forEach((head) => {
+    const text = head.querySelector('.heading-wipe__text');
+    const bar = head.querySelector('.heading-wipe__bar');
+    if (!text || !bar) return;
+    if (reduced) {
+      gsap.set(text, { clipPath: 'inset(0 0% 0 0)' });
+      gsap.set(bar, { scaleY: 0 });
+      return;
+    }
+    const tl = gsap.timeline({ scrollTrigger: { trigger: head, start: 'top 85%' } });
+    // The bar leads: it is already travelling when the text starts to appear,
+    // and it carries on off the right edge rather than stopping on the page.
+    tl.fromTo(bar, { scaleY: 0, x: 0 }, { scaleY: 1, duration: 0.18, ease: EASE }, 0)
+      .to(bar, { x: () => head.offsetWidth + 24, duration: DUR.wipe, ease: EASE }, 0)
+      .to(bar, { scaleY: 0, duration: 0.2, ease: EASE }, DUR.wipe * 0.86)
+      .fromTo(
+        text,
+        { clipPath: 'inset(0 100% 0 0)' },
+        { clipPath: 'inset(0 0% 0 0)', duration: DUR.wipe, ease: EASE },
+        0.06
+      );
+  });
+
+  // ---- The Method: numerals count up while the title masks in ----
+  // Mechanical on purpose — 400ms, two digits, no easing flourish beyond the
+  // shared curve. It should read as instrumentation.
+  gsap.utils.toArray('[data-method-num]').forEach((num) => {
+    const to = parseInt(num.dataset.countTo, 10);
+    const title = num.closest('[data-method-item]')?.querySelector('[data-method-title]');
+    if (reduced) {
+      num.textContent = String(to).padStart(2, '0');
+      if (title) gsap.set(title, { yPercent: 0 });
+      return;
+    }
+    const counter = { v: 0 };
+    ScrollTrigger.create({
+      trigger: num.closest('[data-method-item]'),
+      start: 'top 82%',
+      once: true,
+      onEnter: () => {
+        gsap.to(counter, {
+          v: to,
+          duration: DUR.count,
+          ease: EASE,
+          onUpdate: () => {
+            num.textContent = String(Math.round(counter.v)).padStart(2, '0');
+          },
+        });
+        if (title) {
+          gsap.fromTo(
+            title,
+            { yPercent: ENTER.textYPercentFrom },
+            { yPercent: 0, duration: DUR.reveal, ease: EASE }
+          );
+        }
+      },
+    });
+  });
+
+  // ---- Rail: characters turn to face the reader as scroll progresses ----
+  const railChars = gsap.utils.toArray('.rail__label [data-char]');
+  if (railChars.length) {
+    if (reduced) {
+      gsap.set(railChars, { rotationY: 0 });
+    } else {
+      gsap.fromTo(
+        railChars,
+        { rotationY: -78 },
+        {
+          rotationY: 0,
+          ease: 'none',
+          stagger: CHAR.rotateStagger,
+          scrollTrigger: {
+            trigger: document.querySelector('.page-content'),
+            start: 'top top',
+            end: 'bottom bottom',
+            scrub: reduced ? true : SCRUB,
+          },
+        }
+      );
+    }
+  }
 
   // ---- Rail scroll-progress hairline (chrome, DESIGN.md §5) ----
   const railProgress = document.querySelector('.rail__progress');

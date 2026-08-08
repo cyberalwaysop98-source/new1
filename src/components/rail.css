@@ -41,3 +41,17 @@
     display: none;
   }
 }
+
+/* Characters turn to face the reader in sequence as scroll progresses.
+   Driven as a scrub in animations.js — the rail is persistent chrome and its
+   progress hairline already tracks scroll continuously, so this adds no new
+   always-running animation, it rides the one that exists. */
+.rail__label .chars__mask{
+  overflow: visible;
+  perspective: 400px;
+}
+
+.rail__label .chars__ch{
+  display: block;
+  will-change: transform;
+}

@@ -1,4 +1,5 @@
 import AmbientMedia from '../components/AmbientMedia';
+import Chars from '../components/Chars';
 import { ambient } from '../assets/manifest';
 import './hero.css';
 
@@ -23,13 +24,9 @@ export default function Hero() {
 
         <div className="hero__title-row">
           <h1 className="h-hero hero__title">
-            <span className="reveal-mask">
-              <span className="reveal-mask__inner" data-reveal="title">NOIR</span>
-            </span>
+            <Chars text="NOIR" className="hero__chars" />
           </h1>
-          <span className="tategaki hero__kana reveal-mask">
-            <span className="reveal-mask__inner" data-reveal="kana">ノワール</span>
-          </span>
+          <Chars text="ノワール" className="tategaki hero__kana hero__kana-chars" vertical />
         </div>
 
         <p className="body-text hero__lede reveal-mask">

@@ -25,14 +25,6 @@
   transition: color .7s var(--ease);
 }
 
-.selection__name em{
-  font-style: normal;
-  font-family: var(--body);
-  font-size: 13px;
-  color: var(--washi-dim);
-  margin-left: 8px;
-}
-
 .selection__price{
   transition: color .7s var(--ease);
 }
@@ -41,5 +33,45 @@
   .selection__row{
     grid-template-columns: 1fr;
     gap: 8px;
+  }
+}
+
+/* ---- Hover cascade on the romaji (§7: micro-interactions stay in CSS) -----
+   The Japanese name does not move; only the romaji rebuilds, character by
+   character, 25ms apart. Pure CSS — the stagger is a transition-delay driven by
+   the --i index Chars sets, so no JS runs on hover. */
+.selection__romaji{
+  font-style: normal;
+  font-family: var(--body);
+  font-size: 13px;
+  color: var(--washi-dim);
+  margin-left: 8px;
+}
+
+.selection__romaji .chars__ch{
+  transform: translateY(0);
+  opacity: 1;
+  transition:
+    transform .32s var(--ease),
+    opacity .32s var(--ease);
+  transition-delay: calc(var(--i) * 25ms);
+}
+
+.selection__row:hover .selection__romaji .chars__ch,
+.selection__row:focus-visible .selection__romaji .chars__ch{
+  animation: romaji-rebuild .42s var(--ease) both;
+  animation-delay: calc(var(--i) * 25ms);
+}
+
+@keyframes romaji-rebuild{
+  0%   { transform: translateY(0);    opacity: 1; }
+  40%  { transform: translateY(105%); opacity: 0; }
+  100% { transform: translateY(0);    opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .selection__row:hover .selection__romaji .chars__ch,
+  .selection__row:focus-visible .selection__romaji .chars__ch{
+    animation: none;
   }
 }

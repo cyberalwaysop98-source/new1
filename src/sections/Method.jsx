@@ -39,9 +39,9 @@ export default function Method() {
       <ol className="method__list">
         {ITEMS.map((item) => (
           <li key={item.n} className="method__item" data-method-item>
-            <span className="method__num" data-method-num>{item.n}</span>
+            <span className="method__num" data-method-num data-count-to={item.n}>00</span>
             <div className="method__body">
-              <h3 className="menu-name method__title">{item.title}</h3>
+              <h3 className="menu-name method__title reveal-mask"><span className="reveal-mask__inner" data-method-title>{item.title}</span></h3>
               <p className="body-text">{item.line}</p>
               <hr className="hairline method__rule" data-method-rule />
             </div>

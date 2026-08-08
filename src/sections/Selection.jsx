@@ -1,3 +1,4 @@
+import Chars from '../components/Chars';
 import './selection.css';
 
 const ROWS = [
@@ -37,7 +38,7 @@ export default function Selection() {
   return (
     <section id="selection" className="section selection">
       <div className="section-head">
-        <h2 className="h-section">The Selection</h2>
+        <h2 className="h-section heading-wipe" data-wipe><span className="heading-wipe__text">The Selection</span><span className="heading-wipe__bar" aria-hidden="true" /></h2>
         <span className="eyebrow">Five, only</span>
       </div>
 
@@ -46,7 +47,8 @@ export default function Selection() {
         <div key={row.name} className="selection__group">
           <button type="button" className="selection__row">
             <span className="menu-name selection__name">
-              {row.name} <em>{row.romaji}</em>
+              {row.name}{' '}
+              <Chars text={row.romaji} tag="em" className="selection__romaji" />
             </span>
             <span className="body-text selection__notes">{row.notes}</span>
             <span className="price selection__price">{row.price}</span>

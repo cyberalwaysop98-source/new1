@@ -629,6 +629,34 @@ gsap.ticker.add((t) => lenis.raf(t * 1000));
 gsap.ticker.lagSmoothing(0);
 ```
 
+### 7.1 Typographic effects
+
+Five effects, all drawing their durations, staggers and easing from
+`src/lib/motion.js` (`DUR`, `STAGGER`, `CHAR`, `ENTER_CHAR`). No new easing values, no bounce.
+**The manifesto is deliberately excluded** — its three lines keep their existing masked reveal,
+because they are the page's emotional centre and must not compete with effect work elsewhere.
+
+| Where | Effect |
+|---|---|
+| Hero (§6.1) | `NOIR` splits into four masked characters rising on a 90ms stagger, each with a 2° rotation and a 4px blur that resolve as it settles. `ノワール` follows 200ms later, character by character, vertically. |
+| Section headings (§6.6, §6.7, §6.8) | Clip wipe left→right over `DUR.wipe`, with a **2px vermilion rule travelling ahead of the reveal edge** and exiting off the right. |
+| The Method (§6.4) | Each numeral counts `00 →` its value over `DUR.count` as the item enters, while the title masks in. Mechanical and small — instrumentation, not decoration. |
+| Menu rows (§6.6) | On hover the Japanese name holds still while the romaji rebuilds character by character, 25ms apart. **Pure CSS** — the stagger is a `transition-delay` driven by the `--i` index, so §7's "micro-interactions are CSS" still holds. |
+| Rail (§5) | Characters rotate individually on `rotationY` as scroll progresses, turning to face the reader in sequence. Scrubbed. |
+
+**The travelling bar is a rule, not a shape.** §10 forbids vermilion as an enclosed form; a 2px
+bar with no corners, no fill and no enclosure is the hairline rule §3 permits. It is also never
+at rest — it exits the right edge rather than parking on the page, so it cannot read as a badge.
+
+**One at a time, with one stated exception.** The reveals are placed in separate viewports so no
+two run together. The rail is the exception: it is persistent chrome and its progress hairline
+already scrubs continuously, so the character rotation rides an animation that was always
+running rather than adding a new one.
+
+**Reduced motion drops every one of these to its final state** — characters at rest and
+unblurred, headings unclipped with the bar at `scaleY(0)`, numerals printed at their value,
+no hover cascade, rail characters unrotated.
+
 **Reduced motion:** grain animation off, scroll cue static, all scrubs → `true`, all reveal
 tweens → `duration: 0` with final state applied. The page must remain fully readable.
 

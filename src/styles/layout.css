@@ -62,3 +62,65 @@
     transform: translateY(105%);
   }
 }
+
+/* ---- Per-character reveals (§7 effects pass) ------------------------------ */
+.chars{
+  display: inline-flex;
+}
+
+.chars--vertical{
+  flex-direction: column;
+}
+
+/* Each character gets its own mask so it can rise independently. */
+.chars__mask{
+  display: inline-block;
+  overflow: hidden;
+}
+
+.chars__ch{
+  display: inline-block;
+  will-change: transform, filter;
+}
+
+/* Pre-animation state in CSS, same reasoning as the hero lede: set it after
+   mount and the first paint shows the finished state, then it jumps back.
+   Skipped under reduced motion, where nothing animates. */
+@media (prefers-reduced-motion: no-preference){
+  .js #hero .chars__ch{
+    transform: translateY(110%) rotate(2deg);
+    filter: blur(4px);
+  }
+
+  .js [data-wipe] .heading-wipe__text{
+    clip-path: inset(0 100% 0 0);
+  }
+
+  .js [data-method-title]{
+    transform: translateY(105%);
+  }
+}
+
+/* ---- Section-heading wipe with a travelling vermilion rule ---------------- */
+.heading-wipe{
+  position: relative;
+  display: inline-block;
+}
+
+.heading-wipe__text{
+  display: inline-block;
+}
+
+/* A 2px RULE, not a shape: no corners, no fill, no enclosure (§10). It travels
+   ahead of the reveal edge and exits off the right, so it is never at rest. */
+.heading-wipe__bar{
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 2px;
+  background: var(--shu-lit);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  pointer-events: none;
+}

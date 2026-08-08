@@ -9,10 +9,13 @@ export default function Reserve() {
 
       <div className="reserve__body">
         <div className="reserve__statement">
-          <p className="statement">
-            Sit down.
-            <br />
-            Say nothing.
+          <p className="statement heading-wipe" data-wipe>
+            <span className="heading-wipe__text">
+              Sit down.
+              <br />
+              Say nothing.
+            </span>
+            <span className="heading-wipe__bar" aria-hidden="true" />
           </p>
           <button type="button" className="eyebrow reserve__cta">
             BOOK A SEAT →
