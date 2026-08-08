@@ -286,8 +286,9 @@ export function initAnimations() {
     });
   });
 
-  // ---- Rail scroll-progress hairline (chrome, DESIGN.md §5) ----
+  // ---- Rail scroll-progress hairline and character rotation (§7.1) ----
   const railProgress = document.querySelector('.rail__progress');
+  const railChars = gsap.utils.toArray('.rail__chars [data-char]');
   const pageContent = document.querySelector('.page-content');
   if (railProgress && pageContent) {
     gsap.to(railProgress, {
@@ -300,6 +301,23 @@ export function initAnimations() {
         scrub: true,
       },
     });
+  }
+  if (railChars.length && pageContent) {
+    if (reduced) {
+      gsap.set(railChars, { rotateY: 0 });
+    } else {
+      gsap.to(railChars, {
+        rotateY: 360,
+        stagger: 0.2,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: pageContent,
+          start: 'top top',
+          end: 'bottom bottom',
+          scrub: true,
+        },
+      });
+    }
   }
 
   ScrollTrigger.refresh();
