@@ -3,9 +3,9 @@
 
 .eyebrow{
   font-family: var(--mono);
-  font-weight: 300;
-  font-size: 10px;
-  letter-spacing: .34em;
+  font-weight: 400;
+  font-size: 11px;
+  letter-spacing: .24em;
   text-transform: uppercase;
   color: var(--washi-dim);
 }
@@ -22,8 +22,8 @@
 .h-section{
   font-family: var(--display);
   font-weight: 400;
-  font-size: clamp(24px, 3.2vw, 44px);
-  letter-spacing: 0;
+  font-size: clamp(26px, 3.5vw, 48px);
+  letter-spacing: -0.01em;
   color: var(--washi);
 }
 
@@ -47,14 +47,10 @@
 
 .body-text{
   font-family: var(--body);
-  /* 400/14px, not 300/13px. At 13px weight 300 against the display type this
-     read as thin rather than quiet — quiet is the intent, thin is not. The
-     eyebrow stays at 10px: the giant-display-to-tiny-label jump is deliberate
-     (§4), and widening the body does not soften it. */
   font-weight: 400;
-  font-size: 14px;
-  line-height: 2;
-  letter-spacing: .02em;
+  font-size: clamp(14px, 1.1vw, 15px);
+  line-height: 1.75;
+  letter-spacing: .015em;
   color: var(--washi-dim);
 }
 
@@ -67,12 +63,10 @@
 }
 
 .price{
-  font-family: var(--body);
-  /* 400, matching body copy. At 300 it sat lighter than the notes beside it in
-     the same menu row, which read as an accident rather than a hierarchy. */
+  font-family: var(--display);
   font-weight: 400;
-  font-size: 14px;
-  letter-spacing: 0;
+  font-size: clamp(15px, 1.4vw, 17px);
+  letter-spacing: .02em;
   font-variant-numeric: tabular-nums;
   color: var(--washi-dim);
 }

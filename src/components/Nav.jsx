@@ -4,10 +4,10 @@ import { toggleAmbientSound } from '../lib/sound';
 import './nav.css';
 
 const LINKS = [
-  { href: '#manifesto', num: '01', label: 'ROOM' },
-  { href: '#method', num: '02', label: 'METHOD' },
-  { href: '#selection', num: '03', label: 'SELECTION' },
-  { href: '#reserve', num: '04', label: 'RESERVE' },
+  { href: '#ma', num: '01', label: 'ROOM' },
+  { href: '#manifesto', num: '02', label: 'RITUAL' },
+  { href: '#selection', num: '03', label: 'MENU' },
+  { href: '#reserve', num: '04', label: 'VISIT' },
 ];
 
 export default function Nav() {
@@ -39,6 +39,17 @@ export default function Nav() {
     }
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [mobileOpen]);
+
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
   }, [mobileOpen]);
 
   function handleSoundToggle() {
@@ -125,10 +136,11 @@ export default function Nav() {
               <span>2-14-6 TOMIGAYA, SHIBUYA-KU</span>
             </div>
             <a
-              href="mailto:reserve@noir.jp"
+              href="#reserve"
               className="eyebrow nav__overlay-cta"
+              onClick={(e) => go(e, '#reserve')}
             >
-              RESERVE A SEAT →
+              VISIT NOIR →
             </a>
           </div>
         </div>

@@ -3,12 +3,11 @@ import { ambient } from '../assets/manifest';
 import { getLenis } from '../lib/smoothScroll';
 import SplitText from '../components/reactbits/SplitText';
 import BlurText from '../components/reactbits/BlurText';
-import ShinyText from '../components/reactbits/ShinyText';
 import './hero.css';
 
 export default function Hero() {
   function scrollToRoom(e) {
-    const target = document.querySelector('#manifesto');
+    const target = document.querySelector('#ma');
     if (!target) return;
     const lenis = getLenis();
     if (!lenis) return;
@@ -30,8 +29,8 @@ export default function Hero() {
 
       <div className="hero__content">
         <div className="hero__top eyebrow">
-          <BlurText text="TOMIGAYA · TOKYO · 喫茶室" delay={60} animateBy="words" />
-          <ShinyText text="EST. 2019" speed={4} />
+          <span>TOMIGAYA · TOKYO · 喫茶室</span>
+          <span>EST. 2019</span>
         </div>
 
         <div className="hero__title-row">
@@ -54,19 +53,14 @@ export default function Hero() {
         </div>
 
         <div className="hero__mid">
-          <p className="body-text hero__lede reveal-mask">
-            <span className="reveal-mask__inner" data-reveal="lede">
-              We keep the room dark on purpose.
-              <br />
-              Light flatters coffee — shadow tells the truth about it.
-            </span>
+          <p className="body-text hero__lede">
+            We keep the room dark on purpose. Light flatters coffee — shadow tells the truth about it.
           </p>
 
-          <div className="hero__cta-wrapper reveal-mask">
+          <div className="hero__cta-wrapper">
             <a
-              href="#manifesto"
+              href="#ma"
               className="eyebrow hero__cta"
-              data-reveal="cta"
               onClick={scrollToRoom}
             >
               <span className="hero__cta-text">ENTER THE ROOM →</span>
@@ -75,9 +69,9 @@ export default function Hero() {
         </div>
 
         <div className="hero__bottom eyebrow">
-          <a href="#manifesto" className="hero__scroll" onClick={scrollToRoom}>
+          <a href="#ma" className="hero__scroll" onClick={scrollToRoom}>
             <span className="hero__scroll-hairline" aria-hidden="true" />
-            下へ / SCROLL
+            <span>下へ / SCROLL</span>
           </a>
           <span>七席のみ · SEVEN SEATS</span>
         </div>

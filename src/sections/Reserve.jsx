@@ -11,6 +11,8 @@ export default function Reserve() {
 
       <div className="reserve__body">
         <div className="reserve__statement">
+          <span className="eyebrow reserve__tag">FIND THE ROOM · 喫茶室</span>
+          <h2 className="menu-name reserve__title">NOIR — 喫茶室</h2>
           <ScrollFloat offsetY={15}>
             <p className="statement heading-wipe" data-wipe>
               <span className="heading-wipe__text">
@@ -24,7 +26,8 @@ export default function Reserve() {
             className="eyebrow reserve__cta"
             href="mailto:reserve@noir.jp?subject=Reservation%20request%20%E2%80%94%20NOIR"
           >
-            BOOK A SEAT →
+            <span className="reserve__cta-text">REQUEST A SEAT</span>
+            <span className="reserve__cta-arrow">→</span>
           </a>
         </div>
 

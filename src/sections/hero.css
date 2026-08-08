@@ -13,6 +13,21 @@
   inset: 0;
   z-index: 0;
   opacity: .22;
+  transform-origin: center center;
+  animation: breathe 30s infinite alternate ease-in-out;
+}
+
+.hero__media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 120px var(--sumi);
+  pointer-events: none;
+}
+
+@keyframes breathe {
+  0% { transform: scale(1.0); }
+  100% { transform: scale(1.03); }
 }
 
 .hero__content{
@@ -120,6 +135,9 @@
     animation: none;
     transform: scaleY(1);
     opacity: 1;
+  }
+  .hero__media{
+    animation: none;
   }
 }
 

@@ -20,7 +20,6 @@ const isNarrow = (w) => w < NARROW_BREAKPOINT;
 const setFor = (w) => (isNarrow(w) ? ritualFramesPortrait : ritualFrames);
 const aspectOf = (set) => set.width / set.height;
 
-const NARROW_MAX_H = 0.6;
 
 // Signature Coffee Experience: 5 ritual stages
 const STAGES = [
@@ -64,11 +63,13 @@ export default function Manifesto() {
     function fitCanvas() {
       const rect = canvas.getBoundingClientRect();
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const w = Math.max(1, Math.round(rect.width));
-      const h = Math.max(1, Math.round(rect.height));
+      const w = Math.max(1, Math.round(rect.width || window.innerWidth));
+      const h = Math.max(1, Math.round(rect.height || window.innerHeight));
       const bw = Math.round(w * dpr);
       const bh = Math.round(h * dpr);
-      if (canvas.width !== bw || canvas.height !== bh) {
+      
+      // Prevent 1px sub-pixel rounding jitter from clearing HTML5 canvas buffer
+      if (Math.abs(canvas.width - bw) > 2 || Math.abs(canvas.height - bh) > 2) {
         canvas.width = bw;
         canvas.height = bh;
       }
@@ -77,24 +78,20 @@ export default function Manifesto() {
     }
 
     function boxFor(w, h, ir) {
-      if (!isNarrow(w)) {
-        return { dw: Math.max(w, h * ir), dh: Math.max(h, w / ir), top: null };
-      }
       let dw = w;
       let dh = w / ir;
-      const maxH = h * NARROW_MAX_H;
-      if (dh > maxH) {
-        dh = maxH;
-        dw = maxH * ir;
+      if (dh > h) {
+        dh = h;
+        dw = h * ir;
       }
-      return { dw, dh, top: 0 };
+      const left = (w - dw) / 2;
+      const top = (h - dh) / 2;
+      return { dw, dh, left, top };
     }
 
     function publishImageBox(w, h) {
-      const narrow = isNarrow(w);
       const { dw, dh, top } = boxFor(w, h, aspectOf(setFor(w)));
-      section.style.setProperty('--img-b', `${(top === null ? (h - dh) / 2 : top) + dh}px`);
-      section.classList.toggle('manifesto--narrow', narrow);
+      section.style.setProperty('--img-b', `${top + dh}px`);
       return { dw, dh };
     }
 
@@ -102,9 +99,9 @@ export default function Manifesto() {
       const { w, h, dpr } = view;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, w, h);
-      const ir = img.naturalWidth / img.naturalHeight;
-      const { dw, dh, top } = boxFor(w, h, ir);
-      ctx.drawImage(img, (w - dw) / 2, top === null ? (h - dh) / 2 : top, dw, dh);
+      const ir = (img.naturalWidth && img.naturalHeight) ? (img.naturalWidth / img.naturalHeight) : (16 / 9);
+      const { dw, dh, left, top } = boxFor(w, h, ir);
+      ctx.drawImage(img, left, top, dw, dh);
     }
 
     function render(p) {
@@ -118,7 +115,7 @@ export default function Manifesto() {
         ? [0, Math.floor((FRAMES - 1) / 2), FRAMES - 1][
             Math.min(2, Math.floor(clamped * 3))
           ]
-        : Math.round(clamped * (FRAMES - 1));
+        : Math.min(FRAMES - 1, Math.max(0, Math.round(clamped * (FRAMES - 1))));
       const img = loader.getDrawable(index);
       if (img) drawFrame(img);
     }
@@ -236,14 +233,15 @@ export default function Manifesto() {
 
   return (
     <section id="manifesto" className="manifesto" ref={sectionRef}>
-      <canvas ref={canvasRef} className="manifesto__canvas" />
-
-      {/* Signature Coffee Experience Stage Bar */}
-      <div className="manifesto__stage-bar eyebrow" aria-live="polite">
-        <span className="manifesto__stage-kanji">{activeStage.kanji}</span>
-        <span className="manifesto__stage-sep">/</span>
-        <span className="manifesto__stage-name">{activeStage.name}</span>
-        <span className="manifesto__stage-desc">{activeStage.desc}</span>
+      <div className="manifesto__canvas-container" style={{ position: 'relative', width: '100%', height: '100%' }}>
+        <canvas ref={canvasRef} className="manifesto__canvas" />
+        
+        <div className="manifesto__stage-bar eyebrow" aria-live="polite" aria-atomic="true">
+          <span className="manifesto__stage-kanji">{activeStage.kanji}</span>
+          <span className="manifesto__stage-sep">/</span>
+          <span className="manifesto__stage-name">{activeStage.name}</span>
+          <span className="manifesto__stage-desc">{activeStage.desc}</span>
+        </div>
       </div>
 
       {LINES.map((l, i) => (

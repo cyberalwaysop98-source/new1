@@ -26,22 +26,50 @@
   max-width: 400px;
 }
 
+.reserve__tag{
+  color: var(--shu-lit);
+  margin-bottom: -1.5vh;
+}
+
+.reserve__title{
+  font-family: var(--display);
+  font-size: clamp(24px, 3vw, 36px);
+  color: var(--washi);
+  font-weight: 500;
+}
+
 .reserve__cta{
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
   align-self: flex-start;
   border-bottom: 1px solid var(--shu-lit);
   text-decoration: none;
   color: var(--washi);
   opacity: 1;
-  transition: opacity var(--dur-hover) var(--ease);
-  padding-block: 14px;
-  margin-block: -14px;
+  font-weight: 500;
+  letter-spacing: .28em;
+  padding-bottom: 8px;
+  transition: border-color var(--dur-hover) var(--ease), color var(--dur-hover) var(--ease);
+}
+
+.reserve__cta-arrow{
+  transition: transform var(--dur-hover) var(--ease), color var(--dur-hover) var(--ease);
+  color: var(--shu-lit);
 }
 
 .reserve__cta:hover,
 .reserve__cta:focus-visible{
-  opacity: .55;
+  color: var(--washi);
+  border-color: var(--washi);
   outline: 1px solid var(--shu-lit);
   outline-offset: 4px;
+}
+
+.reserve__cta:hover .reserve__cta-arrow,
+.reserve__cta:focus-visible .reserve__cta-arrow{
+  transform: translateX(6px);
+  color: var(--washi);
 }
 
 .reserve__tomigaya-story{
@@ -64,18 +92,31 @@
 .reserve__access-grid{
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  margin-top: 12px;
+  margin-top: 16px;
+  position: relative;
 }
 
 .reserve__access-item{
   display: flex;
-  gap: 12px;
+  gap: 16px;
   align-items: baseline;
+  position: relative;
+  padding-left: 16px;
+  padding-bottom: 24px;
+  border-left: 1px solid var(--rule);
+}
+
+.reserve__access-item:last-child {
+  padding-bottom: 0;
+  border-left-color: transparent;
 }
 
 .reserve__access-num{
   color: var(--shu-lit);
+  position: absolute;
+  left: -9px;
+  background: var(--sumi);
+  padding-block: 4px;
 }
 
 .reserve__details{
@@ -120,6 +161,10 @@
 }
 
 @media (max-width: 768px){
+  .reserve__top{
+    flex-direction: column;
+    gap: 16px;
+  }
   .reserve__footer-bar{
     flex-direction: column;
     align-items: flex-start;

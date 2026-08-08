@@ -27,11 +27,12 @@ const AmbientMedia = forwardRef(function AmbientMedia(
   return (
     <video
       ref={mediaRef}
-      className={`ambient-media ambient-media--video ${className}`}
+      className={`ambient-media ambient-media--video ambient-media--${variant} ${className}`}
       muted
       loop
       playsInline
-      preload="none"
+      autoPlay
+      preload={variant === 'hero' ? 'auto' : 'none'}
       poster={poster ?? undefined}
       aria-label={alt}
     >

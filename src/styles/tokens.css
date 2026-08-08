@@ -14,7 +14,8 @@
      Level 1: Editorial Display Serif (Shippori Mincho for Latin capitals + JP)
      Level 2: Neutral Body Sans-Serif (Zen Kaku Gothic New 400/14px)
      Level 3: Micro / Condensed Typography (Zen Kaku Gothic New 300/10px, 0.34em tracking) */
-  --display: 'Shippori Mincho', 'Shippori Mincho Fallback', Georgia, serif;
+  --display: 'Cormorant Garamond', 'Shippori Mincho', 'Noto Serif JP', Georgia, serif;
+  --display-jp: 'Shippori Mincho', 'Noto Serif JP', serif;
   --body:    'Zen Kaku Gothic New', 'Zen Kaku Gothic New Fallback', -apple-system, 'Hiragino Sans', sans-serif;
   --mono:    'Zen Kaku Gothic New', ui-monospace, SFMono-Regular, monospace;
 

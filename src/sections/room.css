@@ -45,6 +45,18 @@
   pointer-events: none;
 }
 
+.room__plate:nth-child(even) .room__ground {
+  background:
+    radial-gradient(50% 60% at 70% 30%, rgba(232,225,212,.03), transparent 60%),
+    linear-gradient(180deg, var(--sumi-2), var(--sumi));
+}
+
+.room__plate:nth-child(odd) .room__ground {
+  background:
+    radial-gradient(40% 50% at 20% 70%, rgba(140,42,30,.06), transparent 70%),
+    linear-gradient(180deg, var(--sumi), var(--sumi-2));
+}
+
 .room__jp{
   position: relative;
   z-index: 1;

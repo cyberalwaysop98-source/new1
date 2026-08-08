@@ -1,5 +1,5 @@
 import ScrollReveal from '../components/reactbits/ScrollReveal';
-import VariableProximity from '../components/reactbits/VariableProximity';
+import BlurText from '../components/reactbits/BlurText';
 import './room.css';
 
 const PLATES = [
@@ -41,7 +41,7 @@ export default function Room() {
             </ul>
           </div>
           <figcaption className="eyebrow room__caption">
-            <VariableProximity text={plate.label} />
+            <BlurText text={plate.label} animateBy="words" delay={40} />
           </figcaption>
         </figure>
       ))}

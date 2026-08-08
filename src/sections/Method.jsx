@@ -1,4 +1,5 @@
 import ScrollReveal from '../components/reactbits/ScrollReveal';
+import SplitText from '../components/reactbits/SplitText';
 import './method.css';
 
 const ITEMS = [
@@ -44,7 +45,9 @@ export default function Method() {
           <li key={item.n} className="method__item" data-method-item>
             <span className="method__num" data-method-num data-count-to={item.n}>00</span>
             <div className="method__body">
-              <h3 className="menu-name method__title reveal-mask"><span className="reveal-mask__inner" data-method-title>{item.title}</span></h3>
+              <h3 className="menu-name method__title">
+                <SplitText text={item.title} delay={25} splitBy="words" />
+              </h3>
               <p className="body-text">{item.line}</p>
               <hr className="hairline method__rule" data-method-rule />
             </div>

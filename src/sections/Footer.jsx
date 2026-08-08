@@ -3,7 +3,7 @@ import { ambient } from '../assets/manifest';
 import './footer.css';
 
 const LINKS = [
-  { label: '01 RESERVE A SEAT', href: 'mailto:reserve@noir.jp?subject=Reservation%20request%20%E2%80%94%20NOIR' },
+  { label: '01 REQUEST A SEAT', href: 'mailto:reserve@noir.jp?subject=Reservation%20request%20%E2%80%94%20NOIR' },
   { label: '02 FIND THE ROOM', href: 'https://maps.google.com/?q=2-14-6+Tomigaya,+Shibuya-ku,+Tokyo' },
   { label: '03 TEL +81 3 6407 0000', href: 'tel:+81364070000' },
   { label: '04 INSTAGRAM', href: 'https://instagram.com' },
@@ -42,7 +42,9 @@ export default function Footer() {
 
           <a
             className="eyebrow footer__primary-cta"
-            href="mailto:reserve@noir.jp?subject=Reservation%20request%20%E2%80%94%20NOIR"
+            href="https://maps.google.com/?q=2-14-6+Tomigaya,+Shibuya-ku,+Tokyo"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             FIND THE ROOM →
           </a>
