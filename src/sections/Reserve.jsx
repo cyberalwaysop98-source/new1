@@ -1,5 +1,8 @@
 import './reserve.css';
 
+// §7.1 — each line clips in from the left with a slight lean that resolves.
+const STATEMENT = ['Sit down.', 'Say nothing.'];
+
 export default function Reserve() {
   return (
     <section id="reserve" className="section reserve">
@@ -9,13 +12,14 @@ export default function Reserve() {
 
       <div className="reserve__body">
         <div className="reserve__statement">
-          <p className="statement heading-wipe" data-wipe>
-            <span className="heading-wipe__text">
-              Sit down.
-              <br />
-              Say nothing.
-            </span>
-            
+          <p className="statement">
+            {STATEMENT.map((line) => (
+              <span className="stmt-line" key={line}>
+                <span className="stmt-line__inner" data-stmt-line>
+                  {line}
+                </span>
+              </span>
+            ))}
           </p>
           <a className="eyebrow reserve__cta" href="mailto:reserve@noir.jp?subject=Reservation%20request%20%E2%80%94%20NOIR">
             BOOK A SEAT →

@@ -10,8 +10,9 @@ import {
   ritualFramesPortrait,
   NARROW_BREAKPOINT,
 } from '../assets/manifest';
-import { SCRUB, EASE, ENTER } from '../lib/motion';
+import { SCRUB, EASE, ENTER, CHAR, DUR } from '../lib/motion';
 import { prefersReducedMotion } from '../lib/reducedMotion';
+import Words from '../components/Words';
 import './manifesto.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -29,10 +30,13 @@ const aspectOf = (set) => set.width / set.height;
 // screen entirely.
 const NARROW_MAX_H = 0.6;
 
+// `em` is a [first, last] word index — the emphasis now lives in the data rather
+// than in a branch in the JSX, because every line is word-split the same way and
+// a special-cased third line could not be.
 const LINES = [
   { side: 'right', text: 'There is no music, no wifi, and no second cup.' },
   { side: 'left', text: 'The beans are ground when you sit down, not before.' },
-  { side: 'right', text: null }, // line 3 carries emphasis markup, see JSX
+  { side: 'right', text: 'What arrives will take four minutes. Please let it.', em: [4, 5] },
 ];
 
 // §6.2 timeline. Segments never overlap, which is what guarantees "one line
@@ -49,7 +53,8 @@ const STEPS = [
 export default function Manifesto() {
   const sectionRef = useRef(null);
   const canvasRef = useRef(null);
-  const lineRefs = useRef([]);
+  const slotRefs = useRef([]);
+  const wordRefs = useRef([]);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -138,25 +143,61 @@ export default function Manifesto() {
     let trigger;
     let progress = 0;
 
-    // Masked enter/exit, yPercent 105 -> 0 -> 105. Position is a pure function
-    // of progress, so scrubbing backwards reverses exactly.
+    // Masked enter/exit, yPercent 105 -> 0 -> -105. The line rises in and keeps
+    // rising out; it never retraces its own path (§6.2).
+    //
+    // The old form exited back down to +105 and drove BOTH halves off one ramp
+    // `t` that rose 0->1 then fell 1->0. That had two costs. Each line travelled
+    // 260px up and the same 260px back down, and with the near-static footage
+    // behind them the three lines were the only high-contrast moving thing in
+    // the viewport, so the retrace read as the whole frame sequence bouncing.
+    // And EASE evaluated on a descending `t` is power3.**in**: the exit put
+    // 87.5% of its travel in its final half, driving the text DOWN at ~2.1px per
+    // px of scroll while the reader scrolled down. Both are gone: each phase now
+    // runs its own ramp forward through EASE, so both decelerate.
+    //
+    // y stays a pure function of p, so scrubbing backwards still reverses exactly.
+    const easeFn = gsap.parseEase(EASE);
+
+    // §7.1 — the line reveals word by word, 60ms apart, rather than as one block.
+    //
+    // Under a scrub there is no clock, so CHAR.wordStagger cannot be applied as
+    // a delay. It is expressed as a fraction of the band instead: 60ms measured
+    // against DUR.reveal, the duration this rise would have had if it were timed.
+    // Each word then gets its own sub-ramp inside the band, offset by that
+    // fraction, and the tail is clamped so the last word still has at least 40%
+    // of the band to travel in — otherwise a long line starves its final words.
+    function wordSpan(band, n) {
+      const raw = band * (CHAR.wordStagger / DUR.reveal);
+      const step = Math.min(raw, (band * 0.6) / Math.max(1, n - 1));
+      return { step, run: band - step * (n - 1) };
+    }
+
     function renderLines(p) {
       if (reduced) return;
-      const els = lineRefs.current;
-      for (let i = 0; i < els.length; i++) {
-        const el = els[i];
-        if (!el) continue;
+      const FROM = ENTER.textYPercentFrom;
+
+      for (let i = 0; i < wordRefs.current.length; i++) {
+        const words = wordRefs.current[i];
+        if (!words || !words.length) continue;
         const s = STEPS[i];
-        let t;
-        if (p < s.in[0]) t = 0;
-        else if (p < s.in[1]) t = (p - s.in[0]) / (s.in[1] - s.in[0]);
-        else if (p < s.out[0]) t = 1;
-        else if (p < s.out[1]) t = 1 - (p - s.out[0]) / (s.out[1] - s.out[0]);
-        else t = 0;
-        const eased = gsap.parseEase(EASE)(Math.min(1, Math.max(0, t)));
-        const gone = p >= s.out[1] || p < s.in[0];
-        el.style.transform = `translateY(${(1 - eased) * ENTER.textYPercentFrom}%)`;
-        el.style.opacity = gone ? '0' : '1';
+        const n = words.length;
+        const enter = wordSpan(s.in[1] - s.in[0], n);
+        const exit = wordSpan(s.out[1] - s.out[0], n);
+
+        for (let k = 0; k < n; k++) {
+          const i0 = s.in[0] + k * enter.step;
+          const o0 = s.out[0] + k * exit.step;
+          let y;
+          if (p < i0) y = FROM;
+          else if (p < i0 + enter.run) y = (1 - easeFn((p - i0) / enter.run)) * FROM;
+          else if (p < o0) y = ENTER.textYPercentTo;
+          else if (p < o0 + exit.run) y = -easeFn((p - o0) / exit.run) * FROM;
+          else y = -FROM;
+          const gone = p >= o0 + exit.run || p < i0;
+          words[k].style.transform = `translateY(${y}%)`;
+          words[k].style.opacity = gone ? '0' : '1';
+        }
       }
     }
 
@@ -197,7 +238,7 @@ export default function Manifesto() {
 
     if (reduced) {
       // §7: three static keyframes, all three lines visible at once.
-      lineRefs.current.forEach((el) => {
+      wordRefs.current.flat().forEach((el) => {
         if (!el) return;
         el.style.transform = 'translateY(0%)';
         el.style.opacity = '1';
@@ -252,22 +293,14 @@ export default function Manifesto() {
 
       {LINES.map((l, i) => (
         <div key={i} className={`manifesto__slot manifesto__slot--${l.side}`}>
-          <p className="manifesto-line reveal-mask">
-            <span
-              className="reveal-mask__inner"
-              data-manifesto-line
-              ref={(el) => {
-                lineRefs.current[i] = el;
-              }}
-            >
-              {i === 2 ? (
-                <>
-                  What arrives will take <strong>four minutes</strong>. Please let it.
-                </>
-              ) : (
-                l.text
-              )}
-            </span>
+          <p
+            className="manifesto-line"
+            ref={(el) => {
+              slotRefs.current[i] = el;
+              wordRefs.current[i] = el ? [...el.querySelectorAll('[data-word]')] : [];
+            }}
+          >
+            <Words text={l.text} em={l.em} />
           </p>
         </div>
       ))}

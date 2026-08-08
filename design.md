@@ -48,12 +48,12 @@ screenshots, its logo-wall, its blog cards. Those are B2B SaaS furniture.
 :root{
   /* colour — 6 values, no others exist */
   --sumi:      #0B0A09;   /* page ground. warm black, never #000 */
-  --sumi-2:    #14110E;   /* raised surface: footer, ambient fallback */
+  --sumi-2:    #1C1815;   /* raised surface: Room bands, ambient fallback */
   --washi:     #E8E1D4;   /* primary text, brush strokes */
   --washi-dim: #A39A8B;   /* secondary text, eyebrows, captions. 7.11:1 on --sumi */
   --shu:       #8C2A1E;   /* vermilion lacquer — rules, seal, borders */
   --shu-lit:   #B33A25;   /* vermilion ink — accents only, never a fill */
-  --rule:      rgba(232,225,212,.13);
+  --rule:      rgba(232,225,212,.20);
 
   /* type */
   --display: 'Shippori Mincho', 'Hiragino Mincho ProN', Georgia, serif;
@@ -81,6 +81,27 @@ like a dark-mode SaaS accent.
 quiet. The new value measures **7.11:1**, clearing AAA for body text. The hue relationship is
 unchanged (same warm grey, R>G>B); only the value moved. §9's rule still stands: this is the
 floor, nothing a reader needs may go dimmer.
+
+**The neutrals were warmed and lifted.** `--sumi` and the two vermilions are untouched — the
+ground stays warm black and the accent stays lacquer. What changed is the middle of the scale,
+which was so close to the ground that raised surfaces and hairlines had no presence at all: a
+surface you cannot see is not a surface, it is a rounding error.
+
+| | before | after |
+|---|---|---|
+| `--sumi-2` surface vs ground | 1.05:1 | **1.12:1** |
+| `--rule` hairline vs ground | 1.31:1 | **1.62:1** |
+
+`--sumi-2` went `#14110E → #1C1815` and `--rule` went `.13 → .20` alpha, compositing
+`#282623 → #373532`. Both keep the warm R>G>B relationship; only value moved.
+
+**What it costs.** Text on the raised surface loses a little contrast, because the surface came
+up to meet it. `--washi` on `--sumi-2` goes 14.47:1 → **13.56:1**, and `--washi-dim` goes
+6.77:1 → **6.34:1**. That second figure is comfortably AA but below AAA, and the only place it
+applies is the `--washi-dim` label on a Room band. On the ground itself nothing moved:
+`--washi` 15.21:1, `--washi-dim` 7.11:1 — §3's AAA floor is intact where the body copy lives.
+If the Room label must reach AAA, the fix is to set it in `--washi` on the band, not to push
+`--sumi-2` back down.
 
 **Two permitted colour literals outside this block.** "Six values, no others exist" governs
 *design* colour — anything a viewer perceives as a chosen hue. These two are not that, and are
@@ -113,20 +134,30 @@ generic dark serif site. Do not substitute a Western display serif.
 | Section heading | display 400 | `clamp(24px, 3.2vw, 44px)` | 0 | Title |
 | Manifesto line | display 400 | `clamp(26px, 4.4vw, 62px)` / lh 1.34 | 0 | Sentence |
 | Statement (footer, reserve) | display 400 | `clamp(34px, 5.6vw, 84px)` / lh 1.06 | -0.015em | Sentence |
-| Eyebrow / label | body 300 | 10px | 0.34em | UPPER |
+| Eyebrow / label | body 300 | **11px** | 0.34em | UPPER |
 | Body / caption | body **400** | **14px** / lh 2 | 0.02em | Sentence |
 | Menu name | display 400 | `clamp(19px, 2vw, 27px)` | 0 | as-is |
 | Price | body **400**, `tnum` | 14px | 0 | — |
 | Vertical rail (tategaki) | display 400 | 11px | 0.55em | JP only |
 
-The tension in this design is **giant mincho against 10px tracked-out labels**. Nothing sits
+The tension in this design is **giant mincho against 11px tracked-out labels**. Nothing sits
 in the middle. Avoid 16–20px display type entirely.
 
 **Body/caption is 14px weight 400**, raised from 12.5–13px weight 300. Against display type at
 80px, 300 weight at 13px read as *thin* — and thin is not the same as quiet. Quiet is the
-intent. The **eyebrow stays at 10px**: the giant-display-to-tiny-label jump above is deliberate,
-and it is the label that carries it, not the body. Widening the body does not soften that
-contrast, it just makes the readable text readable.
+intent. Widening the body does not soften the display-to-label contrast, it just makes the
+readable text readable.
+
+**The eyebrow is 11px**, raised from 10px. It previously stayed at 10px on the argument that the
+giant-display-to-tiny-label jump is carried by the label. That argument survives at 11px — the
+jump is from 300px to 11px — but 10px at `0.34em` tracking did not survive contact with a real
+screen. Tracking is unchanged, so the label keeps its width and its character.
+
+**No caption-class text sits below 14px.** Three 13px holdouts were raised: `.method__num`,
+`.room__jp`, `.selection__romaji`. The **vertical rail stays at 11px** — it is a label, not
+running copy, and after this change it matches the eyebrow exactly, which is the size relation
+it should have had all along. Setting a vertically-composed rail at 14px would widen the rail
+and pull it toward the middle ground this scale explicitly excludes.
 
 Japanese never gets translated inline with a slash-gloss more than once per section. `間 — the
 interval` is fine. `珈琲 (coffee)` is not.
@@ -240,7 +271,7 @@ request leaves the origin. Measured on the production build:
 - Persistent chrome: fixed nav (`mix-blend-mode: difference`), fixed vertical tategaki rail on
   the right with a scroll-progress hairline. Rail hides under 820px.
 - **Nav contents:** `NOIR` at the left; `Selection`, `The Room`, `予約 / Reserve` at the right,
-  all at eyebrow scale (10px, 0.34em, upper). Hover is an opacity transition only — a colour
+  all at eyebrow scale (11px, 0.34em, upper). Hover is an opacity transition only — a colour
   change would fight the difference blend, which is already inverting whatever sits behind it.
   **Links scroll through Lenis**, never a native anchor jump: a native jump bypasses the smooth
   scroll and lands without emitting the scroll events ScrollTrigger listens on, so pins and
@@ -350,8 +381,30 @@ region for nothing. If the footage is ever regraded brighter, re-measure before 
 | 0.65–0.90 | line 2 exits, line 3 reveals, holds |
 | 0.90–1.00 | text gone, footage finishes on the steam |
 
-Lines enter masked `yPercent 105 → 0` and **exit the same way**. `EASE` and `DUR` come from
-`src/lib/motion.js` — no new easing values, no new durations.
+Lines enter masked `yPercent 105 → 0` and **exit upward, `0 → -105`**. A line never retraces
+its own path. `EASE` and `DUR` come from `src/lib/motion.js` — no new easing values, no new
+durations.
+
+> **Amended.** This previously read "exit the same way", i.e. back down to `+105`, and that
+> was the cause of a visible vertical bounce in the scrubbed sequence. Measured: each line
+> travelled 260px up and the identical 260px back down, three times across the pin. Because
+> the footage is nearly static (mean inter-frame luma delta 0.77/255, global camera motion
+> 0.12px per frame with zero direction reversals), the lines were the only high-contrast
+> moving element in the viewport, so their retrace was read as the *frame sequence* bouncing.
+> Cross-correlating rendered screenshots under monotonic scroll isolated it: 3.95px mean
+> vertical shift with 10 direction reversals text-visible, against 0.42px and 2 text-hidden.
+>
+> A second fault rode along with it. Both halves were driven by one ramp that rose `0→1` and
+> fell `1→0`, and `EASE` evaluated on a descending parameter is `power3.in` — the exit put
+> 87.5% of its travel into its final half, moving the text *down* at ~2.1px per px of scroll
+> while the reader scrolled down. Each phase now runs its own ramp forward through `EASE`, so
+> enter and exit both decelerate, matching every other motion on the page.
+>
+> Ruled out and recorded so they are not re-opened: the canvas element never moves (rect top
+> range 0.00px across 8 viewport/DPR combinations), the `drawImage` destination rect never
+> moves (0.00px), the drawn frame index is strictly monotonic, exactly 1.00 draw occurs per
+> animation frame, and Lenis's lerp is not fighting `scrub: 1.1` — `scrub: true` measured
+> marginally *worse* (4.16px mean, 11 reversals).
 
 > **The pin stays at `+=340%`. Settled in Phase 6 — do not relitigate.**
 >
@@ -537,7 +590,7 @@ Five menu rows. Hairline between each. No photographs.
 
 Two full-width plates carrying **type only** — the material list, then the room's facts. Lines
 are set at **menu-name scale** (`clamp(19px, 2vw, 27px)`); each plate takes a vertical
-`素材` / `室` label and a 10px tracked caption beneath.
+`素材` / `室` label and an 11px tracked caption beneath.
 
 > **Not manifesto scale.** These lines were briefly set at `clamp(26px, 4.4vw, 62px)` and it was
 > wrong: the manifesto's three lines are the page's emotional centre, and nothing else may read
@@ -607,6 +660,7 @@ Every animation in the build uses these. No exceptions, no per-component improvi
 | Stagger | 80ms |
 | Image enter | `scale 1.12 → 1.0` |
 | Text enter | masked `yPercent 105 → 0` |
+| Text exit | masked `yPercent 0 → -105` — never retraces the enter (§6.2) |
 | Scrub value | `1.1` (never `true`, except under reduced-motion) |
 | Bounce / elastic / back | **never** |
 
@@ -631,31 +685,57 @@ gsap.ticker.lagSmoothing(0);
 
 ### 7.1 Typographic effects
 
-Five effects, all drawing their durations, staggers and easing from
-`src/lib/motion.js` (`DUR`, `STAGGER`, `CHAR`, `ENTER_CHAR`). No new easing values, no bounce.
-**The manifesto is deliberately excluded** — its three lines keep their existing masked reveal,
-because they are the page's emotional centre and must not compete with effect work elsewhere.
+Every effect draws its durations, staggers and easing from `src/lib/motion.js`
+(`DUR`, `STAGGER`, `CHAR`, `ENTER_CHAR`, `ENTER`). No new easing values, no bounce. **No two
+sections share a technique** — that is the point of the set: the page should feel like one hand
+made all of it, without any two moments looking alike.
 
 | Where | Effect |
 |---|---|
 | Hero (§6.1) | `NOIR` splits into four masked characters rising on a 90ms stagger, each with a 2° rotation and a 4px blur that resolve as it settles. `ノワール` follows 200ms later, character by character, vertically. |
-| Section headings (§6.6, §6.7, §6.8) | Clip wipe left→right over `DUR.wipe`, with a **2px vermilion rule travelling ahead of the reveal edge** and exiting off the right. |
-| The Method (§6.4) | Each numeral counts `00 →` its value over `DUR.count` as the item enters, while the title masks in. Mechanical and small — instrumentation, not decoration. |
+| Manifesto (§6.2) | Each line reveals **word by word, 60ms apart**, every word in its own mask. Scrubbed, and it exits upward without retracing — see §6.2. |
+| Section headings (§6.6, §6.7) | Clip wipe left→right over `DUR.wipe`. |
+| The Method (§6.4) | Each numeral counts `00 →` its value over `DUR.count` as the item enters, while the title's **characters resolve from a vertical scatter** — each glyph starting at a different depth inside its own mask, 35ms apart. |
 | Menu rows (§6.6) | On hover the Japanese name holds still while the romaji rebuilds character by character, 25ms apart. **Pure CSS** — the stagger is a `transition-delay` driven by the `--i` index, so §7's "micro-interactions are CSS" still holds. |
-| Rail (§5) | Characters rotate individually on `rotationY` as scroll progresses, turning to face the reader in sequence. Scrubbed. |
+| Reserve statement (§6.8) | **Line by line, clipped from the left**, each line carrying a slight skew that resolves to 0. The only skew in the build. |
 
-**The travelling bar is a rule, not a shape.** §10 forbids vermilion as an enclosed form; a 2px
-bar with no corners, no fill and no enclosure is the hairline rule §3 permits. It is also never
-at rest — it exits the right edge rather than parking on the page, so it cannot read as a badge.
+**The manifesto is no longer excluded.** §7.1 previously held it out on the grounds that it is
+the page's emotional centre and must not compete with effect work elsewhere. The word-by-word
+reveal does not compete with it, it *is* it — the technique now serves the centrepiece rather
+than decorating the edges. The exclusion stands in spirit: nothing else on the page may add
+motion while the pin is engaged.
 
-**One at a time, with one stated exception.** The reveals are placed in separate viewports so no
-two run together. The rail is the exception: it is persistent chrome and its progress hairline
-already scrubs continuously, so the character rotation rides an animation that was always
-running rather than adding a new one.
+**The scatter is a fixed cycle, not a random one.** `ENTER_CHAR.scatter` is five start depths
+applied by index. A seeded RNG would look identical and be one more thing to keep deterministic;
+the effect must be the same on every load and every replay.
+
+**Under a scrub, a stagger is not a delay.** The manifesto is progress-driven, so
+`CHAR.wordStagger` cannot be applied as 60ms of clock. It is converted to a fraction of the
+reveal band — 60ms measured against `DUR.reveal` — and each word gets its own sub-ramp inside
+the band. The tail is clamped so the last word still has 40% of the band to travel in;
+without that clamp a long line starves its final words into a snap.
+
+**One at a time, measured.** The reveals sit in separate viewports. The one place they can
+overlap is adjacent Method items, whose triggers are ~one item apart while `DUR.reveal` is 1.4s:
+measured at a normal 1500px/s scroll, two titles are in motion in **3 frames out of 645**
+(0.5%), rising to 3.6% at a 9000px/s flick. This is trigger adjacency, not two competing
+animations, and it is unchanged from the previous technique — same triggers, same duration.
+
+**Weight interpolation on the Selection heading is NOT implemented, and cannot be with the
+current faces.** The brief asked for the heading to arrive lighter and settle. Shippori Mincho
+is subset at **weight 400 only**, it is not a variable font, and **400 is the lightest weight
+the family ships** — there is no lighter weight to arrive from even if another subset were
+added. Animating `font-weight` would produce a synthetic faux-light, which is exactly the kind
+of substitute §4 exists to prevent. The Selection heading therefore keeps the shared clip wipe.
+Two real paths, both needing a decision rather than an invention: ship a Shippori Mincho 500
+subset and interpolate `500 → 400`, which is weight interpolation that *settles* but arrives
+**heavier**, at the cost of one more woff2 against §9's font budget; or give the Selection a
+different non-weight technique.
 
 **Reduced motion drops every one of these to its final state** — characters at rest and
-unblurred, headings unclipped with the bar at `scaleY(0)`, numerals printed at their value,
-no hover cascade, rail characters unrotated.
+unblurred, words at rest, headings and statement lines unclipped and unskewed, numerals printed
+at their value, no hover cascade. Verified: 0 of 29 manifesto words, 0 of 108 method characters
+displaced, and both statement lines at `inset(0 0% 0 0)`.
 
 **Reduced motion:** grain animation off, scroll cue static, all scrubs → `true`, all reveal
 tweens → `duration: 0` with final state applied. The page must remain fully readable.

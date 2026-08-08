@@ -104,9 +104,47 @@
     clip-path: inset(0 100% 0 0);
   }
 
-  .js [data-method-title]{
-    transform: translateY(105%);
+  /* The scatter starts each character at a different depth; the pre-state only
+     has to guarantee "off", so it uses the deepest value in ENTER_CHAR.scatter. */
+  .js .method__title .chars__ch{
+    transform: translateY(110%);
   }
+
+  /* Keep the skew in step with ENTER.statementSkew in src/lib/motion.js. */
+  .js [data-stmt-line]{
+    clip-path: inset(0 100% 0 0);
+    transform: skewX(-5deg);
+  }
+}
+
+/* ---- Per-word reveals (§7.1, the manifesto) ------------------------------
+   Each word gets its own mask so the line can rebuild word by word. The masks
+   are inline-block; the spaces between them are real text nodes in the markup,
+   which is what keeps the line able to wrap. */
+.words{
+  display: inline;
+}
+
+.words__mask{
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+.words__w{
+  display: inline-block;
+  will-change: transform;
+}
+
+/* ---- Reserve statement lines (§7.1) -------------------------------------- */
+.stmt-line{
+  display: block;
+}
+
+.stmt-line__inner{
+  display: inline-block;
+  transform-origin: left center;
+  will-change: transform, clip-path;
 }
 
 /* ---- Section-heading clip reveal ----------------------------------------

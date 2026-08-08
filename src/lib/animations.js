@@ -254,10 +254,14 @@ export function initAnimations() {
   // shared curve. It should read as instrumentation.
   gsap.utils.toArray('[data-method-num]').forEach((num) => {
     const to = parseInt(num.dataset.countTo, 10);
-    const title = num.closest('[data-method-item]')?.querySelector('[data-method-title]');
+    // §7.1 — the title resolves character by character from a vertical scatter,
+    // each glyph starting at a different depth inside its own mask.
+    const chars = gsap.utils.toArray(
+      num.closest('[data-method-item]')?.querySelectorAll('.method__title [data-char]') || []
+    );
     if (reduced) {
       num.textContent = String(to).padStart(2, '0');
-      if (title) gsap.set(title, { yPercent: 0 });
+      gsap.set(chars, { yPercent: 0, y: 0 });
       return;
     }
     const counter = { v: 0 };
@@ -274,16 +278,47 @@ export function initAnimations() {
             num.textContent = String(Math.round(counter.v)).padStart(2, '0');
           },
         });
-        if (title) {
+        if (chars.length) {
           gsap.fromTo(
-            title,
-            { yPercent: ENTER.textYPercentFrom },
-            { yPercent: 0, duration: DUR.reveal, ease: EASE }
+            chars,
+            {
+              // y:0 is load-bearing for the same reason as the hero: GSAP composes
+              // translate(yPercent% + y) and parses a pixel y out of the CSS matrix.
+              yPercent: (i) => ENTER_CHAR.scatter[i % ENTER_CHAR.scatter.length],
+              y: 0,
+            },
+            { yPercent: 0, y: 0, duration: DUR.reveal, ease: EASE, stagger: CHAR.scatter }
           );
         }
       },
     });
   });
+
+  // ---- Reserve statement: line-by-line clip from the left (§7.1) ----
+  // Its own technique, not the shared heading wipe: the clip runs left to right
+  // like the section headings, but each line carries a slight lean that resolves
+  // to 0 as it lands, and the two lines are staggered rather than revealed as one
+  // block. It is the last type on the page before the CTA, so it gets the only
+  // skew in the build.
+  const stmtLines = gsap.utils.toArray('[data-stmt-line]');
+  if (stmtLines.length) {
+    if (reduced) {
+      gsap.set(stmtLines, { clipPath: 'inset(0 0% 0 0)', skewX: 0 });
+    } else {
+      gsap.fromTo(
+        stmtLines,
+        { clipPath: 'inset(0 100% 0 0)', skewX: ENTER.statementSkew },
+        {
+          clipPath: 'inset(0 0% 0 0)',
+          skewX: 0,
+          duration: DUR.wipe,
+          ease: EASE,
+          stagger: STAGGER,
+          scrollTrigger: { trigger: stmtLines[0].closest('.reserve__statement'), start: 'top 85%' },
+        }
+      );
+    }
+  }
 
   // ---- Rail scroll-progress hairline (chrome, DESIGN.md §5) ----
   const railProgress = document.querySelector('.rail__progress');

@@ -1,12 +1,12 @@
 :root{
   /* colour — 6 values, no others exist */
   --sumi:      #0B0A09;   /* page ground. warm black, never #000 */
-  --sumi-2:    #14110E;   /* raised surface: footer, ambient fallback */
+  --sumi-2:    #1C1815;   /* raised surface: Room bands, ambient fallback. 1.12:1 on --sumi */
   --washi:     #E8E1D4;   /* primary text, brush strokes */
   --washi-dim: #A39A8B;   /* secondary text, eyebrows, captions. 7.11:1 on --sumi */
   --shu:       #8C2A1E;   /* vermilion lacquer — rules, seal, borders */
   --shu-lit:   #B33A25;   /* vermilion ink — accents only, never a fill */
-  --rule:      rgba(232,225,212,.13);
+  --rule:      rgba(232,225,212,.20);  /* hairlines. composites to #373532, 1.62:1 on --sumi */
 
   /* type — see fonts.css for @font-face + fallback metrics (DESIGN.md §4.1) */
   --display: 'Shippori Mincho', 'Shippori Mincho Fallback', Georgia, serif;
