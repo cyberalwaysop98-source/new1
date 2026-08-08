@@ -32,7 +32,7 @@ export default function Method() {
   return (
     <section id="method" className="section method">
       <div className="method__sticky">
-        <span className="eyebrow">The Method</span>
+        <span className="eyebrow">03 · THE RITUAL / METHOD</span>
         <h2 className="h-section">01 — 05</h2>
       </div>
 

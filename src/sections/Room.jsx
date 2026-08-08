@@ -21,7 +21,7 @@ export default function Room() {
     <section id="room" className="section room">
       <div className="section-head">
         <h2 className="h-section heading-wipe" data-wipe><span className="heading-wipe__text">The Room</span></h2>
-        <span className="eyebrow">Seven seats</span>
+        <span className="eyebrow">05 · THE ROOM / SEVEN SEATS</span>
       </div>
 
       {PLATES.map((plate) => (

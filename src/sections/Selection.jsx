@@ -39,7 +39,7 @@ export default function Selection() {
     <section id="selection" className="section selection">
       <div className="section-head">
         <h2 className="h-section heading-wipe" data-wipe><span className="heading-wipe__text">The Selection</span></h2>
-        <span className="eyebrow">Five, only</span>
+        <span className="eyebrow">04 · THE COFFEE / FIVE SELECTIONS</span>
       </div>
 
       <hr className="hairline" />

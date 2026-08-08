@@ -4,7 +4,7 @@ export default function Reserve() {
   return (
     <section id="reserve" className="section reserve">
       <div className="reserve__top eyebrow">
-        <span>予約 / RESERVE</span>
+        <span>06 · VISIT / 予約 RESERVE</span>
       </div>
 
       <div className="reserve__body">
