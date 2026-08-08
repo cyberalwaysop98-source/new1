@@ -157,23 +157,32 @@ export function initAnimations() {
     });
   }
 
-  // ---- The Room: scale 1.12→1.0 + clip-path wipe from bottom, parallax scrub ----
+  // ---- The Room: clip-path wipe on the static band, scale + parallax on the
+  // ground layer inside it. The two are deliberately split: transforming the
+  // band itself made a full-width element 12% wider than the viewport (measured
+  // -46..2606 at 2560), while clip-path is paint-only and cannot overflow.
   gsap.utils.toArray('.room__plate').forEach((plate) => {
-    const el = plate.querySelector('.room__face');
-    if (!el) return;
-    gsap.set(el, {
-      scale: reduced ? 1 : ENTER.imageScaleFrom,
+    const face = plate.querySelector('.room__face');
+    const ground = plate.querySelector('.room__ground');
+    if (!face || !ground) return;
+    gsap.set(face, {
       clipPath: reduced ? 'inset(0% 0% 0% 0%)' : 'inset(100% 0% 0% 0%)',
     });
+    gsap.set(ground, { scale: reduced ? 1 : ENTER.imageScaleFrom });
     if (!reduced) {
-      gsap.to(el, {
-        scale: ENTER.imageScaleTo,
+      gsap.to(face, {
         clipPath: 'inset(0% 0% 0% 0%)',
         duration: DUR.reveal,
         ease: EASE,
         scrollTrigger: { trigger: plate, start: 'top 85%' },
       });
-      gsap.to(el, {
+      gsap.to(ground, {
+        scale: ENTER.imageScaleTo,
+        duration: DUR.reveal,
+        ease: EASE,
+        scrollTrigger: { trigger: plate, start: 'top 85%' },
+      });
+      gsap.to(ground, {
         yPercent: -8,
         ease: 'none',
         scrollTrigger: {

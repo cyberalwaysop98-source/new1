@@ -27,6 +27,9 @@ export default function Room() {
       {PLATES.map((plate) => (
         <figure key={plate.label} className="room__plate">
           <div className="room__face">
+            {/* The layer that scales. The band box itself must stay untransformed
+                — scaling a full-width element pushes it past the viewport. */}
+            <div className="room__ground" aria-hidden="true" />
             <span className="tategaki room__jp" aria-hidden="true">
               {plate.jp}
             </span>
