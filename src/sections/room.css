@@ -24,7 +24,7 @@
   display: flex;
   align-items: center;
   gap: var(--gut);
-  min-height: 38vh;
+  min-height: 30vh;
   padding: 6vh var(--gut);
   background: var(--sumi-2);
   border-top: 1px solid var(--rule);
@@ -49,6 +49,9 @@
   gap: 1.5vh;
 }
 
+/* Menu-name scale (clamp 19-27px), NOT manifesto scale. The manifesto's three
+   lines are the page's emotional centre and nothing else may read at that
+   volume — at 26-62px these facts competed with it. */
 .room__line{
   color: var(--washi);
 }
@@ -59,7 +62,7 @@
 
 @media (max-width: 820px){
   .room__face{
-    min-height: 30vh;
+    min-height: 24vh;
     padding: 5vh var(--gut);
     gap: 5vw;
   }

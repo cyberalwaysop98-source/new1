@@ -32,7 +32,7 @@ export default function Room() {
             </span>
             <ul className="room__lines">
               {plate.lines.map((line) => (
-                <li key={line} className="manifesto-line room__line">
+                <li key={line} className="menu-name room__line">
                   {line}
                 </li>
               ))}

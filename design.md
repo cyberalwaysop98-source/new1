@@ -536,8 +536,13 @@ Five menu rows. Hairline between each. No photographs.
 ```
 
 Two full-width plates carrying **type only** — the material list, then the room's facts. Lines
-are set at manifesto scale; each plate takes a vertical `素材` / `室` label and a 10px tracked
-caption beneath.
+are set at **menu-name scale** (`clamp(19px, 2vw, 27px)`); each plate takes a vertical
+`素材` / `室` label and a 10px tracked caption beneath.
+
+> **Not manifesto scale.** These lines were briefly set at `clamp(26px, 4.4vw, 62px)` and it was
+> wrong: the manifesto's three lines are the page's emotional centre, and nothing else may read
+> at that volume. At 62px a material list competes with the one thing the page is built around.
+> Menu-name scale keeps it a list.
 
 **No photography and no line drawing.** An SVG architectural elevation stood here through
 phases 2–6 and was removed: at 1440 it read as a CAD drawing — thin hairlines with large dead
