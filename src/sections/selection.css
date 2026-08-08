@@ -1,3 +1,37 @@
+.selection__tabs{
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(12px, 2vw, 28px);
+  margin-bottom: 4vh;
+}
+
+.selection__tab{
+  background: transparent;
+  border: none;
+  color: var(--washi-dim);
+  cursor: pointer;
+  padding: 8px 0;
+  position: relative;
+  transition: color var(--dur-hover) var(--ease);
+}
+
+.selection__tab:hover,
+.selection__tab:focus-visible{
+  color: var(--washi);
+  outline: 1px solid var(--shu-lit);
+  outline-offset: 4px;
+}
+
+.selection__tab--active{
+  color: var(--washi);
+  border-bottom: 1px solid var(--shu);
+}
+
+.selection__list{
+  display: flex;
+  flex-direction: column;
+}
+
 .selection__group{
   display: flex;
   flex-direction: column;
@@ -5,18 +39,43 @@
 
 .selection__row{
   display: grid;
-  grid-template-columns: 1fr 2fr auto;
+  grid-template-columns: 1.2fr 2.2fr auto;
   align-items: baseline;
   gap: var(--gut);
   width: 100%;
-  padding: 4vh 0;
-  /* The 22px shift is driven by GSAP (animations.js), not from here: GSAP owns
-     an inline transform on this element from the reveal, and inline beats the
-     stylesheet, so a :hover transform rule here silently does nothing. */
+  padding: 3.5vh 0;
+  background: transparent;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.selection__col-name{
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.selection__cat-tag{
+  color: var(--shu-lit);
+  font-size: 9px;
+}
+
+.selection__col-body{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.selection__origin-detail{
+  color: var(--washi);
+  margin-top: 4px;
+  display: block;
 }
 
 .selection__row:hover .selection__price,
-.selection__row:focus-visible .selection__price{
+.selection__row:focus-visible .selection__price,
+.selection__row--expanded .selection__price{
   color: var(--shu-lit);
   transition: color var(--dur-hover) var(--ease);
 }
@@ -28,14 +87,10 @@
 @media (max-width: 700px){
   .selection__row{
     grid-template-columns: 1fr;
-    gap: 8px;
+    gap: 12px;
   }
 }
 
-/* ---- Hover cascade on the romaji (§7: micro-interactions stay in CSS) -----
-   The Japanese name does not move; only the romaji rebuilds, character by
-   character, 25ms apart. Pure CSS — the stagger is a transition-delay driven by
-   the --i index Chars sets, so no JS runs on hover. */
 .selection__romaji{
   font-style: normal;
   font-family: var(--body);
@@ -71,3 +126,4 @@
     animation: none;
   }
 }
+

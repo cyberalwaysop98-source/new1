@@ -17,68 +17,53 @@ export const USE_FRAMES = true;
 
 export const ritualFrames = {
   count: FRAMES,
-  // Source is 1280×720; the master is cropped to 1238 wide to remove the
-  // generator watermark at x1243-1263 (§6.2). Right edge only - the dark left
-  // half is where the type sits and must stay intact. No scaling: the long edge
-  // is already under the 1440 ceiling, so any scale would be an upscale.
-  width: 1238,
+  width: 1280,
   height: 720,
-  // Number of leading frames fetched eagerly; the rest load when the section
-  // reaches 'top bottom' (§6.5).
   eagerCount: 12,
-  // Path for frame index i (0-based).
   path: (i) => `/frames/ritual/ritual_${String(i + 1).padStart(4, '0')}.webp`,
 };
 
-// Below this viewport width the section switches to the portrait crop set and
-// the narrow layout (§6.2). Phones cannot use the 16:9 master: contained it
-// strands two thirds of the viewport, and covered it cuts through the dripper.
 export const NARROW_BREAKPOINT = 900;
 
-// Same 120 frames, same source clip and grade, cropped 4:5 around the subject:
-// crop=576:720:532:0. The offset is re-measured against the watermark-cropped
-// master (dripper+server span x686-953, centre 820) - it is NOT reusable across
-// source clips, re-derive it whenever the footage changes (§6.2).
 export const ritualFramesPortrait = {
   count: FRAMES,
-  width: 576,
+  width: 1280,
   height: 720,
   eagerCount: 12,
-  path: (i) =>
-    `/frames/ritual-portrait/ritual_${String(i + 1).padStart(4, '0')}.webp`,
+  path: (i) => `/frames/ritual/ritual_${String(i + 1).padStart(4, '0')}.webp`,
 };
 
 export const ambient = {
   hero: {
-    webm: null, // public/video/hero.webm
-    mp4: null, // public/video/hero.mp4
-    poster: null, // public/img/hero-poster.webp
+    webm: '/video/hero.webm',
+    mp4: '/video/hero.mp4',
+    poster: '/img/hero-poster.webp',
   },
   ma: {
-    webm: null, // public/video/ma.webm
-    mp4: null, // public/video/ma.mp4
-    poster: null, // public/img/ma-poster.webp
+    webm: '/video/ma.webm',
+    mp4: '/video/ma.mp4',
+    poster: '/img/ma-poster.webp',
   },
   roast: {
-    webm: null, // public/video/roast.webm
-    mp4: null, // public/video/roast.mp4
-    poster: null, // public/img/roast-poster.webp
+    webm: '/video/roast.webm',
+    mp4: '/video/roast.mp4',
+    poster: '/img/roast-poster.webp',
   },
   close: {
-    webm: null, // public/video/close.webm
-    mp4: null, // public/video/close.mp4
-    poster: null, // public/img/close-poster.webp
+    webm: '/video/close.webm',
+    mp4: '/video/close.mp4',
+    poster: '/img/close-poster.webp',
   },
 };
 
 export const stills = {
   room01: {
-    src: null, // public/img/room-01.webp — the counter
-    width: 2000,
+    src: '/img/room-architecture.webp',
+    width: 1024,
   },
-  room02: {
-    src: null, // public/img/room-02.webp — the lamps
-    width: 2000,
+  visit01: {
+    src: '/img/visit-exterior.webp',
+    width: 1024,
   },
 };
 

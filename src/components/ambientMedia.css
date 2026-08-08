@@ -24,3 +24,18 @@
     radial-gradient(65% 55% at 50% 15%, rgba(232,225,212,.06), transparent 60%),
     linear-gradient(180deg, var(--sumi), var(--sumi-2));
 }
+
+@media (max-width: 768px) {
+  .ambient-media--hero {
+    object-position: 70% center;
+  }
+  .ambient-media--ma {
+    object-position: 30% center;
+  }
+  .ambient-media--roast {
+    object-position: 65% center;
+  }
+  .ambient-media--close {
+    object-position: 40% center;
+  }
+}

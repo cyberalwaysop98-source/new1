@@ -123,7 +123,9 @@
    copied the four letters of NOIR on four separate lines (innerText breaks at
    every inline-block mask), and axe flagged aria-label on a roleless <span>. */
 .chars,
-.words{
+.words,
+.split-text,
+.blur-text{
   user-select: none;
 }
 

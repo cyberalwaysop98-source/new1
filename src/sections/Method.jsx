@@ -1,4 +1,5 @@
 import Chars from '../components/Chars';
+import ScrollReveal from '../components/reactbits/ScrollReveal';
 import './method.css';
 
 const ITEMS = [
@@ -33,8 +34,10 @@ export default function Method() {
   return (
     <section id="method" className="section method">
       <div className="method__sticky">
-        <span className="eyebrow">The Method</span>
-        <h2 className="h-section">01 — 05</h2>
+        <ScrollReveal>
+          <span className="eyebrow">03 · THE RITUAL / METHOD</span>
+          <h2 className="h-section">01 — 05</h2>
+        </ScrollReveal>
       </div>
 
       <ol className="method__list">
@@ -42,6 +45,10 @@ export default function Method() {
           <li key={item.n} className="method__item" data-method-item>
             <span className="method__num" data-method-num data-count-to={item.n}>00</span>
             <div className="method__body">
+              {/* Chars, not SplitText: the §7.1 Method effect resolves each
+                  CHARACTER from a vertical scatter and animations.js targets
+                  [data-char], which a word split does not emit. Chars also
+                  carries the aria-hidden + visually-hidden clipboard copy. */}
               <h3 className="menu-name method__title"><Chars text={item.title} /></h3>
               <p className="body-text">{item.line}</p>
               <hr className="hairline method__rule" data-method-rule />

@@ -19,6 +19,37 @@
   background: var(--sumi);
 }
 
+.manifesto__stage-bar{
+  position: absolute;
+  top: clamp(60px, 10vh, 100px);
+  left: var(--gut);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  pointer-events: none;
+  mix-blend-mode: difference;
+}
+
+.manifesto__stage-kanji{
+  color: var(--washi);
+}
+
+.manifesto__stage-sep{
+  color: var(--shu-lit);
+}
+
+.manifesto__stage-name{
+  color: var(--washi);
+  letter-spacing: .4em;
+}
+
+.manifesto__stage-desc{
+  color: var(--washi-dim);
+  margin-left: 12px;
+  opacity: 0.8;
+}
+
 .manifesto__slot{
   position: absolute;
   top: 0;
@@ -28,11 +59,6 @@
   pointer-events: none;
 }
 
-/* Landscape source, COVER fit: the frame is full-bleed, so there is no bleed to
-   put type in. The composition keeps its subject in the right half and its left
-   half near-black, so the type overlays that dark half. Alternation (§5) is
-   preserved WITHIN that half — flush-right then flush-left then flush-right —
-   rather than across the full width, which would put a line on the dripper. */
 .manifesto__slot--right,
 .manifesto__slot--left{
   left: var(--gut);
@@ -58,9 +84,12 @@
   color: var(--shu-lit);
 }
 
-/* Portrait phones: the contained frame spans the full width, so there are no
-   side margins at all. The frame is top-anchored (see publishImageBox) and the
-   type takes the band underneath. Alternating flush-left/right still holds. */
+@media (max-width: 768px){
+  .manifesto__stage-desc{
+    display: none;
+  }
+}
+
 .manifesto--narrow .manifesto__slot{
   top: calc(var(--img-b, 70%) + 16px);
   bottom: var(--gut);
@@ -78,3 +107,4 @@
   justify-content: flex-start;
   text-align: left;
 }
+

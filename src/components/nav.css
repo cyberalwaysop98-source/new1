@@ -11,47 +11,179 @@
   padding: 28px var(--gut);
   mix-blend-mode: difference;
   pointer-events: none;
+  transition: transform var(--dur-medium) var(--ease), opacity var(--dur-medium) var(--ease);
 }
 
-.nav a{
+.nav--hidden{
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+.nav a,
+.nav button{
   pointer-events: auto;
   text-decoration: none;
   color: var(--washi);
-  /* §7 — micro-interactions are CSS, using the hover duration and the shared
-     ease. Opacity only: a colour change would fight mix-blend-mode: difference,
-     which is already inverting whatever sits behind the nav. */
+  background: transparent;
+  border: none;
+  cursor: pointer;
   opacity: 1;
-  transition: opacity var(--dur-hover) var(--ease);
-  /* 44px hit area without moving anything: the padding grows the box, the equal
-     negative margin removes it from layout. Type size is untouched (§4). */
+  font-weight: 500;
+  letter-spacing: .28em;
+  transition: opacity var(--dur-hover) var(--ease), color var(--dur-hover) var(--ease);
   padding-block: 15px;
   margin-block: -15px;
 }
 
 .nav a:hover,
-.nav a:focus-visible{
-  opacity: .55;
+.nav a:focus-visible,
+.nav button:hover,
+.nav button:focus-visible{
+  opacity: 1;
+  color: var(--shu-lit);
+  outline: 1px solid var(--shu-lit);
+  outline-offset: 4px;
 }
 
-.nav__links{
+.nav__desktop-links{
   display: flex;
   gap: clamp(18px, 2.6vw, 44px);
   align-items: baseline;
 }
 
-@media (max-width: 640px){
-  .nav{
-    gap: 12px;
-  }
+.nav__num{
+  color: var(--washi-dim);
+  margin-right: 4px;
+}
 
-  .nav__links{
-    gap: 14px;
-  }
+.nav__sound-toggle{
+  margin-left: 12px;
+  color: var(--washi-dim);
+  letter-spacing: .25em;
+  border-left: 1px solid var(--rule);
+  padding-left: 16px;
+}
 
-  /* At 360 the four items do not fit on one line at 10px/0.34em tracking.
-     Selection and The Room are reachable by scrolling; the reservation link is
-     the one that must survive, so it is the one kept. */
-  .nav__link:not(:last-child){
+.nav__mobile-toggle{
+  display: none;
+}
+
+/* Editorial Mobile Navigation Overlay Curtain */
+.nav__overlay{
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  visibility: hidden;
+  transition: visibility var(--dur-medium) var(--ease);
+}
+
+.nav__overlay--open{
+  pointer-events: auto;
+  visibility: visible;
+}
+
+.nav__overlay-backdrop{
+  position: absolute;
+  inset: 0;
+  background: var(--sumi-2);
+  opacity: 0;
+  transition: opacity var(--dur-medium) var(--ease);
+}
+
+.nav__overlay--open .nav__overlay-backdrop{
+  opacity: 0.96;
+}
+
+.nav__overlay-content{
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  padding: clamp(32px, 8vh, 64px) var(--gut);
+  transform: translateY(-20px);
+  opacity: 0;
+  transition: transform var(--dur-medium) var(--ease), opacity var(--dur-medium) var(--ease);
+}
+
+.nav__overlay--open .nav__overlay-content{
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.nav__overlay-header{
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 16px;
+}
+
+.nav__overlay-links{
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-top: 4vh;
+  margin-bottom: 4vh;
+}
+
+.nav__overlay-link{
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  text-decoration: none;
+  color: var(--washi);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity var(--dur-medium) var(--ease), transform var(--dur-medium) var(--ease);
+}
+
+.nav__overlay--open .nav__overlay-link{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.nav__overlay--open .nav__overlay-link:nth-child(1) { transition-delay: 0.1s; }
+.nav__overlay--open .nav__overlay-link:nth-child(2) { transition-delay: 0.15s; }
+.nav__overlay--open .nav__overlay-link:nth-child(3) { transition-delay: 0.2s; }
+.nav__overlay--open .nav__overlay-link:nth-child(4) { transition-delay: 0.25s; }
+
+.nav__overlay-link:hover,
+.nav__overlay-link:focus-visible{
+  opacity: 0.7;
+}
+
+.nav__overlay-num{
+  color: var(--shu-lit);
+}
+
+.nav__overlay-label{
+  font-size: clamp(28px, 6vw, 44px);
+}
+
+.nav__overlay-footer{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  border-top: 1px solid var(--rule);
+  padding-top: 24px;
+}
+
+.nav__overlay-cta{
+  color: var(--washi);
+  text-decoration: none;
+  border-bottom: 1px solid var(--shu);
+  padding-bottom: 4px;
+  align-self: flex-start;
+}
+
+@media (max-width: 768px){
+  .nav__desktop-links{
     display: none;
   }
+  .nav__mobile-toggle{
+    display: inline-block;
+  }
 }
+

@@ -1,0 +1,31 @@
+.shiny-text{
+  display: inline-block;
+  background: linear-gradient(
+    120deg,
+    var(--washi-dim) 0%,
+    var(--washi-dim) 35%,
+    var(--washi) 50%,
+    var(--washi-dim) 65%,
+    var(--washi-dim) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shiny-shimmer 4s infinite linear;
+}
+
+@keyframes shiny-shimmer{
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .shiny-text{
+    animation: none;
+    -webkit-text-fill-color: var(--washi-dim);
+  }
+}

@@ -33,8 +33,8 @@ function App() {
 
       <main className="page-content">
         <Hero />
-        <Manifesto />
 
+        {/* THE ROOM */}
         <AmbientBreak
           id="ma"
           media={ambient.ma}
@@ -44,9 +44,12 @@ function App() {
           caption="間 — the interval. Not empty space, but the pause that gives the next thing its weight. We build the room around it."
           captionAlign="left"
         />
+        <Room />
 
-        <Method />
+        {/* THE RITUAL */}
+        <Manifesto />
 
+        {/* THE COFFEE */}
         <AmbientBreak
           id="roast"
           media={ambient.roast}
@@ -55,9 +58,10 @@ function App() {
           caption="Binchōtan. Twelve minutes. By ear."
           captionAlign="right"
         />
-
+        <Method />
         <Selection />
-        <Room />
+
+        {/* TOMIGAYA */}
         <Reserve />
       </main>
 

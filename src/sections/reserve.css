@@ -1,13 +1,10 @@
 .reserve__top{
   display: flex;
   justify-content: space-between;
+  align-items: baseline;
   margin-bottom: 10vh;
 }
 
-/* The tategaki rail (§5) owns the right edge above 820px. Removing the seal
-   moved the hours block outward into the rail's lane — measured 16px of overlap
-   at 1100, 1440 and 2560. Same rule as §6.2: nothing right-aligned may sit under
-   the rail. */
 @media (min-width: 821px){
   .reserve__body{
     padding-right: 44px;
@@ -17,7 +14,7 @@
 .reserve__body{
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: flex-start;
   flex-wrap: wrap;
   gap: 6vh;
 }
@@ -26,37 +23,107 @@
   display: flex;
   flex-direction: column;
   gap: 4vh;
+  max-width: 400px;
+}
+
+.reserve__tag{
+  color: var(--shu-lit);
+  margin-bottom: -1.5vh;
+}
+
+.reserve__title{
+  font-family: var(--display);
+  font-size: clamp(24px, 3vw, 36px);
+  color: var(--washi);
+  font-weight: 500;
 }
 
 .reserve__cta{
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
   align-self: flex-start;
   border-bottom: 1px solid var(--shu-lit);
   text-decoration: none;
-  /* Same language as the nav: opacity only. The page's one job is this control,
-     and it was the only interactive element with no response to the pointer. */
+  color: var(--washi);
   opacity: 1;
-  transition: opacity var(--dur-hover) var(--ease);
-  /* 44px hit area, layout unchanged. Note this replaces the old
-     padding-bottom: 4px — padding-block would have overridden it anyway, and
-     the underline now sits 14px below the text rather than 4px. */
-  padding-block: 14px;
-  margin-block: -14px;
+  font-weight: 500;
+  letter-spacing: .28em;
+  padding-bottom: 8px;
+  transition: border-color var(--dur-hover) var(--ease), color var(--dur-hover) var(--ease);
+}
+
+.reserve__cta-arrow{
+  transition: transform var(--dur-hover) var(--ease), color var(--dur-hover) var(--ease);
+  color: var(--shu-lit);
 }
 
 .reserve__cta:hover,
 .reserve__cta:focus-visible{
-  opacity: .55;
+  color: var(--washi);
+  border-color: var(--washi);
+  outline: 1px solid var(--shu-lit);
+  outline-offset: 4px;
+}
+
+.reserve__cta:hover .reserve__cta-arrow,
+.reserve__cta:focus-visible .reserve__cta-arrow{
+  transform: translateX(6px);
+  color: var(--washi);
+}
+
+.reserve__tomigaya-story{
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 42ch;
+  border-left: 1px solid var(--rule);
+  padding-left: clamp(16px, 3vw, 32px);
+}
+
+.reserve__section-tag{
+  color: var(--shu-lit);
+}
+
+.reserve__narrative{
+  color: var(--washi-dim);
+}
+
+.reserve__access-grid{
+  display: flex;
+  flex-direction: column;
+  margin-top: 16px;
+  position: relative;
+}
+
+.reserve__access-item{
+  display: flex;
+  gap: 16px;
+  align-items: baseline;
+  position: relative;
+  padding-left: 16px;
+  padding-bottom: 24px;
+  border-left: 1px solid var(--rule);
+}
+
+.reserve__access-item:last-child {
+  padding-bottom: 0;
+  border-left-color: transparent;
+}
+
+.reserve__access-num{
+  color: var(--shu-lit);
+  position: absolute;
+  left: -9px;
+  background: var(--sumi);
+  padding-block: 4px;
 }
 
 .reserve__details{
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: var(--gut);
 }
-
-/* The seal (a 104px vermilion-bordered square holding 黒) was removed in
-   Phase 6. It was the only enclosed shape on the page, and at that size against
-   flat sumi it read as a badge and pulled focus off the CTA — see §10. */
 
 .reserve__hours{
   display: flex;
@@ -65,7 +132,43 @@
   text-align: right;
 }
 
+.reserve__footer-bar{
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 10vh;
+  border-top: 1px solid var(--rule);
+  padding-top: 24px;
+}
 
 .reserve__address{
-  margin-top: 10vh;
+  margin-top: 0;
 }
+
+.reserve__dir-link{
+  color: var(--washi);
+  text-decoration: none;
+  border-bottom: 1px solid var(--shu);
+  padding-bottom: 2px;
+  transition: border-color var(--dur-hover) var(--ease);
+}
+
+.reserve__dir-link:hover,
+.reserve__dir-link:focus-visible{
+  border-color: var(--shu-lit);
+  outline: 1px solid var(--shu-lit);
+  outline-offset: 4px;
+}
+
+@media (max-width: 768px){
+  .reserve__top{
+    flex-direction: column;
+    gap: 16px;
+  }
+  .reserve__footer-bar{
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+}
+

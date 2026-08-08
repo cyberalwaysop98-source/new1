@@ -38,12 +38,10 @@ export function initAnimations() {
   // composes translate(yPercent% + y) and parses the CSS matrix into y.
   const heroChars = gsap.utils.toArray('#hero .hero__chars [data-char]');
   const heroKana = gsap.utils.toArray('#hero .hero__kana-chars [data-char]');
-  const heroLede = gsap.utils.toArray('#hero .hero__lede [data-reveal]');
   const restChar = { yPercent: 0, y: 0, rotate: 0, filter: 'blur(0px)' };
 
   if (reduced) {
     gsap.set([...heroChars, ...heroKana], restChar);
-    gsap.set(heroLede, { yPercent: 0, y: 0 });
   } else {
     gsap.fromTo(
       heroChars,
@@ -60,11 +58,6 @@ export function initAnimations() {
         stagger: CHAR.heroStagger,
         delay: CHAR.kanaDelay,
       }
-    );
-    gsap.fromTo(
-      heroLede,
-      { yPercent: ENTER.heroYPercentFrom, y: 0 },
-      { yPercent: 0, y: 0, duration: DUR.heroReveal, ease: EASE, delay: CHAR.kanaDelay }
     );
   }
 
@@ -320,8 +313,9 @@ export function initAnimations() {
     }
   }
 
-  // ---- Rail scroll-progress hairline (chrome, DESIGN.md §5) ----
+  // ---- Rail scroll-progress hairline and character rotation (§7.1) ----
   const railProgress = document.querySelector('.rail__progress');
+  const railChars = gsap.utils.toArray('.rail__chars [data-char]');
   const pageContent = document.querySelector('.page-content');
   if (railProgress && pageContent) {
     gsap.to(railProgress, {
@@ -334,6 +328,23 @@ export function initAnimations() {
         scrub: true,
       },
     });
+  }
+  if (railChars.length && pageContent) {
+    if (reduced) {
+      gsap.set(railChars, { rotateY: 0 });
+    } else {
+      gsap.to(railChars, {
+        rotateY: 360,
+        stagger: 0.2,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: pageContent,
+          start: 'top top',
+          end: 'bottom bottom',
+          scrub: true,
+        },
+      });
+    }
   }
 
   ScrollTrigger.refresh();

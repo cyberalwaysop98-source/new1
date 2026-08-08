@@ -18,6 +18,9 @@ export function createFrameLoader(set = ritualFrames) {
     return img;
   }
 
+  // Pre-trigger frame 0 immediately so first paint never hits a null drawable
+  load(0);
+
   function loadEager() {
     const n = Math.min(set.eagerCount, FRAMES);
     return Promise.all(
@@ -45,10 +48,11 @@ export function createFrameLoader(set = ritualFrames) {
   // scrubs into a region whose frames are still in flight — the sequence holds
   // on the closest available image instead of clearing to nothing.
   function getDrawable(i) {
-    if (isReady(images[i])) return images[i];
+    const idx = Math.min(FRAMES - 1, Math.max(0, i));
+    if (isReady(images[idx])) return images[idx];
     for (let d = 1; d < FRAMES; d++) {
-      if (isReady(images[i - d])) return images[i - d];
-      if (isReady(images[i + d])) return images[i + d];
+      if (idx - d >= 0 && isReady(images[idx - d])) return images[idx - d];
+      if (idx + d < FRAMES && isReady(images[idx + d])) return images[idx + d];
     }
     return null;
   }
