@@ -408,7 +408,7 @@ durations.
 
 > **The pin stays at `+=340%`. Settled in Phase 6 — do not relitigate.**
 >
-> The critique raised that this is 36% of total scroll depth (3960 of 11058px) for three
+> The critique raised that this is 35% of total scroll depth (3960 of 11,347px) for three
 > sentences, and that `0.00–0.15` and `0.90–1.00` carry no text at all. That is the intended
 > reading. This is the centrepiece and the only pinned section on the page; the silent head and
 > tail are **pacing**, not dead scroll — the pour arriving before the first line, and the steam

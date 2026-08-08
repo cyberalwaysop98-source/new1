@@ -36,3 +36,7 @@ public/*.mov
 
 .vercel
 .env*
+
+# Local audit scratch: Playwright/Lighthouse output and its own node_modules.
+# Screenshots and a duplicate lockfile are build noise, not source.
+production-audit/

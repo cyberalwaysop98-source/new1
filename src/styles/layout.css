@@ -117,6 +117,29 @@
   }
 }
 
+/* The split spans in Chars and Words are decoration. The glyphs are aria-hidden
+   and unselectable; a single .vh copy of the string carries the accessible name
+   and is the only thing a selection copies. Without this, selecting the hero
+   copied the four letters of NOIR on four separate lines (innerText breaks at
+   every inline-block mask), and axe flagged aria-label on a roleless <span>. */
+.chars,
+.words{
+  user-select: none;
+}
+
+.vh{
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  user-select: text;
+}
+
 /* ---- Per-word reveals (§7.1, the manifesto) ------------------------------
    Each word gets its own mask so the line can rebuild word by word. The masks
    are inline-block; the spaces between them are real text nodes in the markup,
