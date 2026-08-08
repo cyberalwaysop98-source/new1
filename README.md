@@ -77,6 +77,40 @@ server.
 Android figures are 4× CPU throttling at 360×780 / dpr 3, driven with real wheel input across
 the pinned section, with the sequence fully decoded first.
 
+### If you re-measure this site, do not drive it with `window.scrollTo`
+
+Worth knowing before you trust any number you take yourself, and worth knowing on **any** Lenis
+site.
+
+Lenis does not emit a `scroll` event for programmatic native scrolling. The bridge in
+`src/lib/smoothScroll.js` is `lenis.on('scroll', ScrollTrigger.update)`, so when a test driver
+calls `window.scrollTo`, the page position changes but **ScrollTrigger never updates**. The pin
+never engages, the canvas never repaints, and time-based GSAP tweens sit frozen — while
+everything *looks* like it is scrolling, because `window.scrollY` really is moving.
+
+The failure is silent and it reads as success:
+
+- a frozen canvas returns **identical hashes forwards and backwards**, which scores as *perfect
+  scrub determinism*
+- nothing moves, so **CLS measures 0**
+- `requestAnimationFrame` still ticks, so an FPS probe returns a **healthy frame rate** for a
+  scrub that is not happening
+
+Every one of those was recorded as a pass on this project before the cause was found. The
+figures in the table above are the corrected ones, taken with real `mouse.wheel` input.
+
+Two related traps in the same family, both hit here:
+
+- **Headless Chromium throttles `requestAnimationFrame`** — measured at ~1 tick per 500 ms with
+  no input. Time-based GSAP tweens then appear permanently stuck at their start value. Launch
+  with `--disable-renderer-backgrounding` or generate input before measuring.
+- **The Paint Timing API is unreliable in that same state** — this repo saw
+  `first-contentful-paint` reported at 22 seconds and `largest-contentful-paint` returning no
+  entries at all.
+
+If a measurement looks suspiciously perfect, check that the thing you are measuring actually
+moved before believing it.
+
 **Two honest caveats on the table above.**
 
 - **CLS is 0.0004, not 0.** §9 asks for 0. The residual is four ten-thousandths and well inside
