@@ -33,3 +33,5 @@ public/*.mov
 *.njsproj
 *.sln
 *.sw?
+
+.vercel

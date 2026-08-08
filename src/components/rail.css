@@ -26,7 +26,14 @@
   left: 0;
   width: 1px;
   height: 0%;
-  background: var(--shu-lit);
+  /* --shu (lacquer), not --shu-lit (ink), at half opacity. At full height this
+     element is the longest continuous run of colour on the page; in --shu-lit it
+     read as a saturated red highlight down the whole right edge, which is the
+     §10 vermilion failure. §3 permits vermilion as a hairline RULE — this stays
+     1px and now sits close to the --rule track it runs against, so it reads as a
+     mark rather than an accent. */
+  background: var(--shu);
+  opacity: .5;
 }
 
 @media (max-width: 820px){

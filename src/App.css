@@ -2,6 +2,18 @@
   position: relative;
   z-index: 1;
   background: var(--sumi);
+  /* Clearance for the fixed nav at MAXIMUM scroll.
+     At the scroll extreme the viewport shows the page's last 100vh: the footer
+     reveal (74svh) plus whatever precedes it. Reserve's own 20vh bottom padding
+     left the address sitting 846px above the document end — 94% of a 900px
+     viewport — so it came to rest at y=28..54, directly under the nav mark at
+     y=28..43. Measured overlap, not theoretical.
+     8vh takes the total past 100vh, so the last line clears the nav band instead
+     of resting beneath it. Transient overlap while scrolling is intended (that is
+     what mix-blend-mode: difference on the nav is for); a STATIC overlap at the
+     scroll extreme is not. This lives on .page-content, not on a section, so
+     §5's uniform 20vh section rhythm is untouched. */
+  padding-bottom: 8vh;
 }
 
 /* §6.9 — the footer reveal. The container gives the sticky footer its scroll
