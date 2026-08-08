@@ -50,24 +50,24 @@ export const ritualFramesPortrait = {
 
 export const ambient = {
   hero: {
-    webm: null, // public/video/hero.webm
-    mp4: null, // public/video/hero.mp4
-    poster: null, // public/img/hero-poster.webp
+    webm: '/video/hero.webm',
+    mp4: '/video/hero.mp4',
+    poster: '/img/hero-poster.webp',
   },
   ma: {
-    webm: null, // public/video/ma.webm
-    mp4: null, // public/video/ma.mp4
-    poster: null, // public/img/ma-poster.webp
+    webm: '/video/ma.webm',
+    mp4: '/video/ma.mp4',
+    poster: '/img/ma-poster.webp',
   },
   roast: {
-    webm: null, // public/video/roast.webm
-    mp4: null, // public/video/roast.mp4
-    poster: null, // public/img/roast-poster.webp
+    webm: '/video/roast.webm',
+    mp4: '/video/roast.mp4',
+    poster: '/img/roast-poster.webp',
   },
   close: {
-    webm: null, // public/video/close.webm
-    mp4: null, // public/video/close.mp4
-    poster: null, // public/img/close-poster.webp
+    webm: '/video/close.webm',
+    mp4: '/video/close.mp4',
+    poster: '/img/close-poster.webp',
   },
 };
 
