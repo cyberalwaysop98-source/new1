@@ -1,14 +1,17 @@
 :root{
   /* ---- COLOR PALETTE ----------------------------------------------------
-     Japanese kissaten warm-black palette. No pure #000, no neon, no glows. */
+     Japanese kissaten warm-black palette. No pure #000, no neon, no glows.
+     --sumi-2 and --rule carry the lifted values from the neutrals pass: at the
+     old #14110E / .13 the raised surface measured 1.05:1 and the hairline
+     1.31:1 against the ground, which is to say they were not visible at all. */
   --sumi:         #0B0A09;   /* Near Black: page ground. Warm sumi ink tone */
-  --sumi-2:       #14110E;   /* Charcoal / Raised Surface: footer, ambient fallbacks */
-  --kohi:         #1A1613;   /* Coffee Brown: deep roasted surface tint */
+  --sumi-2:       #1C1815;   /* Charcoal / Raised Surface: Room bands, ambient fallback. 1.12:1 on --sumi */
+  --kohi:         #1A1613;   /* Coffee Brown: deep roasted surface tint. Currently unreferenced */
   --washi:        #E8E1D4;   /* Warm Ivory: primary display typography & brushwork */
   --washi-dim:    #A39A8B;   /* Muted Beige: secondary copy, captions (7.11:1 AAA on --sumi) */
   --shu:          #8C2A1E;   /* Vermilion Lacquer: hairlines, seal, structural rules */
   --shu-lit:      #B33A25;   /* Vermilion Ink: restrained warm accent, prices on hover, count-ups */
-  --rule:         rgba(232,225,212,.13); /* Hairline border substrate */
+  --rule:         rgba(232,225,212,.20); /* Hairline substrate. Composites to #373532, 1.62:1 on --sumi */
 
   /* ---- TYPOGRAPHY SYSTEM (3 Levels) -------------------------------------
      Level 1: Editorial Display Serif (Shippori Mincho for Latin capitals + JP)

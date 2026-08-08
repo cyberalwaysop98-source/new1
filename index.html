@@ -14,11 +14,10 @@
     <!--
       Open Graph / Twitter.
 
-      ⚠ og:image and og:url are RELATIVE. Most scrapers (Facebook, Slack,
-      LinkedIn) require an ABSOLUTE URL and will silently show no card with a
-      relative one. Before the first real deploy, prefix both with the live
-      origin, e.g. https://example.com/og/noir-og.jpg. This is deliberately not
-      guessed here — no domain has been chosen yet.
+      og:url, og:image and twitter:image are ABSOLUTE against the live origin.
+      Scrapers (Facebook, Slack, LinkedIn, X) require it and silently render no
+      card for a relative URL. If the site moves to a custom domain, these three
+      are the only values that must change.
     -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="NOIR" />
@@ -29,8 +28,8 @@
       property="og:description"
       content="A seven-seat kissaten in Tomigaya, Tokyo. Dark wood, one low light, hand-drip only. No music, no wifi, no second cup."
     />
-    <meta property="og:url" content="/" />
-    <meta property="og:image" content="/og/noir-og.jpg" />
+    <meta property="og:url" content="https://new1-eight-ochre.vercel.app/" />
+    <meta property="og:image" content="https://new1-eight-ochre.vercel.app/og/noir-og.jpg" />
     <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -42,7 +41,7 @@
       name="twitter:description"
       content="A seven-seat kissaten in Tomigaya, Tokyo. Dark wood, one low light, hand-drip only."
     />
-    <meta name="twitter:image" content="/og/noir-og.jpg" />
+    <meta name="twitter:image" content="https://new1-eight-ochre.vercel.app/og/noir-og.jpg" />
 
     <!-- §4.1: self-hosted subsets. Preload the three faces used above the
          fold, since the hero title is the LCP element and must not wait on a

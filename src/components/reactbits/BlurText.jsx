@@ -47,9 +47,15 @@ export default function BlurText({
     <Tag
       ref={ref}
       className={`blur-text ${className}`}
-      aria-label={text}
       style={{ display: 'inline-block' }}
     >
+      {/* The intact string lives in one visually-hidden copy: it carries the
+          accessible name and is the only thing a selection copies. The split
+          spans are decoration (aria-hidden + user-select:none). Without this,
+          aria-label sat on a roleless <span> — prohibited, and it failed the
+          production a11y audit — and selecting the text copied one fragment
+          per line, because every split span is inline-block. */}
+      <span className="vh">{text}</span>
       {elements.map((el, i) => {
         const isSpace = el === ' ';
         const style = inView

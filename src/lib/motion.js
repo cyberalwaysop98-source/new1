@@ -30,12 +30,19 @@ export const CHAR = {
   heroStagger: 0.09,   // 90ms between hero characters
   kanaDelay: 0.2,      // kana follows the latin by 200ms
   cascade: 0.025,      // 25ms — mirrored as --cascade in tokens.css
+  wordStagger: 0.06,   // §7.1 manifesto: 60ms between words
+  scatter: 0.035,      // §7.1 method titles: 35ms between characters
   mediaDelay: 0.8,     // §6.1: the hero loop fades in at 800ms
 };
 
 export const ENTER_CHAR = {
   rotate: 2,   // degrees, resolves to 0
   blur: 4,     // px, resolves to 0
+  // §7.1 method titles resolve from a vertical scatter. A fixed cycle of start
+  // depths, not an RNG: the scatter must be identical on every load and every
+  // replay, and a seeded random would be one more thing to keep deterministic
+  // for no gain. yPercent, so each character still rises inside its own mask.
+  scatter: [110, 62, 96, 55, 84],
 };
 
 export const SCRUB = 1.1; // never `true`, except under prefers-reduced-motion
@@ -50,4 +57,7 @@ export const ENTER = {
   // both together.
   heroYPercentFrom: 110,
   heroOpacityTo: 0.22,
+  // §7.1 reserve statement: each line's clip arrives with a slight lean that
+  // resolves to 0. Degrees.
+  statementSkew: -5,
 };

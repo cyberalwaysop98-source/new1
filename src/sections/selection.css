@@ -94,7 +94,7 @@
 .selection__romaji{
   font-style: normal;
   font-family: var(--body);
-  font-size: 13px;
+  font-size: 14px;
   color: var(--washi-dim);
   margin-left: 8px;
 }

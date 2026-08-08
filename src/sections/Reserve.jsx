@@ -1,5 +1,7 @@
-import ScrollFloat from '../components/reactbits/ScrollFloat';
 import './reserve.css';
+
+// §7.1 — each line clips in from the left with a slight lean that resolves.
+const STATEMENT = ['Sit down.', 'Say nothing.'];
 
 export default function Reserve() {
   return (
@@ -13,15 +15,20 @@ export default function Reserve() {
         <div className="reserve__statement">
           <span className="eyebrow reserve__tag">FIND THE ROOM · 喫茶室</span>
           <h2 className="menu-name reserve__title">NOIR — 喫茶室</h2>
-          <ScrollFloat offsetY={15}>
-            <p className="statement heading-wipe" data-wipe>
-              <span className="heading-wipe__text">
-                Sit down.
-                <br />
-                Say nothing.
+          {/* The §7.1 Reserve effect lives on these lines: each clips in from
+              the left with a slight skew resolving to 0 (animations.js targets
+              [data-stmt-line]). main wrapped the old heading-wipe statement in
+              <ScrollFloat>; that wrapper is dropped rather than nested, because
+              the two would animate the same element at the same time. */}
+          <p className="statement">
+            {STATEMENT.map((line) => (
+              <span className="stmt-line" key={line}>
+                <span className="stmt-line__inner" data-stmt-line>
+                  {line}
+                </span>
               </span>
-            </p>
-          </ScrollFloat>
+            ))}
+          </p>
           <a
             className="eyebrow reserve__cta"
             href="mailto:reserve@noir.jp?subject=Reservation%20request%20%E2%80%94%20NOIR"

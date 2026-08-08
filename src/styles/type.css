@@ -2,10 +2,14 @@
    introduces a size or weight not in the §4 table. */
 
 .eyebrow{
-  font-family: var(--mono);
-  font-weight: 400;
+  /* DESIGN.md §4: body 300, 11px, 0.34em. main set this to --mono/400/.24em
+     without amending §4; the table still reads "body 300 | 11px | 0.34em", and
+     --mono's first family is the same Zen Kaku Gothic New, so the substantive
+     difference was weight and tracking only. Spec wins. */
+  font-family: var(--body);
+  font-weight: 300;
   font-size: 11px;
-  letter-spacing: .24em;
+  letter-spacing: .34em;
   text-transform: uppercase;
   color: var(--washi-dim);
 }
