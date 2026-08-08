@@ -47,8 +47,12 @@
 
 .body-text{
   font-family: var(--body);
-  font-weight: 300;
-  font-size: 13px;
+  /* 400/14px, not 300/13px. At 13px weight 300 against the display type this
+     read as thin rather than quiet — quiet is the intent, thin is not. The
+     eyebrow stays at 10px: the giant-display-to-tiny-label jump is deliberate
+     (§4), and widening the body does not soften it. */
+  font-weight: 400;
+  font-size: 14px;
   line-height: 2;
   letter-spacing: .02em;
   color: var(--washi-dim);

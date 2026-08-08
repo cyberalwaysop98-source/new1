@@ -139,6 +139,22 @@ Source footage lives in `source-footage/` and is gitignored. It must **not** sit
 everything there is copied verbatim into `dist/`, and a 1.48 MB master was being deployed as
 dead weight until that was caught.
 
+## Caching
+
+`vercel.json` sets `max-age=31536000, immutable` on `/frames/*` and `/fonts/*`. Without it
+Vercel serves files from `public/` with `max-age=0, must-revalidate`, so every repeat visitor
+revalidates **240 frame files** before the scrub can run.
+
+**These filenames are not content-hashed.** `ritual_0001.webp` is `ritual_0001.webp` forever, so
+`immutable` means a returning visitor keeps the old bytes until the cache entry expires. If you
+ever replace the footage or regenerate the font subsets, **change the filenames** — bump the
+directory (`frames/ritual-v2/`) or the subset name — and update `src/assets/manifest.js` and
+`src/styles/fonts.css`. Vite's own hashed bundles in `/assets/` are unaffected; they cache-bust
+themselves.
+
+`/og/*` gets a week rather than a year, since social cards are the thing most likely to be
+swapped without renaming.
+
 ## Before deploying
 
 - **`og:image` and `og:url` in `index.html` are relative.** Most scrapers require absolute URLs

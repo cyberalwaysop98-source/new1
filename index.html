@@ -44,12 +44,13 @@
     />
     <meta name="twitter:image" content="/og/noir-og.jpg" />
 
-    <!-- §4.1: self-hosted subsets. Preload only the two faces used above the
+    <!-- §4.1: self-hosted subsets. Preload the three faces used above the
          fold, since the hero title is the LCP element and must not wait on a
          font request that starts late. crossorigin is required even same-origin
          for fonts, or the preload is fetched twice. -->
     <link rel="preload" href="/fonts/shippori-mincho-subset.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/zen-kaku-gothic-new-300-subset.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/zen-kaku-gothic-new-400-subset.woff2" as="font" type="font/woff2" crossorigin />
   </head>
   <body>
     <div id="root"></div>

@@ -50,7 +50,7 @@ screenshots, its logo-wall, its blog cards. Those are B2B SaaS furniture.
   --sumi:      #0B0A09;   /* page ground. warm black, never #000 */
   --sumi-2:    #14110E;   /* raised surface: footer, ambient fallback */
   --washi:     #E8E1D4;   /* primary text, brush strokes */
-  --washi-dim: #8A8076;   /* secondary text, eyebrows, captions */
+  --washi-dim: #A39A8B;   /* secondary text, eyebrows, captions. 7.11:1 on --sumi */
   --shu:       #8C2A1E;   /* vermilion lacquer — rules, seal, borders */
   --shu-lit:   #B33A25;   /* vermilion ink — accents only, never a fill */
   --rule:      rgba(232,225,212,.13);
@@ -75,6 +75,12 @@ like a dark-mode SaaS accent.
 **Radius is 0 everywhere.** One exception: the seal, at 2px.
 
 **No shadows.** Depth comes from value and grain, not elevation.
+
+**`--washi-dim` was lifted from `#8A8076` to `#A39A8B`.** At the old value body copy measured
+**5.1:1** against `--sumi` — WCAG AA, but below AAA, and at 13px it read as thin rather than
+quiet. The new value measures **7.11:1**, clearing AAA for body text. The hue relationship is
+unchanged (same warm grey, R>G>B); only the value moved. §9's rule still stands: this is the
+floor, nothing a reader needs may go dimmer.
 
 **Two permitted colour literals outside this block.** "Six values, no others exist" governs
 *design* colour — anything a viewer perceives as a chosen hue. These two are not that, and are
@@ -108,13 +114,19 @@ generic dark serif site. Do not substitute a Western display serif.
 | Manifesto line | display 400 | `clamp(26px, 4.4vw, 62px)` / lh 1.34 | 0 | Sentence |
 | Statement (footer, reserve) | display 400 | `clamp(34px, 5.6vw, 84px)` / lh 1.06 | -0.015em | Sentence |
 | Eyebrow / label | body 300 | 10px | 0.34em | UPPER |
-| Body / caption | body 300 | 12.5–13px / lh 2 | 0.02em | Sentence |
+| Body / caption | body **400** | **14px** / lh 2 | 0.02em | Sentence |
 | Menu name | display 400 | `clamp(19px, 2vw, 27px)` | 0 | as-is |
 | Price | body 300, `tnum` | 14px | 0 | — |
 | Vertical rail (tategaki) | display 400 | 11px | 0.55em | JP only |
 
 The tension in this design is **giant mincho against 10px tracked-out labels**. Nothing sits
 in the middle. Avoid 16–20px display type entirely.
+
+**Body/caption is 14px weight 400**, raised from 12.5–13px weight 300. Against display type at
+80px, 300 weight at 13px read as *thin* — and thin is not the same as quiet. Quiet is the
+intent. The **eyebrow stays at 10px**: the giant-display-to-tiny-label jump above is deliberate,
+and it is the label that carries it, not the body. Widening the body does not soften that
+contrast, it just makes the readable text readable.
 
 Japanese never gets translated inline with a slash-gloss more than once per section. `間 — the
 interval` is fine. `珈琲 (coffee)` is not.
@@ -133,8 +145,10 @@ production build.
 - **Hosting:** `public/fonts/`, referenced with relative `@font-face src: url(...)`. No
   third-party font host in the critical path.
 - **Loading strategy:** `font-display: swap`, with a `<link rel="preload" as="font" type="font/woff2" crossorigin>`
-  for the two weights used above the fold (display 400, body 300) in `index.html`. Everything
-  else loads lazily.
+  for the **three** faces used above the fold in `index.html`: display 400, body 300 (eyebrows)
+  and body 400 (the hero lede, since body copy moved to weight 400). Everything else loads
+  lazily. If a weight is used above the fold and not preloaded, it swaps in late and the
+  metrics-matched fallback is doing more work than it should.
 - **Metrics-matched fallback:** each face gets a `size-adjust` / `ascent-override` /
   `descent-override` / `line-gap-override` fallback so the swap does not reflow the layout
   (this is also how CLS stays at 0 through a webfont swap per §9):
