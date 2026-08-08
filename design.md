@@ -365,8 +365,9 @@ Lines enter masked `yPercent 105 → 0` and **exit the same way**. `EASE` and `D
 > already below it and the frames are extracted at native size with **no scale filter at all**.
 > Scaling up to 1440 would add weight and no picture. Never upscale to hit the number.
 
-> **The source carries a generator watermark. The crop exists to remove it — do not restore the
-> full frame.**
+> **RESOLVED — not an outstanding item.** The source carries a generator watermark; the crop
+> removes it. Every frame in both sets is clean and has been since commit `10cd5f3`. This note
+> exists so the crop is not undone, **not** because anything is left to do. Do not re-open it.
 >
 > The clip has a "Veo" mark burned into the bottom-right corner. It cannot be removed at source,
 > and WORKFLOW.md §0.1 requires that nothing in frame is identifiably branded, so the master is

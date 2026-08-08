@@ -12,10 +12,14 @@ dist
 dist-ssr
 *.local
 
-# Ritual source footage — the Flow/Veo master clips (~7 MB each).
-# The extracted frames in public/frames/ritual/ ARE committed; these masters are
-# the input that produced them and are reproducible from WORKFLOW.md §Phase 0
-# plus the ffmpeg pipeline recorded in DESIGN.md §6.5/§8.
+# Ritual source footage — the Flow/Veo master clips.
+# These live in source-footage/ and NOT in public/: anything under public/ is
+# copied verbatim into dist/ by Vite, so a master left there ships to production
+# as dead weight (1.48 MB was being deployed before this was caught).
+# The extracted frames in public/frames/ ARE committed; the masters are the input
+# that produced them, reproducible from WORKFLOW.md §Phase 0 plus the ffmpeg
+# pipeline in DESIGN.md §6.2/§8.
+source-footage/
 public/*.mp4
 public/*.mov
 

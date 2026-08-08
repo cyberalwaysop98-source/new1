@@ -99,7 +99,9 @@ ffmpeg -i ritual_raw.mp4 \
 - [ ] Each ≤ 60 KB
 - [ ] Scrubbing forward and backward through them in Finder/Preview reads as one continuous action
 - [ ] No visible cut at the A→B and B→C joins
-- [ ] Nothing in frame is identifiably branded
+- [x] Nothing in frame is identifiably branded — **passes.** The source clip carries a Veo mark
+      at x1243–1263; the master is cropped to 1238 wide so it is structurally absent from every
+      frame in both sets (DESIGN.md §6.2). Closed, do not re-open.
 
 ### 0.2 Ambient loops — four clips
 
