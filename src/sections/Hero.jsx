@@ -1,7 +1,9 @@
 import AmbientMedia from '../components/AmbientMedia';
-import Chars from '../components/Chars';
 import { ambient } from '../assets/manifest';
 import { getLenis } from '../lib/smoothScroll';
+import SplitText from '../components/reactbits/SplitText';
+import BlurText from '../components/reactbits/BlurText';
+import ShinyText from '../components/reactbits/ShinyText';
 import './hero.css';
 
 export default function Hero() {
@@ -28,16 +30,26 @@ export default function Hero() {
 
       <div className="hero__content">
         <div className="hero__top eyebrow">
-          <span>TOMIGAYA · TOKYO · 喫茶室</span>
-          <span>EST. 2019</span>
+          <BlurText text="TOMIGAYA · TOKYO · 喫茶室" delay={60} animateBy="words" />
+          <ShinyText text="EST. 2019" speed={4} />
         </div>
 
         <div className="hero__title-row">
-          <h1 className="h-hero hero__title">
-            <Chars text="NOIR" className="hero__chars" />
-          </h1>
+          <SplitText
+            text="NOIR"
+            tag="h1"
+            className="h-hero hero__title"
+            delay={90}
+            splitBy="characters"
+          />
           <div className="hero__kanji-col">
-            <Chars text="喫茶室" className="tategaki hero__kana hero__kana-chars" vertical />
+            <BlurText
+              text="喫茶室"
+              className="tategaki hero__kana"
+              delay={140}
+              animateBy="letters"
+              direction="top"
+            />
           </div>
         </div>
 
@@ -73,4 +85,5 @@ export default function Hero() {
     </section>
   );
 }
+
 

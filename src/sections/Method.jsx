@@ -1,3 +1,4 @@
+import ScrollReveal from '../components/reactbits/ScrollReveal';
 import './method.css';
 
 const ITEMS = [
@@ -32,8 +33,10 @@ export default function Method() {
   return (
     <section id="method" className="section method">
       <div className="method__sticky">
-        <span className="eyebrow">03 · THE RITUAL / METHOD</span>
-        <h2 className="h-section">01 — 05</h2>
+        <ScrollReveal>
+          <span className="eyebrow">03 · THE RITUAL / METHOD</span>
+          <h2 className="h-section">01 — 05</h2>
+        </ScrollReveal>
       </div>
 
       <ol className="method__list">

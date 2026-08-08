@@ -1,3 +1,4 @@
+import ScrollFloat from '../components/reactbits/ScrollFloat';
 import './reserve.css';
 
 export default function Reserve() {
@@ -10,13 +11,15 @@ export default function Reserve() {
 
       <div className="reserve__body">
         <div className="reserve__statement">
-          <p className="statement heading-wipe" data-wipe>
-            <span className="heading-wipe__text">
-              Sit down.
-              <br />
-              Say nothing.
-            </span>
-          </p>
+          <ScrollFloat offsetY={15}>
+            <p className="statement heading-wipe" data-wipe>
+              <span className="heading-wipe__text">
+                Sit down.
+                <br />
+                Say nothing.
+              </span>
+            </p>
+          </ScrollFloat>
           <a
             className="eyebrow reserve__cta"
             href="mailto:reserve@noir.jp?subject=Reservation%20request%20%E2%80%94%20NOIR"
