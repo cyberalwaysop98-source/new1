@@ -48,14 +48,14 @@
   transform: translateY(0);
   opacity: 1;
   transition:
-    transform var(--dur-hover) var(--ease),
-    opacity var(--dur-hover) var(--ease);
+    transform var(--dur-cascade-step) var(--ease),
+    opacity var(--dur-cascade-step) var(--ease);
   transition-delay: calc(var(--i) * var(--cascade));
 }
 
 .selection__row:hover .selection__romaji .chars__ch,
 .selection__row:focus-visible .selection__romaji .chars__ch{
-  animation: romaji-rebuild var(--dur-hover) var(--ease) both;
+  animation: romaji-rebuild var(--dur-cascade-step) var(--ease) both;
   animation-delay: calc(var(--i) * var(--cascade));
 }
 

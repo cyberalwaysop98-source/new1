@@ -18,6 +18,7 @@ export const DUR = {
   wipe: 1.2,        // section-heading clip wipe
   rule: 1.2,        // §6.4 hairline rule drawing left to right
   fade: 0.6,        // opacity-only fades (the hero ambient loop)
+  cascadeStep: 0.4, // the character cascade is a rebuild, not a fade — at DUR.hover it stops reading as sequential
   count: 0.4,       // numeral count-up — mechanical, not decorative
 };
 
